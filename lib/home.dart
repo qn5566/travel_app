@@ -1,9 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:travel/bloc/post_bloc.dart';
+import 'package:travel/bloc/post_provider.dart';
+import 'package:travel/config/app_model.dart';
 import 'package:travel/page/chat.dart';
 import 'package:travel/page/dashboard.dart';
 import 'package:travel/page/profile.dart';
 import 'package:travel/page/setting.dart';
+
+import 'bloc/counter_bloc.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -21,6 +28,14 @@ class _HomeState extends State<Home> {
     const Setting(),
   ];
 
+  late PostBloc _postBloc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _postBloc = PostProvider.of(context);
+  }
+
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = const Dashboard();
 
@@ -33,7 +48,16 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
-        onPressed: () {},
+        onPressed: () {
+          // 使用 Provider.of，並且將 listen 設定為 false(若沒設定，預設為 true)，
+          // 則不會再次調用 Widget 重新構建（ build ）畫面 ，更省效能。
+          Provider.of<AppModel>(context, listen: false).increment();
+
+          // final cubit = BlocObserver();
+          // cubit.increment();
+
+          _postBloc.increment();
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
@@ -105,7 +129,11 @@ class _HomeState extends State<Home> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const Profile();
+                        currentScreen = BlocProvider<CounterBloc>(
+                          create: (context) => CounterBloc(),
+                          child: Profile(),
+                        );
+                        // const Profile();
                         currentTab = 2;
                       });
                     },
@@ -113,7 +141,7 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.dashboard,
+                          Icons.radar,
                           color: currentTab == 2 ? Colors.blue : Colors.grey,
                         ),
                         Text(
@@ -137,7 +165,7 @@ class _HomeState extends State<Home> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.dashboard,
+                          Icons.settings,
                           color: currentTab == 3 ? Colors.blue : Colors.grey,
                         ),
                         Text(
