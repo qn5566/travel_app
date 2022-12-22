@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:travel/config/app_model.dart';
-import 'package:travel/home.dart';
+import 'package:get/get.dart';
 
-import 'bloc/post_provider.dart';
+import 'routes/app_pages.dart';
+import 'routes/app_routes.dart';
+import 'themes/app_theme.dart';
 
 void main() {
-  // Bloc.observer = SimpleBlocObserver();
-  runApp(
-    PostProvider(
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -19,18 +14,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //在 widget 元件樹中的最上層，使用 provider ，方便傳遞到其他底層頁面
-    //建議採用 MultiProvider，因為一個 APP 很少一個 provider 就夠用，所以直接上 MultiProvider
-    return MultiProvider(
-        providers: [ChangeNotifierProvider.value(value: AppModel())],
-        child: MaterialApp(
-          title: '旅遊',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
-          ),
-          home: const Home(),
-          debugShowCheckedModeBanner: false,
-        ));
+    return GetMaterialApp(
+      initialRoute: AppRoutes.DASHBOARD,
+      getPages: AppPages.list,
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.system,
+    );
   }
 }

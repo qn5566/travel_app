@@ -1,0 +1,59 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../account/account_page.dart';
+import '../home/home_page.dart';
+import 'dashboard_controller.dart';
+
+/*
+APP TableView Page router
+ */
+class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key});
+
+  /// 頁面設定
+  static List<Widget> pages = [
+    const HomePage(),
+    const AccountPage(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<DashboardController>(
+      builder: (controller) {
+        return Scaffold(
+          body: pages[controller.tabIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            unselectedItemColor: Colors.black,
+            selectedItemColor: Colors.redAccent,
+            onTap: controller.changeTabIndex,
+            currentIndex: controller.tabIndex,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            items: [
+              _bottomNavigationBarItem(
+                icon: CupertinoIcons.home,
+                label: '首頁',
+              ),
+              _bottomNavigationBarItem(
+                icon: CupertinoIcons.person,
+                label: '設定',
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  _bottomNavigationBarItem({required IconData icon, required String label}) {
+    return BottomNavigationBarItem(
+      icon: Icon(icon),
+      label: label,
+    );
+  }
+}
