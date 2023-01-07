@@ -5,6 +5,7 @@ import 'package:get/get_connect/connect.dart';
 import 'mode/data_all.dart';
 import 'mode/post_model.dart';
 
+/// 資料取得的地方
 class ApiHelper extends GetConnect {
   Future<List<DataAll>> fetchAllData() async {
     return await get(

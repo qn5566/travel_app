@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-import '../data/api_helper.dart';
-import '../data/mode/data_all.dart';
+import '../../data/api_helper.dart';
+import '../../data/mode/data_all.dart';
+import '../../routes/app_routes.dart';
 
 enum SortState { id, title, region, siteLevel }
 
@@ -43,5 +45,12 @@ class HomeController extends GetxController {
         break;
     }
     update();
+  }
+
+  void onTap(DataAll item) {
+    if (kDebugMode) {
+      print(item.title);
+      Get.toNamed(AppRoutes.travelDetails, arguments: item);
+    }
   }
 }

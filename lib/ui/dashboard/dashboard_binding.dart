@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
+import 'package:travel/ui/account/account_controller.dart';
 
-import '../account/account_controller.dart';
 import '../home/home_controller.dart';
 import 'dashboard_controller.dart';
 

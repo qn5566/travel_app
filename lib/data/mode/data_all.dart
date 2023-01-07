@@ -1,6 +1,6 @@
 class DataAll {
   String? id;
-  String? title;
+  String title = "尚未資料";
   String? zone;
   String? toldescribe;
   String? description;
@@ -37,7 +37,6 @@ class DataAll {
 
   DataAll(
       {this.id,
-      this.title,
       this.zone,
       this.toldescribe,
       this.description,
