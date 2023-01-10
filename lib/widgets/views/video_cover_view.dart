@@ -5,7 +5,6 @@ import '../network_cache_image.dart';
 
 /// 「封面圖」
 class VideoCoverView extends StatelessWidget {
-  final String? name;
   final String? cover;
   final String? money;
   final double radius;
@@ -14,7 +13,6 @@ class VideoCoverView extends StatelessWidget {
 
   const VideoCoverView(
       {super.key,
-      @required this.name,
       this.cover,
       this.money,
       this.radius = 0});
