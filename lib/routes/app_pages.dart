@@ -15,7 +15,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.travelDetails,
-      page: () => DetailPage(),
+      page: () => const DetailPage(),
       binding: DetailBinding(),
       transition: Transition.rightToLeft
     ),

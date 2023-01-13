@@ -73,7 +73,7 @@ class DataAll {
 
   DataAll.fromJson(Map json) {
     id = json['Id'];
-    title = json['Title'];
+    title = json['Title'] ?? "";
     zone = json['Zone'];
     toldescribe = json['Toldescribe'];
     description = json['Description'];

@@ -25,7 +25,11 @@ class HomeController extends GetxController {
       dataList.assignAll(value);
       isLoading(false);
       update();
-    }).catchError((e) {});
+    }).catchError((e) {
+      if (kDebugMode) {
+        print('Error:$e');
+      }
+    });
   }
 
   // sort method

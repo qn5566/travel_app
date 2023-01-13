@@ -36,7 +36,7 @@ class ListViewHome extends StatelessWidget {
                           children: [
                             Positioned.fill(
                               child: VideoCoverView(
-                                radius: 10,
+                                // radius: 10,
                                 cover: item.picture1 ?? '',
                                 money: item.region,
                               ),
