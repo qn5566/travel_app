@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../../data/api_helper.dart';
+import '../../data/database/categoryDb.dart';
 import '../../data/mode/data_all.dart';
 import '../../routes/app_routes.dart';
 
@@ -13,19 +14,41 @@ class HomeController extends GetxController {
   var isLoading = true.obs;
   var dataList = <DataAll>[].obs;
 
+  CategoryDb categoryDb = CategoryDb();
+
   @override
   void onInit() async {
     super.onInit();
-    fetchApi();
+    fetchDB();
   }
 
+  /// 抓取資料判斷
+  void fetchDB() async {
+    isLoading(true);
+    await categoryDb.open();
+
+    var poetryData = await categoryDb.queryAll();
+    categoryDb.close();
+    dataList.assignAll(List.generate(poetryData.length, (index) {
+      return DataAll.fromJson(poetryData[index]);
+    }));
+    isLoading(false);
+  }
+
+  /// 抓取遠端資料
   void fetchApi() async {
     isLoading(true);
-    await ApiHelper().fetchAllData().then((value) {
-      dataList.assignAll(value);
+    await categoryDb.open();
+
+    await ApiHelper().fetchAllDataToDb().then((value) async {
+      for (var data in value) {
+        await categoryDb.autoCheckInsertOrUpdate(data);
+      }
+      categoryDb.close();
       isLoading(false);
-      update();
+      fetchDB();
     }).catchError((e) {
+      isLoading(false);
       if (kDebugMode) {
         print('Error:$e');
       }

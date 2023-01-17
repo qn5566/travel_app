@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../data/api_helper.dart';
 import '../../data/mode/comment_model.dart';
-import '../../util/ui_util.dart';
+import '../../util/ToastUtil.dart';
 import '../../widgets/title_view.dart';
 
 class DetailController extends GetxController
@@ -46,6 +48,50 @@ class DetailController extends GetxController
     });
   }
 
+  void checkSendData(String data, {required ValueChanged<dynamic> callback}) {
+    if (data.isEmpty) {
+      ToastUtil.info("請填入資訊");
+    } else {
+      int timestamp = DateTime
+          .now()
+          .millisecondsSinceEpoch;
+      DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(timestamp);
+      String datetime =
+          "${tsdate.year}/${tsdate.month}/${tsdate.day} ${tsdate.hour}:${tsdate
+          .minute}";
+      if (kDebugMode) {
+        print(datetime);
+      }
+
+      Map<String, dynamic> body = {
+        'TitleId': Get.arguments.id,
+        'Username': 'Ted',
+        'Comment': data,
+        'Like': 5,
+        'Device': Platform.isAndroid ? 'Android' : 'iOS',
+        'TimeStamp': datetime
+      };
+
+      sendCommentApi(body, callback: (value) {
+        callback(value);
+      });
+    }
+  }
+
+  /// 傳送Comment data
+  void sendCommentApi(Map<String, dynamic> body,
+      {required ValueChanged<dynamic> callback}) async {
+    isLoading(true);
+    await ApiHelper().sendCommentData(body).then((value) {
+      isLoading(false);
+      callback('ok');
+    }).catchError((e) {
+      if (kDebugMode) {
+        print('Error:$e');
+      }
+    });
+  }
+
   @override
   void onClose() {
     tabInfoController.dispose();
@@ -61,23 +107,5 @@ class DetailController extends GetxController
       print(item.like);
       // Get.toNamed(AppRoutes.travelDetails, arguments: item);
     }
-  }
-
-  /// 傳送Commend訊息
-  void send(){
-    sendCommend();
-  }
-
-  void sendCommend() async {
-    isLoading(true);
-    await ApiHelper().fetchCommentData(Get.arguments.id).then((value) {
-      dataList.assignAll(value);
-      isLoading(false);
-      update();
-    }).catchError((e) {
-      if (kDebugMode) {
-        print('Error:$e');
-      }
-    });
   }
 }

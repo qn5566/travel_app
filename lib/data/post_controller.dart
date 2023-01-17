@@ -12,17 +12,17 @@ class PostController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchApi();
+    // fetchApi();
   }
 
-  void fetchApi() async {
-    isLoading(true);
-    await ApiHelper().fetchData().then((value) {
-      postList.assignAll(value);
-      isLoading(false);
-      update();
-    }).catchError((e) {});
-  }
+  // void fetchApi() async {
+  //   isLoading(true);
+  //   await ApiHelper().fetchData().then((value) {
+  //     postList.assignAll(value);
+  //     isLoading(false);
+  //     update();
+  //   }).catchError((e) {});
+  // }
 
   // sort method
   void sort(SortState sortState) async {
