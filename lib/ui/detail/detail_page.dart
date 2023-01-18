@@ -16,79 +16,81 @@ class DetailPage extends GetView<DetailController> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-            body: NestedScrollView(headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            SliverToBoxAdapter(
-              child: Padding(
-                //标题栏
-                padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      behavior: HitTestBehavior.opaque,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: ASize.w(10),
-                          top: ASize.w(10),
-                          bottom: ASize.w(10),
-                        ),
-                        child: const Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    Text(Get.arguments.title),
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: AspectRatio(
-                aspectRatio: 1.2,
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: VideoCoverView(
-                        // radius: 10,
-                        cover: Get.arguments.picture1 ?? '',
-                        money: Get.arguments.region,
-                      ),
-                    ),
-                    MoneytextWidget(Get.arguments.region ?? "尚未資料"),
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: TabBar(
-                isScrollable: true,
-                indicatorColor: Colors.black,
-                labelColor: Colors.red,
-                unselectedLabelColor: Colors.grey,
-                indicatorWeight: 2.5,
-                tabs: controller.subTitle,
-                controller: controller.tabInfoController,
-              ),
-            ),
-          ];
-        }, body: Builder(builder: (BuildContext context) {
-          return Container(
-            color: Colors.black,
-            child: TabBarView(
-              controller: controller.tabInfoController,
+      debugShowCheckedModeBanner: false,
+      home: Builder(builder: (context) {
+        return Scaffold(
+          body: Container(
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InfoView(),
-                CommentView(),
+                Padding(
+                  //标题栏
+                  padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            left: ASize.w(10),
+                            top: ASize.w(10),
+                            bottom: ASize.w(10),
+                          ),
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Text(Get.arguments.title),
+                    ],
+                  ),
+                ),
+                AspectRatio(
+                  aspectRatio: 1.2,
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: VideoCoverView(
+                          // radius: 10,
+                          cover: Get.arguments.picture1 ?? '',
+                          money: Get.arguments.region,
+                        ),
+                      ),
+                      MoneytextWidget(Get.arguments.region ?? "尚未資料"),
+                    ],
+                  ),
+                ),
+                TabBar(
+                  isScrollable: true,
+                  indicatorColor: Colors.black,
+                  labelColor: Colors.red,
+                  unselectedLabelColor: Colors.grey,
+                  indicatorWeight: 2.5,
+                  tabs: controller.subTitle,
+                  controller: controller.tabInfoController,
+                ),
+                Expanded(
+                  child: Container(
+                    color: Colors.black,
+                    child: TabBarView(
+                      controller: controller.tabInfoController,
+                      children: [
+                        InfoView(),
+                        CommentView(),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
-          );
-        }))));
+          ),
+        );
+      }),
+    );
   }
 }

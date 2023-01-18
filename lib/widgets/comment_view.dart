@@ -21,6 +21,7 @@ class CommentView extends StatelessWidget {
           Expanded(
             child: Obx(
               () => ListView.builder(
+                physics: const ClampingScrollPhysics(),
                 padding: const EdgeInsets.all(0),
                 itemCount: controller.dataList.length,
                 itemBuilder: (context, index) {
