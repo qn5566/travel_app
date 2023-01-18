@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/api_helper.dart';
 import '../../data/mode/comment_model.dart';
@@ -52,13 +53,10 @@ class DetailController extends GetxController
     if (data.isEmpty) {
       ToastUtil.info("請填入資訊");
     } else {
-      int timestamp = DateTime
-          .now()
-          .millisecondsSinceEpoch;
+      int timestamp = DateTime.now().millisecondsSinceEpoch;
       DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(timestamp);
       String datetime =
-          "${tsdate.year}/${tsdate.month}/${tsdate.day} ${tsdate.hour}:${tsdate
-          .minute}";
+          "${tsdate.year}/${tsdate.month}/${tsdate.day} ${tsdate.hour}:${tsdate.minute}";
       if (kDebugMode) {
         print(datetime);
       }
@@ -90,6 +88,15 @@ class DetailController extends GetxController
         print('Error:$e');
       }
     });
+  }
+
+  //拨打电话
+  void call(Uri url) async {
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw '不能撥打 $url';
+    }
   }
 
   @override

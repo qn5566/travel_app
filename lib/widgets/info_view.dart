@@ -27,16 +27,21 @@ class InfoView extends StatelessWidget {
                   fontSize: ASize.ft(8),
                 ),
               ),
-              Text(
-                Get.arguments.tel,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: "PingFangSC",
-                  fontStyle: FontStyle.normal,
-                  fontSize: ASize.ft(8),
+              InkWell(
+                child: Text(
+                  Get.arguments.tel,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: "PingFangSC",
+                    fontStyle: FontStyle.normal,
+                    fontSize: ASize.ft(8),
+                  ),
+                  // overflow: TextOverflow.ellipsis,
                 ),
-                // overflow: TextOverflow.ellipsis,
+                onTap: (){
+                  controller.call(Uri(scheme: 'tel',path: "+${Get.arguments.tel}"));
+                },
               ),
               (Get.arguments.toldescribe == '')
                   ? Text(
