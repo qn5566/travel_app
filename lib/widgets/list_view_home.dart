@@ -9,11 +9,13 @@ import '../util/ui_util.dart';
 import 'money_text_widget.dart';
 
 class ListViewHome extends StatelessWidget {
-  ListViewHome({Key? key}) : super(key: key);
+  ListViewHome({Key? key, required this.site}) : super(key: key);
+  final String site;
   final HomeController controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
+    controller.searchData([site]);
     return Obx(() => controller.isLoading.value
         ? const Center(child: CircularProgressIndicator())
         : ListView.builder(

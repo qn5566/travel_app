@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../data/api_helper.dart';
@@ -8,7 +9,8 @@ import '../../routes/app_routes.dart';
 
 enum SortState { id, title, region, siteLevel }
 
-class HomeController extends GetxController {
+class HomeController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   final String title = '旅遊地圖';
 
   var isLoading = true.obs;
@@ -16,9 +18,47 @@ class HomeController extends GetxController {
 
   CategoryDb categoryDb = CategoryDb();
 
+  late TabController tabTitleController;
+
+  List<String> getTabTitle = [
+    "台北市",
+    "基隆市",
+    "新北市",
+    "連江縣",
+    "宜蘭縣",
+    "新竹市",
+    "新竹縣",
+    "桃園市",
+    "苗栗縣",
+    "台中市",
+    "彰化縣",
+    "南投縣",
+    "嘉義市",
+    "嘉義縣",
+    "雲林縣",
+    "台南市",
+    "高雄市",
+    "澎湖縣",
+    "金門縣",
+    "屏東縣",
+    "台東縣",
+    "花蓮縣"
+  ];
+
+  /// 子分類
+  final List<Tab> subTitle = const <Tab>[
+    Tab(text: '資訊'),
+    Tab(text: '評論'),
+  ];
+
   @override
   void onInit() async {
     super.onInit();
+    tabTitleController = TabController(length: getTabTitle.length, vsync: this);
+    tabTitleController.addListener(() {
+      // 監聽滑動
+      // print(tabTitleController.index);
+    });
     fetchDB();
   }
 
@@ -53,6 +93,19 @@ class HomeController extends GetxController {
         print('Error:$e');
       }
     });
+  }
+
+  /// 抓取資料判斷
+  void searchData(List<Object?>? whereArgs) async {
+    // isLoading(true);
+    await categoryDb.open();
+
+    var poetryData = await categoryDb.query('Region = ?', whereArgs);
+    categoryDb.close();
+    dataList.assignAll(List.generate(poetryData.length, (index) {
+      return DataAll.fromJson(poetryData[index]);
+    }));
+    // isLoading(false);
   }
 
   // sort method
