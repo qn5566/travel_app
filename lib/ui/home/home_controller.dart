@@ -59,19 +59,28 @@ class HomeController extends GetxController
       // 監聽滑動
       // print(tabTitleController.index);
     });
-    fetchDB();
+
+    await categoryDb.open();
+    if (await categoryDb.checkTableIsEmpty() > 0) {
+      categoryDb.close();
+      fetchDB();
+    } else {
+      categoryDb.close();
+      fetchApi();
+    }
   }
 
   /// 抓取資料判斷
   void fetchDB() async {
     isLoading(true);
     await categoryDb.open();
-
     var poetryData = await categoryDb.queryAll();
     categoryDb.close();
     dataList.assignAll(List.generate(poetryData.length, (index) {
       return DataAll.fromJson(poetryData[index]);
     }));
+
+    searchData([getTabTitle[0]]);
     isLoading(false);
   }
 
@@ -79,7 +88,6 @@ class HomeController extends GetxController
   void fetchApi() async {
     isLoading(true);
     await categoryDb.open();
-
     await ApiHelper().fetchAllDataToDb().then((value) async {
       for (var data in value) {
         await categoryDb.autoCheckInsertOrUpdate(data);
@@ -97,7 +105,6 @@ class HomeController extends GetxController
 
   /// 抓取資料判斷
   void searchData(List<Object?>? whereArgs) async {
-    // isLoading(true);
     await categoryDb.open();
 
     var poetryData = await categoryDb.query('Region = ?', whereArgs);

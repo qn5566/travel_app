@@ -59,7 +59,7 @@ class HomePage extends GetView<HomeController> {
         SizedBox(
           height: ASize.w(18),
           child: TabBar(
-            tabs: controller.getTabTitle.map((e) => Tab(text:e)).toList(),
+            tabs: controller.getTabTitle.map((e) => Tab(text: e)).toList(),
             controller: controller.tabTitleController,
             isScrollable: true,
             indicatorColor: Colors.white,
@@ -88,9 +88,9 @@ class HomePage extends GetView<HomeController> {
         Expanded(
           child: TabBarView(
             controller: controller.tabTitleController,
-              children : controller.getTabTitle.map((e) {
-                return ListViewHome(site:e);
-              }).toList(),
+            children: controller.getTabTitle.map((e) {
+              return ListViewHome(site: e);
+            }).toList(),
             // children: [
             //   ListViewHome(site:controller.getTabTitle[0]),
             //   ListViewHome(site:controller.getTabTitle[1]),
@@ -104,7 +104,7 @@ class HomePage extends GetView<HomeController> {
   /// 导航条
   Widget _navigationBar() {
     double topMargin = ScreenUtil().statusBarHeight;
-    double navigationBarHeight = 44.0;
+    double navigationBarHeight = 50.0;
     return Container(
       height: topMargin + navigationBarHeight,
       color: Colors.transparent,
@@ -186,6 +186,7 @@ class HomePage extends GetView<HomeController> {
         onTap: onTap,
         child: SizedBox(
           width: 50,
+          height: 80,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -194,7 +195,7 @@ class HomePage extends GetView<HomeController> {
                 width: ASize.w(12),
               ),
               SizedBox(
-                height: ASize.ft(1),
+                height: ASize.ft(0),
               ),
               Text(
                 title,

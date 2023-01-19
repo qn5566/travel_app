@@ -28,6 +28,7 @@ class DetailPage extends GetView<DetailController> {
                   //标题栏
                   padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
                         onTap: () {
@@ -35,18 +36,22 @@ class DetailPage extends GetView<DetailController> {
                         },
                         behavior: HitTestBehavior.opaque,
                         child: Padding(
-                          padding: EdgeInsets.only(
-                            left: ASize.w(10),
-                            top: ASize.w(10),
-                            bottom: ASize.w(10),
-                          ),
+                          padding: EdgeInsets.only(left: ASize.w(5)),
                           child: const Icon(
                             Icons.arrow_back_ios,
                             color: Colors.black,
                           ),
                         ),
                       ),
-                      Text(Get.arguments.title),
+                      Text(Get.arguments.title,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "PingFangSC",
+                            fontStyle: FontStyle.normal,
+                            fontSize: ASize.ft(10),
+                          )),
+                      const SizedBox(width: 36.0),
                     ],
                   ),
                 ),
@@ -62,6 +67,25 @@ class DetailPage extends GetView<DetailController> {
                         ),
                       ),
                       MoneytextWidget(Get.arguments.region ?? "尚未資料"),
+                      //align at bottom center using Align()
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                            color: Colors.black38,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Text(
+                                controller.item.picdescribe1!,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: "PingFangSC",
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: ASize.ft(7),
+                                ),
+                              ),
+                            )),
+                      ),
                     ],
                   ),
                 ),

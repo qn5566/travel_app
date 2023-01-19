@@ -23,8 +23,8 @@ class ApiHelper extends GetConnect {
   /// 取得data進入db
   Future<List<Map<String, dynamic>>> fetchAllDataToDb() async {
     return await get(
-      // 'https://raw.githubusercontent.com/qn5566/travel/main/all_data.json',
-      'http://10.0.2.2:5000/data',
+      'https://raw.githubusercontent.com/qn5566/travel/main/all_data.json',
+      // 'http://10.0.2.2:5000/data',
       contentType: 'application/json; charset=utf-8',
       decoder: (data) {
         // print(data);
@@ -34,10 +34,6 @@ class ApiHelper extends GetConnect {
             return temp.toJson();
           }),
         );
-
-        // DataAll.fromJson(e)));
-        // return List<DataAll>.from(
-        //     json.decode(data).map((e) => DataAll.fromJson(e)));
       },
     ).then((value) => value.body!).catchError((e) => throw e);
   }

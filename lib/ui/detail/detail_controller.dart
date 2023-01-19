@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:travel/data/mode/data_all.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/api_helper.dart';
@@ -20,6 +21,7 @@ class DetailController extends GetxController
   late TextEditingController messageController;
   bool isShowTitle = false;
   GlobalKey<TitleViewState> titleStateKey = GlobalKey();
+  final item = Get.arguments as DataAll;
 
   /// 子分類
   final List<Tab> subTitle = const <Tab>[

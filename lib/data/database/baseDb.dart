@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:travel/data/database/sqliteHelper.dart';
-
 
 class BaseDb {
   BaseDb(this.table);
@@ -26,6 +24,12 @@ class BaseDb {
   Future close() async {
     // await myDbQuery(this, "after");
     _sql.close();
+  }
+
+  checkTableIsEmpty() async {
+    int? count =
+        Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $table'));
+    return count;
   }
 
   insert(Map<String, dynamic> m) async {
