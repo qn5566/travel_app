@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:travel/ui/search/search_binding.dart';
+import 'package:travel/ui/search/search_page.dart';
 
 import '../ui/dashboard/dashboard_binding.dart';
 import '../ui/dashboard/dashboard_page.dart';
@@ -14,10 +16,14 @@ class AppPages {
       binding: DashboardBinding(),
     ),
     GetPage(
-      name: AppRoutes.travelDetails,
-      page: () => const DetailPage(),
-      binding: DetailBinding(),
-      transition: Transition.rightToLeft
-    ),
+        name: AppRoutes.travelDetails,
+        page: () => const DetailPage(),
+        binding: DetailBinding(),
+        transition: Transition.rightToLeft),
+    GetPage(
+        name: AppRoutes.searchPage,
+        page: () => SearchPage(),
+        binding: SearchBinding(),
+        transition: Transition.rightToLeft),
   ];
 }

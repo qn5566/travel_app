@@ -158,8 +158,7 @@ class HomePage extends GetView<HomeController> {
                 ),
               ),
               onTap: () {
-                // JDRoute.openSearch(
-                //     type: _currentIndexType(_tabController.index));
+                controller.toSearch();
               },
             ),
           ),

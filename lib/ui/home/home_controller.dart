@@ -137,7 +137,11 @@ class HomeController extends GetxController
   void onTap(DataAll item) {
     if (kDebugMode) {
       print(item.title);
-      Get.toNamed(AppRoutes.travelDetails, arguments: item);
     }
+    Get.toNamed(AppRoutes.travelDetails, arguments: item);
+  }
+
+  void toSearch() {
+    Get.toNamed(AppRoutes.searchPage);
   }
 }

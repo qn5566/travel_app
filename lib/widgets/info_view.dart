@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../ui/detail/detail_controller.dart';
+import '../util/ToastUtil.dart';
 import '../util/ui_util.dart';
 
 class InfoView extends StatelessWidget {
@@ -26,28 +28,35 @@ class InfoView extends StatelessWidget {
                 },
               ),
               (controller.item.address != '')
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                          const Icon(Icons.assistant_navigation,
-                              color: Colors.white),
-                          Padding(
-                            padding: EdgeInsets.only(left: ASize.w(2)),
-                            child: InkWell(
-                              child: buildText('開啟導航'),
-                              onTap: () {
-                                // var uri = Uri.parse(controller.item.map!);
-                                controller.call(Uri(
-                                    scheme: 'https',
-                                    host: 'www.google.com',
-                                    path:
-                                        '/maps/search/${controller.item.address!}'));
-                              },
-                            ),
-                          ),
-                        ])
+                  ? InkWell(
+                      child: buildText('地址資訊\n${controller.item.address!}'),
+                      onTap: () {
+                        Clipboard.setData(
+                            ClipboardData(text: controller.item.address!));
+                        ToastUtil.info("複製成功!");
+                      },
+                    )
                   : const SizedBox.shrink(),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.assistant_navigation, color: Colors.white),
+                    Padding(
+                      padding: EdgeInsets.only(left: ASize.w(2)),
+                      child: InkWell(
+                        child: buildText('開啟導航'),
+                        onTap: () {
+                          // var uri = Uri.parse(controller.item.map!);
+                          controller.call(Uri(
+                              scheme: 'https',
+                              host: 'www.google.com',
+                              path:
+                                  '/maps/search/${(controller.item.address != null) ? controller.item.address : controller.item.title}'));
+                        },
+                      ),
+                    ),
+                  ]),
               (controller.item.opentime != '')
                   ? buildText('營業時間\n${controller.item.opentime!}')
                   : const SizedBox.shrink(),
