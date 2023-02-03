@@ -61,6 +61,10 @@ class BaseDb {
     return await db.query(table, where: where, whereArgs: whereArgs);
   }
 
+  queryWhere(String where) async {
+    return await db.query(table, where: where);
+  }
+
   isExist(String where, List<Object?>? whereArgs) async {
     return await query(where, whereArgs) != null;
   }

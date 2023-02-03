@@ -1,11 +1,13 @@
 import 'package:get/get.dart';
 import 'package:travel/ui/search/search_binding.dart';
 import 'package:travel/ui/search/search_page.dart';
+import 'package:travel/ui/splash/splash_page.dart';
 
 import '../ui/dashboard/dashboard_binding.dart';
 import '../ui/dashboard/dashboard_page.dart';
 import '../ui/detail/detail_binding.dart';
 import '../ui/detail/detail_page.dart';
+import '../ui/splash/splash_binding.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -24,6 +26,11 @@ class AppPages {
         name: AppRoutes.searchPage,
         page: () => SearchPage(),
         binding: SearchBinding(),
+        transition: Transition.rightToLeft),
+    GetPage(
+        name: AppRoutes.splashPage,
+        page: () => const SplashPage(),
+        binding: SplashBinding(),
         transition: Transition.rightToLeft),
   ];
 }

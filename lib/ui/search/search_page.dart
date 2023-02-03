@@ -6,13 +6,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:travel/ui/search/search_controller.dart';
+import 'package:travel/widgets/list_view_search.dart';
 
 import '../../config/style_info.dart';
 import '../../util/ui_util.dart';
 
 class SearchPage extends GetView<SearchController> {
   SearchPage({Key? key}) : super(key: key);
-  String _keywords = '';
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +21,11 @@ class SearchPage extends GetView<SearchController> {
       home: Builder(builder: (context) {
         return Scaffold(
           body: Container(
-            color: Colors.grey,
+            color: Colors.white70,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 5.0),
                 Padding(
                   //标题栏
                   padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
@@ -50,13 +51,16 @@ class SearchPage extends GetView<SearchController> {
                             fontWeight: FontWeight.w500,
                             fontFamily: "PingFangSC",
                             fontStyle: FontStyle.normal,
-                            fontSize: ASize.ft(10),
+                            fontSize: ASize.ft(8),
                           )),
                       const SizedBox(width: 36.0),
                     ],
                   ),
                 ),
-                _searchBar(context, '請輸入關鍵字', height: ASize.h(16)),
+                const SizedBox(height: 12.0),
+                _searchBar(context, '請輸入關鍵字', height: ASize.h(20)),
+                const SizedBox(height: 5.0),
+                Expanded(child: ListViewSearch(site: controller.keywords)),
               ],
             ),
           ),
@@ -81,18 +85,26 @@ class SearchPage extends GetView<SearchController> {
                 decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.all(Radius.circular(ASize.w(18))),
-                    color: Colors.orange),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                    color: Colors.white),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
+                    const Padding(
+                      padding: EdgeInsets.only(
                         left: 5,
                       ),
-                      child: Image.asset(
-                        'images/home/home_search.png',
-                        width: ASize.w(10),
+                      child: Icon(
+                        Icons.search,
                         color: Colors.black,
                       ),
                     ),
@@ -106,51 +118,56 @@ class SearchPage extends GetView<SearchController> {
                         placeholderStyle: TextStyle(
                             fontSize: ASize.ft(6),
                             fontWeight: FontWeight.normal,
-                            color: StyleInfo.white),
+                            color: Colors.black),
                         decoration:
                             const BoxDecoration(color: Colors.transparent),
                         onChanged: (value) {
-                          _keywords = value;
+                          controller.keywords.value = value;
                           if (kDebugMode) {
-                            print('keywords:$_keywords');
+                            print('keywords:${controller.keywords.value}');
                           }
                         },
                       ),
                     ),
+                    GestureDetector(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          right: ASize.w(2),
+                        ),
+                        child: Container(
+                          height: ASize.h(16),
+                          width: ASize.w(30),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(ASize.w(30))),
+                          ),
+                          child: Center(
+                            child: Text("搜索",
+                                style: TextStyle(
+                                    color:
+                                        (controller.keywords.value.isNotEmpty)
+                                            ? Colors.black
+                                            : StyleInfo.gray_7C7C8D,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: "PingFang-SC",
+                                    fontStyle: FontStyle.normal,
+                                    fontSize: ASize.ft(7))),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        if (controller.keywords.value.isNotEmpty) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          // 搜索
+                          controller.searchData(controller.keywords.value);
+                        }
+                      },
+                    )
                   ],
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.only(left: ASize.w(5))),
-            GestureDetector(
-              child: Container(
-                height: height,
-                width: ASize.w(30),
-                decoration: BoxDecoration(
-                    color:
-                        (_keywords.isNotEmpty) ? Colors.black : Colors.orange,
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(ASize.w(30)))),
-                child: Center(
-                  child: Text("搜索",
-                      style: TextStyle(
-                          color: (_keywords.isNotEmpty)
-                              ? Colors.black
-                              : StyleInfo.gray_7C7C8D,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "PingFang-SC",
-                          fontStyle: FontStyle.normal,
-                          fontSize: ASize.ft(7))),
-                ),
-              ),
-              onTap: () {
-                if (_keywords.isNotEmpty) {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                  // 搜索
-                  // _doSearch(_keywords);
-                }
-              },
-            )
           ],
         ),
       ),
