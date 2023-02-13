@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
+import '../../config/global_config.dart';
 import '../../data/database/categoryDb.dart';
 import '../../data/mode/data_all.dart';
 import '../../routes/app_routes.dart';
@@ -42,11 +42,23 @@ class SearchController extends GetxController {
     isLoading(false);
   }
 
-  // 近詳細
+  // 進詳細
   void onTap(DataAll item) {
     if (kDebugMode) {
       print(item.title);
     }
+    // 儲存資料 - 判斷這個item title有沒有資料
+    List<String> historyList =
+        (sharedPreferences.getStringList('history') ?? <String>[]);
+    var match = historyList.firstWhere(
+        (element) => element.contains(item.title),
+        orElse: () => '');
+    if (match == '') {
+      // 確定沒有儲存
+      historyList.add(item.title);
+      sharedPreferences.setStringList('history', historyList);
+    }
+    //跳頁
     Get.toNamed(AppRoutes.travelDetails, arguments: item);
   }
 }

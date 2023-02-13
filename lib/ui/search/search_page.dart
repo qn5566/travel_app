@@ -22,45 +22,60 @@ class SearchPage extends GetView<SearchController> {
         return Scaffold(
           body: Container(
             color: Colors.white70,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Stack(
               children: [
-                const SizedBox(height: 5.0),
-                Padding(
-                  //标题栏
-                  padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.back();
-                        },
-                        behavior: HitTestBehavior.opaque,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: ASize.w(5)),
-                          child: const Icon(
-                            Icons.arrow_back_ios,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      Text('搜尋',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "PingFangSC",
-                            fontStyle: FontStyle.normal,
-                            fontSize: ASize.ft(8),
-                          )),
-                      const SizedBox(width: 36.0),
-                    ],
+                Positioned.fill(
+                  child: Image.asset(
+                    'images/search/background_search.jpg',
+                    fit: BoxFit.fill,
                   ),
                 ),
-                const SizedBox(height: 12.0),
-                _searchBar(context, '請輸入關鍵字', height: ASize.h(20)),
-                const SizedBox(height: 5.0),
-                Expanded(child: ListViewSearch(site: controller.keywords)),
+                // 毛玻璃效果 - 半透明
+                Container(
+                  color: const Color(0xFF0E3311).withOpacity(0.5),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 5.0),
+                    Padding(
+                      //标题栏
+                      padding:
+                          EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Get.back();
+                            },
+                            behavior: HitTestBehavior.opaque,
+                            child: Padding(
+                              padding: EdgeInsets.only(left: ASize.w(5)),
+                              child: const Icon(
+                                Icons.arrow_back_ios,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Text('搜尋',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "PingFangSC",
+                                fontStyle: FontStyle.normal,
+                                fontSize: ASize.ft(8),
+                              )),
+                          const SizedBox(width: 36.0),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 12.0),
+                    _searchBar(context, '請輸入關鍵字', height: ASize.h(20)),
+                    const SizedBox(height: 5.0),
+                    Expanded(child: ListViewSearch(site: controller.keywords)),
+                  ],
+                ),
               ],
             ),
           ),

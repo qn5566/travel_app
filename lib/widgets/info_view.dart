@@ -12,74 +12,91 @@ class InfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: ASize.w(5), left: ASize.w(5), right: ASize.w(5)),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InkWell(
-                child: buildText('聯絡電話\n${controller.item.tel!} - 立即詢問'),
-                onTap: () {
-                  controller.call(
-                      Uri(scheme: 'tel', path: "+${controller.item.tel}"));
-                },
-              ),
-              (controller.item.address != '')
-                  ? InkWell(
-                      child: buildText('地址資訊\n${controller.item.address!}'),
-                      onTap: () {
-                        Clipboard.setData(
-                            ClipboardData(text: controller.item.address!));
-                        ToastUtil.info("複製成功!");
-                      },
-                    )
-                  : const SizedBox.shrink(),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Icon(Icons.assistant_navigation, color: Colors.white),
-                    Padding(
-                      padding: EdgeInsets.only(left: ASize.w(2)),
-                      child: InkWell(
-                        child: buildText('開啟導航'),
-                        onTap: () {
-                          // var uri = Uri.parse(controller.item.map!);
-                          controller.call(Uri(
-                              scheme: 'https',
-                              host: 'www.google.com',
-                              path:
-                                  '/maps/search/${(controller.item.address != null) ? controller.item.address : controller.item.title}'));
-                        },
-                      ),
-                    ),
-                  ]),
-              (controller.item.opentime != '')
-                  ? buildText('營業時間\n${controller.item.opentime!}')
-                  : const SizedBox.shrink(),
-              (controller.item.ticketinfo != '')
-                  ? buildText('門票\n${controller.item.ticketinfo!}')
-                  : const SizedBox.shrink(),
-              (controller.item.travellinginfo != '')
-                  ? buildText('旅遊資訊\n${controller.item.travellinginfo!}')
-                  : const SizedBox.shrink(),
-              (controller.item.toldescribe == '')
-                  ? buildText('詳細資訊\n${controller.item.toldescribe!}')
-                  : (controller.item.description != '')
-                      ? buildText('詳細資訊\n${controller.item.description!}')
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Image.asset(
+            'images/info/background_club.jpg',
+            fit: BoxFit.fill,
+          ),
+        ),
+        // 毛玻璃效果 - 半透明
+        Container(
+          color: const Color(0xFF0E3311).withOpacity(0.5),
+        ),
+        SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+                top: ASize.w(5), left: ASize.w(5), right: ASize.w(5)),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InkWell(
+                    child: buildText(
+                        '聯絡電話\n${controller.item.tel ?? '暫時無資料'} - 立即詢問'),
+                    onTap: () {
+                      controller.call(
+                          Uri(scheme: 'tel', path: "+${controller.item.tel}"));
+                    },
+                  ),
+                  (controller.item.address != '')
+                      ? InkWell(
+                          child: buildText(
+                              '地址資訊\n${controller.item.address ?? '暫時無資料'}'),
+                          onTap: () {
+                            Clipboard.setData(ClipboardData(
+                                text: controller.item.address ?? '暫時無資料'));
+                            ToastUtil.info("複製成功!");
+                          },
+                        )
                       : const SizedBox.shrink(),
-              (controller.item.remarks != '')
-                  ? buildText('注意事項\n${controller.item.remarks!}')
-                  : const SizedBox.shrink(),
-              SizedBox(height: ASize.h(30)),
-              (controller.item.changetime != '')
-                  ? buildText('最後更新時間\n${controller.item.changetime!}')
-                  : const SizedBox.shrink(),
-            ]),
-      ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Icon(Icons.assistant_navigation,
+                            color: Colors.white),
+                        Padding(
+                          padding: EdgeInsets.only(left: ASize.w(2)),
+                          child: InkWell(
+                            child: buildText('開啟導航'),
+                            onTap: () {
+                              // var uri = Uri.parse(controller.item.map!);
+                              controller.call(Uri(
+                                  scheme: 'https',
+                                  host: 'www.google.com',
+                                  path:
+                                      '/maps/search/${(controller.item.address != null) ? controller.item.address : controller.item.title}'));
+                            },
+                          ),
+                        ),
+                      ]),
+                  (controller.item.opentime != '')
+                      ? buildText('營業時間\n${controller.item.opentime!}')
+                      : const SizedBox.shrink(),
+                  (controller.item.ticketinfo != '')
+                      ? buildText('門票\n${controller.item.ticketinfo!}')
+                      : const SizedBox.shrink(),
+                  (controller.item.travellinginfo != '')
+                      ? buildText('旅遊資訊\n${controller.item.travellinginfo!}')
+                      : const SizedBox.shrink(),
+                  (controller.item.toldescribe == '')
+                      ? buildText('詳細資訊\n${controller.item.toldescribe!}')
+                      : (controller.item.description != '')
+                          ? buildText('詳細資訊\n${controller.item.description!}')
+                          : const SizedBox.shrink(),
+                  (controller.item.remarks != '')
+                      ? buildText('注意事項\n${controller.item.remarks!}')
+                      : const SizedBox.shrink(),
+                  SizedBox(height: ASize.h(30)),
+                  (controller.item.changetime != '')
+                      ? buildText('最後更新時間\n${controller.item.changetime!}')
+                      : const SizedBox.shrink(),
+                ]),
+          ),
+        ),
+      ],
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -24,17 +25,14 @@ enum VideoType {
 /// 用户的性别
 enum UserSex { unknown, man, girl }
 
-/// 内容类型
-enum JDContentType {
-  unknown, // 未知
-  video, // 视频
-  smallVideo, // 短视频
-  cartoon, // 漫画
-  fiction, // 小说
-  image // 图片/美图
-}
+late SharedPreferences prefs;
 
-class UserSexUtil {
+class UserUtil {
+  /// Initializing the library.
+  static Future<void> init(BuildContext context) async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   static UserSex toValue(String sexStr) {
     if (sexStr == '1') {
       return UserSex.man;
@@ -51,32 +49,27 @@ class UserSexUtil {
     } else if (UserSex.girl == sex) {
       return 'images/user/tag_woman.png';
     }
-
     return '';
   }
 }
 
-///1约炮2红灯3裸聊
-const String actual_combat_type_yue = '1';
-const String actual_combat_type_red = '2';
-const String actual_combat_type_luo = '3';
+SharedPreferences get sharedPreferences {
+  return prefs;
+}
 
 //数据库key前缀
 const String history_cartoon_prex = 'cartoon';
 const String history_fiction_prex = 'fiction';
 
-// MARK -  一些固定的图片资源路径
-
-// 方形图片占位
-String kPlaceholderSquareImage = 'images/placeholder/placeholder_rect.png';
+/// MARK -  一些固定的图片资源路径
 // 小矩形图片占位
-String kPlaceholderSmallImage = 'images/placeholder/placeholder_small.png';
-// 圆形占位图
-String kPlaceholderCircleImage = 'images/placeholder/placeholder_circle.png';
-// 大矩形图片占位
-const String kPlaceholderBigImage = 'images/placeholder/placeholder_big.png';
+String kPlaceholderSmallImage = 'images/placeholder/placeholder_small.jpg';
 // 小矩形图片占位
-String kPlaceholderEmptyImage = 'images/placeholder/error_banner.jpeg';
+String kPlaceholderEmptyImage = 'images/placeholder/error_banner.jpg';
+// 開機圖片
+String splashImage = 'images/icon/hitaiwan.png';
+// 第一次抓取資料
+String firstLoading = 'images/icon/loading_data.gif';
 
 /// 自訂化文字
 const String emptyData = '尚未資料';

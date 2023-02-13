@@ -27,19 +27,19 @@ class DashboardPage extends StatelessWidget {
         return Scaffold(
           body: pages[controller.tabIndex],
           bottomNavigationBar: BottomNavigationBar(
-            unselectedItemColor: Colors.black,
-            selectedItemColor: Colors.redAccent,
+            unselectedItemColor: Colors.white,
+            selectedItemColor: const Color(0xFFffd9d9),
             onTap: controller.changeTabIndex,
             currentIndex: controller.tabIndex,
             showSelectedLabels: true,
             showUnselectedLabels: true,
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.blueGrey,
             elevation: 0,
             items: [
               _bottomNavigationBarItem(
                 icon: CupertinoIcons.home,
-                label: '首頁',
+                label: '景點',
               ),
               _bottomNavigationBarItem(
                 icon: CupertinoIcons.person,

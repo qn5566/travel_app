@@ -16,76 +16,112 @@ class ListViewHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     controller.searchData([site]);
-    return Obx(() => controller.isLoading.value
-        ? const Center(child: CircularProgressIndicator())
-        : ListView.builder(
-            itemCount: controller.dataList.length,
-            itemBuilder: (context, index) {
-              DataAll item = controller.dataList[index];
-              return GestureDetector(
-                onTap: () {
-                  controller.onTap(item);
-                },
-                child: Container(
-                  // color: Colors.transparent,
-                  color: Colors.black38,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AspectRatio(
-                        aspectRatio: 1.7777777,
-                        child: Stack(
-                          children: [
-                            Positioned.fill(
-                              child: VideoCoverView(
-                                // radius: 10,
-                                cover: item.picture1 ?? '',
-                                money: item.region,
+    return Obx(
+      () => controller.isLoading.value
+          ? Stack(
+              children: const [
+               /* Image.asset(
+                  firstLoading,
+                  fit: BoxFit.cover,
+                ),*/
+                Center(child: CircularProgressIndicator()),
+              ],
+            )
+          : (controller.dataList.isNotEmpty)
+              ? MediaQuery.removePadding(
+                  removeTop: true,
+                  context: context,
+                  child: ListView.builder(
+                    itemCount: controller.dataList.length,
+                    itemBuilder: (context, index) {
+                      DataAll item = controller.dataList[index];
+                      return GestureDetector(
+                        onTap: () {
+                          controller.onTap(item);
+                        },
+                        child: Container(
+                          color: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 1.7777777,
+                                child: Stack(
+                                  children: [
+                                    VideoCoverView(
+                                      radius: 10,
+                                      cover: item.picture1 ?? '',
+                                      money: item.region,
+                                    ),
+                                    MoneytextWidget(item.region ?? "尚未資料")
+                                  ],
+                                ),
                               ),
-                            ),
-                            MoneytextWidget(item.region ?? "尚未資料")
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.only(top: ASize.w(1), left: ASize.w(1)),
-                        child: Text(
-                          item.title,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "PingFangSC",
-                            fontStyle: FontStyle.normal,
-                            fontSize: ASize.ft(8),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: ASize.w(1), left: ASize.w(1)),
+                                child: Text(
+                                  item.title,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "PingFangSC",
+                                    fontStyle: FontStyle.normal,
+                                    fontSize: ASize.ft(8),
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: ASize.w(1),
+                                    left: ASize.w(1),
+                                    bottom: ASize.w(4)),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.place_outlined,
+                                      color: Colors.grey,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        item.address ?? emptyData,
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w500,
+                                          fontFamily: "PingFangSC",
+                                          fontStyle: FontStyle.normal,
+                                          fontSize: ASize.ft(6),
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.fade,
+                                        softWrap: false,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: ASize.w(1),
-                            left: ASize.w(1),
-                            bottom: ASize.w(4)),
-                        child: Text(
-                          item.address ?? emptyData,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "PingFangSC",
-                            fontStyle: FontStyle.normal,
-                            fontSize: ASize.ft(6),
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
+                )
+              : Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Padding(
+                        padding: const EdgeInsets.all(50.0),
+                        child: Image.asset(
+                          'images/icon/no_data.png',
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            },
-          ));
+    );
   }
 }

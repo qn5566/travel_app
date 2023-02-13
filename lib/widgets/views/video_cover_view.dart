@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../config/global_config.dart';
+import '../../util/ui_util.dart';
 import '../network_cache_image.dart';
 
 /// 「封面圖」
@@ -22,7 +23,7 @@ class VideoCoverView extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.transparent,
-        borderRadius: BorderRadius.all(Radius.circular(radius)),
+        borderRadius:BorderRadius.all(Radius.circular(ASize.w(10))),
       ),
       child: Stack(
         children: [

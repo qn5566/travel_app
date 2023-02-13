@@ -7,7 +7,7 @@ import '../util/ui_util.dart';
 class MoneytextWidget extends StatefulWidget {
   String moneyText;
 
-  MoneytextWidget(this.moneyText);
+  MoneytextWidget(this.moneyText, {super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -20,11 +20,11 @@ class MoneytextWidgetState extends State<MoneytextWidget> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return (widget.moneyText.length > 0 && widget.moneyText != '0')
+    return (widget.moneyText.isNotEmpty && widget.moneyText != '0')
         ? Positioned(
             left: ASize.w(5),
             top: ASize.w(5),
-            height: ASize.w(10),
+            height: ASize.w(12),
             child: Container(
               decoration: BoxDecoration(
                 color: StyleInfo.main_black.withOpacity(0.6),
@@ -35,10 +35,14 @@ class MoneytextWidgetState extends State<MoneytextWidget> {
                   Padding(
                     padding:
                         EdgeInsets.only(left: ASize.w(3), right: ASize.w(3)),
-                    child: Image.asset(
-                      'images/icon/img.png',
-                      width: ASize.w(8),
+                    child: const Icon(
+                      Icons.travel_explore,
+                      color: Colors.orange,
                     ),
+                    // Image.asset(
+                    //   'images/icon/img.png',
+                    //   width: ASize.w(8),
+                    // ),
                   ),
                   Text(
                     widget.moneyText,

@@ -1,11 +1,14 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../config/style_info.dart';
+import '../../config/global_config.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/list_view_home.dart';
+import '../dashboard/dashboard_controller.dart';
 import 'home_controller.dart';
 
 /*
@@ -14,16 +17,85 @@ import 'home_controller.dart';
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});
 
+  static TextStyle leftText = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+    fontFamily: "PingFangSC",
+    fontStyle: FontStyle.normal,
+    fontSize: ASize.ft(8),
+    backgroundColor: const Color(0xFF0E3311).withOpacity(0.5),
+  );
+
   @override
   Widget build(BuildContext context) {
+    DashboardController dashboardController = Get.find<DashboardController>();
+    if (sharedPreferences.getString("username") != null) {
+      controller.username.value = sharedPreferences.getString("username")!;
+    }
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
+        key: controller.scaffoldKey,
+        drawer: Drawer(
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/home/background_left.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  child: Obx(() => (controller.username.value.isEmpty)
+                      ? Column(
+                          children: [
+                            Text("Hello!", style: leftText),
+                            SizedBox(height: ASize.h(10)),
+                            Text("請先去設定頁面填入暱稱", style: leftText),
+                            SizedBox(height: ASize.h(5)),
+                          ],
+                        )
+                      : Text("Hello! \n${controller.username.value}",
+                          style: leftText)),
+                ),
+                ListTile(
+                  title: Text('景點', style: leftText),
+                  onTap: () {
+                    dashboardController.changeTabIndex(0);
+                    return controller.closeDrawer();
+                  },
+                ),
+                ListTile(
+                  title: Text('設定', style: leftText),
+                  onTap: () {
+                    dashboardController.changeTabIndex(1);
+                    return controller.closeDrawer();
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
         body: Container(
-          color: StyleInfo.main_bg,
+          color: Colors.white,
           child: Stack(
             children: [
-              _backgroundImageView(height: 300),
+              Positioned.fill(
+                child: Image.asset(
+                  'images/home/home_bg.jpg',
+                  fit: BoxFit.fill,
+                ),
+              ),
+              // 毛玻璃效果 - 半透明
+              Container(
+                color: const Color(0xFF0E3311).withOpacity(0.5),
+              ),
               Positioned.fill(
                 child: Container(
                   color: Colors.transparent,
@@ -63,15 +135,7 @@ class HomePage extends GetView<HomeController> {
             controller: controller.tabTitleController,
             isScrollable: true,
             indicatorColor: Colors.white,
-            // indicator: ACETabBarIndicator(
-            //   type: ACETabBarIndicatorType.runderline_fixed,
-            //   height: ASize.w(8),
-            //   lineWidth: ASize.w(15),
-            //   color: Colors.white,
-            // ),
-            // indicatorSize: Custom.TabBarIndicatorSize.label,
             indicatorWeight: 2,
-            // unselectedLabelColor: StyleInfo.white_07,
             labelColor: Colors.white,
             unselectedLabelStyle: TextStyle(
               fontSize: ASize.ft(6),
@@ -91,10 +155,6 @@ class HomePage extends GetView<HomeController> {
             children: controller.getTabTitle.map((e) {
               return ListViewHome(site: e);
             }).toList(),
-            // children: [
-            //   ListViewHome(site:controller.getTabTitle[0]),
-            //   ListViewHome(site:controller.getTabTitle[1]),
-            // ],
           ),
         )
       ],
@@ -113,7 +173,7 @@ class HomePage extends GetView<HomeController> {
           Expanded(
             child: Container(),
           ),
-          _searchBar('请输入关键词', height: navigationBarHeight)
+          _searchBar('請輸入關鍵字', height: navigationBarHeight)
         ],
       ),
     );
@@ -126,24 +186,24 @@ class HomePage extends GetView<HomeController> {
       color: Colors.transparent,
       child: Row(
         children: [
-          _buildNavigationItem('签到', 'images/home/home_sign_in.png', onTap: () {
-            // SignInAlertController.showAlert(context);
+          _buildNavigationItem('選單', 'images/home/home_sign_in.png', onTap: () {
+            controller.openDrawer();
           }),
           Expanded(
             child: GestureDetector(
               child: Container(
                 height: ASize.w(16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(ASize.w(26))),
+                decoration: const BoxDecoration(
+                  // borderRadius: BorderRadius.all(Radius.circular(ASize.w(26))),
                   color: Colors.white,
                 ),
                 child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 8),
-                      child: Image.asset(
-                        'images/home/home_search.png',
-                        width: ASize.w(10),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 8, right: 8),
+                      child: Icon(
+                        Icons.search,
+                        color: Colors.black38,
                       ),
                     ),
                     Text(
@@ -162,13 +222,16 @@ class HomePage extends GetView<HomeController> {
               },
             ),
           ),
-          _buildNavigationItem('分类', 'images/home/tag_list.png', onTap: () {
-            // Navigator.push(
-            //     context,
-            //     CupertinoPageRoute(
-            //         builder: (_) => HomeCategoryPage(
-            //             _currentIndexType(_tabController.index))));
-          }),
+          SizedBox(
+            width: ASize.w(5),
+          )
+          // _buildNavigationItem('分类', 'images/home/tag_list.png', onTap: () {
+          // Navigator.push(
+          //     context,
+          //     CupertinoPageRoute(
+          //         builder: (_) => HomeCategoryPage(
+          //             _currentIndexType(_tabController.index))));
+          // }),
         ],
       ),
     );
@@ -189,9 +252,13 @@ class HomePage extends GetView<HomeController> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                icon,
-                width: ASize.w(12),
+              // Image.asset(
+              //   icon,
+              //   width: ASize.w(12),
+              // ),
+              const Icon(
+                Icons.menu,
+                color: Colors.white,
               ),
               SizedBox(
                 height: ASize.ft(0),
@@ -212,20 +279,10 @@ class HomePage extends GetView<HomeController> {
   /// 毛玻璃背景(不需要毛玻璃了)
   /// [height] 图片高度
   /// https://www.jianshu.com/p/381c6609c5f1
-  Positioned _backgroundImageView({required double height}) => Positioned(
-        top: 0,
-        right: 0,
-        left: 0,
-        height: height,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                'images/home/home_top_bg.png',
-                fit: BoxFit.fill,
-              ),
-            ),
-          ],
+  Positioned _backgroundImageView({double height = 0}) => Positioned.fill(
+        child: Image.asset(
+          'images/home/home_bg.jpg',
+          fit: BoxFit.fill,
         ),
       );
 }

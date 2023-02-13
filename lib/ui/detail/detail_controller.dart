@@ -6,10 +6,12 @@ import 'package:get/get.dart';
 import 'package:travel/data/mode/data_all.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../config/global_config.dart';
 import '../../data/api_helper.dart';
 import '../../data/mode/comment_model.dart';
 import '../../util/ToastUtil.dart';
 import '../../widgets/title_view.dart';
+import '../account/account_controller.dart';
 
 class DetailController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -35,6 +37,7 @@ class DetailController extends GetxController
     fetchApi();
     tabInfoController = TabController(length: subTitle.length, vsync: this);
     messageController = TextEditingController();
+    Get.delete<AccountController>();
   }
 
   /// 獲取Comment data
@@ -52,6 +55,14 @@ class DetailController extends GetxController
   }
 
   void checkSendData(String data, {required ValueChanged<dynamic> callback}) {
+    String username = '';
+    if (sharedPreferences.getString("username") != null) {
+      username = sharedPreferences.getString("username") ?? '';
+    }else{
+      ToastUtil.info("請先設定暱稱");
+      return;
+    }
+
     if (data.isEmpty) {
       ToastUtil.info("請填入資訊");
     } else {
@@ -64,8 +75,9 @@ class DetailController extends GetxController
       }
 
       Map<String, dynamic> body = {
+        'fun': 'updateComment',
         'TitleId': Get.arguments.id,
-        'Username': 'Ted',
+        'Username': username,
         'Comment': data,
         'Like': 5,
         'Device': Platform.isAndroid ? 'Android' : 'iOS',
@@ -89,6 +101,7 @@ class DetailController extends GetxController
       if (kDebugMode) {
         print('Error:$e');
       }
+      callback('ok');
     });
   }
 
@@ -104,6 +117,7 @@ class DetailController extends GetxController
   @override
   void onClose() {
     tabInfoController.dispose();
+    Get.lazyPut<AccountController>(() => AccountController());
     super.onClose();
   }
 
