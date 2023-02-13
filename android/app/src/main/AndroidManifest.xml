@@ -4,7 +4,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="travel"
+        android:label="台灣景點地圖"
         android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
@@ -31,6 +31,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3731028924883193~7523929898"/>
     </application>
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />

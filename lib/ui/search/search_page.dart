@@ -12,7 +12,7 @@ import '../../config/style_info.dart';
 import '../../util/ui_util.dart';
 
 class SearchPage extends GetView<SearchController> {
-  SearchPage({Key? key}) : super(key: key);
+  const SearchPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -91,15 +91,14 @@ class SearchPage extends GetView<SearchController> {
       height: height,
       color: Colors.transparent,
       child: Padding(
-        padding: EdgeInsets.only(left: ASize.w(5), right: ASize.w(5)),
+        padding: EdgeInsets.only(left: ASize.w(10), right: ASize.w(10)),
         child: Row(
           children: [
             Expanded(
               child: Container(
-                height: ASize.h(38),
                 decoration: BoxDecoration(
                     borderRadius:
-                        BorderRadius.all(Radius.circular(ASize.w(18))),
+                        const BorderRadius.all(Radius.circular(5)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),
@@ -149,14 +148,9 @@ class SearchPage extends GetView<SearchController> {
                         padding: EdgeInsets.only(
                           right: ASize.w(2),
                         ),
-                        child: Container(
+                        child: SizedBox(
                           height: ASize.h(16),
                           width: ASize.w(30),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(ASize.w(30))),
-                          ),
                           child: Center(
                             child: Text("搜索",
                                 style: TextStyle(

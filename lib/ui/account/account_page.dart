@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import '../../config/style_info.dart';
 import '../../util/ui_util.dart';
@@ -58,9 +59,23 @@ class AccountPage extends GetView<AccountController> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 15.0),
+                    const SizedBox(height: 10.0),
+                    Obx(() => (controller.isADShowing.value &&
+                            controller.bannerAd != null)
+                        ? Align(
+                            alignment: Alignment.topCenter,
+                            child: SizedBox(
+                              width: controller.bannerAd!.size.width.toDouble(),
+                              height:
+                                  controller.bannerAd!.size.height.toDouble(),
+                              child: AdWidget(ad: controller.bannerAd!),
+                            ),
+                          )
+                        : SizedBox(
+                            height: ASize.h(0),
+                          )),
                     Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
                       child: Row(
                         children: [
                           const Text("暱稱:"),

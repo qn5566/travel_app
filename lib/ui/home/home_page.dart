@@ -194,7 +194,7 @@ class HomePage extends GetView<HomeController> {
               child: Container(
                 height: ASize.w(16),
                 decoration: const BoxDecoration(
-                  // borderRadius: BorderRadius.all(Radius.circular(ASize.w(26))),
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
                   color: Colors.white,
                 ),
                 child: Row(
@@ -223,15 +223,8 @@ class HomePage extends GetView<HomeController> {
             ),
           ),
           SizedBox(
-            width: ASize.w(5),
+            width: ASize.w(20),
           )
-          // _buildNavigationItem('分类', 'images/home/tag_list.png', onTap: () {
-          // Navigator.push(
-          //     context,
-          //     CupertinoPageRoute(
-          //         builder: (_) => HomeCategoryPage(
-          //             _currentIndexType(_tabController.index))));
-          // }),
         ],
       ),
     );

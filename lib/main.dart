@@ -7,9 +7,11 @@ import 'config/global_config.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
 import 'themes/app_theme.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() {
   Get.put(RxConfig());
+  MobileAds.instance.initialize();
   runApp(const MyApp());
 }
 

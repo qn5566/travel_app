@@ -1,6 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:travel/data/database/sqliteHelper.dart';
 
+/// DB 基本mode
 class BaseDb {
   BaseDb(this.table);
 
@@ -8,21 +9,11 @@ class BaseDb {
   final SqliteHelper _sql = SqliteHelper();
   late Database db;
 
-  // static final BaseDb _instance = BaseDb.internal();
-  //
-  // static BaseDb get instance => _instance;
-  //
-  // BaseDb.internal() {
-  //   _sql = SqliteHelper();
-  // }
-
   Future open() async {
     db = await _sql.db;
-    // await myDbQuery(this, "before");
   }
 
   Future close() async {
-    // await myDbQuery(this, "after");
     _sql.close();
   }
 

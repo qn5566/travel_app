@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import '../../config/AdHelper.dart';
 import '../../config/global_config.dart';
 import '../../data/database/categoryDb.dart';
 import '../../data/mode/data_all.dart';
@@ -20,9 +22,14 @@ class AccountController extends GetxController {
   // 儲存資料
   late List<String> historyList;
 
+  // 廣告宣告
+  BannerAd? bannerAd;
+  var isADShowing = false.obs;
+
   @override
   void onInit() async {
     super.onInit();
+    adMobBanner();
     if (sharedPreferences.getString("username") != null) {
       username.value = sharedPreferences.getString("username")!;
     }
@@ -45,6 +52,25 @@ class AccountController extends GetxController {
       }
     }
     isLoading(false);
+  }
+
+  /// 設定廣告
+  void adMobBanner() {
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          bannerAd = ad as BannerAd;
+          isADShowing(true);
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
   }
 
   /// 更新暱稱
@@ -72,12 +98,14 @@ class AccountController extends GetxController {
     if (kDebugMode) {
       print(item.title);
     }
-    // // 儲存資料
-    // List<String> historyList =
-    //     (sharedPreferences.getStringList('history') ?? <String>[]);
-    // historyList.add(item.title);
-    // sharedPreferences.setStringList('history', historyList);
     // 跳頁
     Get.toNamed(AppRoutes.travelDetails, arguments: item);
+  }
+
+  /// 關閉
+  @override
+  void dispose() {
+    bannerAd?.dispose();
+    super.dispose();
   }
 }
