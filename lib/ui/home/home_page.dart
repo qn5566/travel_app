@@ -17,13 +17,22 @@ import 'home_controller.dart';
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});
 
+  static TextStyle leftTextHello = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w500,
+    fontFamily: "PingFangSC",
+    fontStyle: FontStyle.normal,
+    fontSize: ASize.ft(12),
+    // backgroundColor: const Color(0xFF0E3311).withOpacity(0.5),
+  );
+
   static TextStyle leftText = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.w500,
     fontFamily: "PingFangSC",
     fontStyle: FontStyle.normal,
     fontSize: ASize.ft(8),
-    backgroundColor: const Color(0xFF0E3311).withOpacity(0.5),
+    // backgroundColor: const Color(0xFF0E3311).withOpacity(0.5),
   );
 
   @override
@@ -41,43 +50,73 @@ class HomePage extends GetView<HomeController> {
           child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("images/home/background_left.jpg"),
+                image: AssetImage("images/home/background_left.png"),
                 fit: BoxFit.cover,
               ),
             ),
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
-                  decoration: const BoxDecoration(
-                    color: Colors.transparent,
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: <Widget>[
+                      DrawerHeader(
+                        decoration: const BoxDecoration(
+                          color: Colors.transparent,
+                        ),
+                        child: Obx(() => (controller.username.value.isEmpty)
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text("Hello!", style: leftTextHello),
+                                  SizedBox(height: ASize.h(10)),
+                                  Text("請先去設定頁面填入暱稱", style: leftText),
+                                  SizedBox(height: ASize.h(5)),
+                                ],
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text("Hello!", style: leftText),
+                                  SizedBox(height: ASize.h(20)),
+                                  Text(controller.username.value,
+                                      style: leftText),
+                                ],
+                              )),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 20, right: 20),
+                        child: Divider(
+                          color: Colors.white,
+                          thickness: 2,
+                        ),
+                      ),
+                      ListTile(
+                        title: Text('景點', style: leftText),
+                        onTap: () {
+                          dashboardController.changeTabIndex(0);
+                          return controller.closeDrawer();
+                        },
+                      ),
+                      ListTile(
+                        title: Text('設定', style: leftText),
+                        onTap: () {
+                          dashboardController.changeTabIndex(1);
+                          return controller.closeDrawer();
+                        },
+                      )
+                    ],
                   ),
-                  child: Obx(() => (controller.username.value.isEmpty)
-                      ? Column(
-                          children: [
-                            Text("Hello!", style: leftText),
-                            SizedBox(height: ASize.h(10)),
-                            Text("請先去設定頁面填入暱稱", style: leftText),
-                            SizedBox(height: ASize.h(5)),
-                          ],
-                        )
-                      : Text("Hello! \n${controller.username.value}",
-                          style: leftText)),
                 ),
-                ListTile(
-                  title: Text('景點', style: leftText),
-                  onTap: () {
-                    dashboardController.changeTabIndex(0);
-                    return controller.closeDrawer();
-                  },
+                const Text(
+                  '資料來源',
+                  style: TextStyle(color: Colors.white),
                 ),
-                ListTile(
-                  title: Text('設定', style: leftText),
-                  onTap: () {
-                    dashboardController.changeTabIndex(1);
-                    return controller.closeDrawer();
-                  },
-                )
+                const Text('政府資料開放平臺', style: TextStyle(color: Colors.white)),
+                Text('版本:${controller.getAppVersion()}', style: const TextStyle(color: Colors.white)),
+                const SizedBox(height: 2,)
               ],
             ),
           ),
@@ -88,8 +127,8 @@ class HomePage extends GetView<HomeController> {
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  'images/home/home_bg.jpg',
-                  fit: BoxFit.fill,
+                  'images/home/home_bg.png',
+                  fit: BoxFit.cover,
                 ),
               ),
               // 毛玻璃效果 - 半透明

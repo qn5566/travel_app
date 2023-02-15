@@ -19,7 +19,7 @@ class CommentView extends StatelessWidget {
       children: [
         Positioned.fill(
           child: Image.asset(
-            'images/info/background_commit.jpg',
+            'images/info/background_commit.png',
             fit: BoxFit.cover,
           ),
         ),
@@ -28,7 +28,8 @@ class CommentView extends StatelessWidget {
           color: const Color(0xFF0E3311).withOpacity(0.5),
         ),
         Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.only(
+              left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
           child: Column(
             children: [
               Expanded(
@@ -73,7 +74,11 @@ class CommentView extends StatelessWidget {
                                         fontWeight: FontWeight.w500,
                                         color: StyleInfo.white_07),
                                   ),
-                                  SizedBox(height: ASize.h(5)),
+                                  SizedBox(height: ASize.h(2)),
+                                  const Divider(
+                                    color: Colors.white,
+                                    thickness: 1,
+                                  ),
                                 ],
                               ),
                             )

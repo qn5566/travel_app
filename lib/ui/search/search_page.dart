@@ -31,9 +31,9 @@ class SearchPage extends GetView<SearchController> {
                   ),
                 ),
                 // 毛玻璃效果 - 半透明
-                Container(
-                  color: const Color(0xFF0E3311).withOpacity(0.5),
-                ),
+                // Container(
+                //   color: const Color(0xFF0E3311).withOpacity(0.5),
+                // ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

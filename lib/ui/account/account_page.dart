@@ -23,21 +23,28 @@ class AccountPage extends GetView<AccountController> {
       debugShowCheckedModeBanner: false,
       home: Builder(builder: (context) {
         return Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: Stack(
-            children: [
-              Positioned.fill(
-                child: Image.asset(
-                  'images/setting/background_setting.jpg',
-                  fit: BoxFit.cover,
-                  height: double.infinity,
-                  width: double.infinity,
-                  alignment: Alignment.center,
+            resizeToAvoidBottomInset: false,
+            body: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    'images/setting/background_setting_2.png',
+                    fit: BoxFit.fitWidth,
+                    height: double.infinity,
+                    width: double.infinity,
+                    alignment: Alignment.bottomCenter,
+                  ),
                 ),
-              ),
-              Container(
-                color: Colors.white70,
-                child: Column(
+                Positioned.fill(
+                  child: Image.asset(
+                    'images/setting/background_setting.png',
+                    fit: BoxFit.fitWidth,
+                    height: double.infinity,
+                    width: double.infinity,
+                    alignment: Alignment.topCenter,
+                  ),
+                ),
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const SizedBox(height: 5.0),
@@ -50,7 +57,7 @@ class AccountPage extends GetView<AccountController> {
                         children: [
                           Text('設定',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontWeight: FontWeight.w500,
                                 fontFamily: "PingFangSC",
                                 fontStyle: FontStyle.normal,
@@ -75,10 +82,18 @@ class AccountPage extends GetView<AccountController> {
                             height: ASize.h(0),
                           )),
                     Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+                      padding:
+                          const EdgeInsets.only(left: 10, right: 10, top: 5),
                       child: Row(
                         children: [
-                          const Text("暱稱:"),
+                          Text("暱稱:",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "PingFangSC",
+                                fontStyle: FontStyle.normal,
+                                fontSize: ASize.ft(8),
+                              )),
                           Obx(() => (controller.username.value == '')
                               ? Expanded(
                                   child: Row(
@@ -99,9 +114,9 @@ class AccountPage extends GetView<AccountController> {
                                             maxLength: 10,
                                             placeholder: "請輸入暱稱",
                                             placeholderStyle: TextStyle(
-                                                fontSize: ASize.ft(6),
+                                                fontSize: ASize.ft(8),
                                                 fontWeight: FontWeight.normal,
-                                                color: Colors.black),
+                                                color: Colors.white),
                                             decoration:
                                                 // const BoxDecoration(color: Colors.transparent),
                                                 BoxDecoration(
@@ -186,11 +201,20 @@ class AccountPage extends GetView<AccountController> {
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(left: 10),
-                                        child: Text(controller.username.value),
+                                        child: Text(controller.username.value,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: "PingFangSC",
+                                              fontStyle: FontStyle.normal,
+                                              fontSize: ASize.ft(8),
+                                            )),
                                       ),
                                       GestureDetector(
                                         child: Padding(
@@ -243,16 +267,35 @@ class AccountPage extends GetView<AccountController> {
                         ],
                       ),
                     ),
-                    SizedBox(height: ASize.h(10)),
-                    const Text("最近查看"),
+                    SizedBox(height: ASize.h(2)),
+                    Text("最近查看",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: "PingFangSC",
+                          fontStyle: FontStyle.normal,
+                          fontSize: ASize.ft(8),
+                        )),
                     const SizedBox(height: 5.0),
                     Expanded(child: ListViewHistory()),
                   ],
                 ),
-              ),
-            ],
-          ),
-        );
+              ],
+            ),
+            floatingActionButton: Obx(() => (controller.dataList.isNotEmpty)
+                ? FloatingActionButton.extended(
+                    onPressed: () {
+                      controller.deleteData();
+                    },
+                    backgroundColor: Colors.red,
+                    label: const Text(
+                      '刪除全部資料',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                : SizedBox(
+                    width: ASize.w(1),
+                  )));
       }),
     );
   }

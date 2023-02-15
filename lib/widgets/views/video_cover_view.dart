@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../config/global_config.dart';
 import '../../util/ui_util.dart';
@@ -12,18 +13,14 @@ class VideoCoverView extends StatelessWidget {
 
   String get moneyText => money == '0' ? '' : money ?? '';
 
-  const VideoCoverView(
-      {super.key,
-      this.cover,
-      this.money,
-      this.radius = 0});
+  const VideoCoverView({super.key, this.cover, this.money, this.radius = 0});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.transparent,
-        borderRadius:BorderRadius.all(Radius.circular(ASize.w(10))),
+        borderRadius: BorderRadius.all(Radius.circular(ASize.w(10))),
       ),
       child: Stack(
         children: [
@@ -34,10 +31,12 @@ class VideoCoverView extends StatelessWidget {
               height: double.infinity,
               radius: radius,
               fit: BoxFit.cover,
-              placeholderWidget: Image.asset(
-                kPlaceholderSmallImage,
-                fit: BoxFit.cover,
-              ),
+              placeholderWidget:
+              Lottie.asset('assets/cover.json'),
+              // Image.asset(
+              //   kPlaceholderSmallImage,
+              //   fit: BoxFit.cover,
+              // ),
               errorWidget: Image.asset(
                 kPlaceholderEmptyImage,
                 fit: BoxFit.cover,

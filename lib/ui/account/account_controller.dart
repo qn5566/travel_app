@@ -66,7 +66,9 @@ class AccountController extends GetxController {
           isADShowing(true);
         },
         onAdFailedToLoad: (ad, err) {
-          print('Failed to load a banner ad: ${err.message}');
+          if (kDebugMode) {
+            print('Failed to load a banner ad: ${err.message}');
+          }
           ad.dispose();
         },
       ),
@@ -91,6 +93,14 @@ class AccountController extends GetxController {
     dataList.assignAll(List.generate(poetryData.length, (index) {
       return DataAll.fromJson(poetryData[index]);
     }));
+    isLoading(false);
+  }
+
+  /// 刪除資料
+  void deleteData() async {
+    isLoading(true);
+    sharedPreferences.setStringList('history', <String>[]);
+    dataList.assignAll(<DataAll>[]);
     isLoading(false);
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -27,10 +28,14 @@ enum UserSex { unknown, man, girl }
 
 late SharedPreferences prefs;
 
+/// 版本資料包
+late PackageInfo info;
+
 class UserUtil {
   /// Initializing the library.
   static Future<void> init(BuildContext context) async {
     prefs = await SharedPreferences.getInstance();
+    info = await PackageInfo.fromPlatform();
   }
 
   static UserSex toValue(String sexStr) {
@@ -55,6 +60,10 @@ class UserUtil {
 
 SharedPreferences get sharedPreferences {
   return prefs;
+}
+
+PackageInfo get packageInfo {
+  return info;
 }
 
 //数据库key前缀

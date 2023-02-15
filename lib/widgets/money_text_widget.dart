@@ -35,14 +35,16 @@ class MoneytextWidgetState extends State<MoneytextWidget> {
                   Padding(
                     padding:
                         EdgeInsets.only(left: ASize.w(3), right: ASize.w(3)),
-                    child: const Icon(
-                      Icons.travel_explore,
-                      color: Colors.orange,
-                    ),
-                    // Image.asset(
-                    //   'images/icon/img.png',
-                    //   width: ASize.w(8),
+                    child:
+
+                    // const Icon(
+                    //   Icons.travel_explore,
+                    //   color: Colors.orange,
                     // ),
+                    Image.asset(
+                      'images/icon/love.png',
+                      width: ASize.w(8),
+                    ),
                   ),
                   Text(
                     widget.moneyText,

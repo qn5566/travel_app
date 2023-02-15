@@ -16,7 +16,7 @@ class InfoView extends StatelessWidget {
       children: [
         Positioned.fill(
           child: Image.asset(
-            'images/info/background_club.jpg',
+            'images/info/background_club.png',
             fit: BoxFit.fill,
           ),
         ),
@@ -33,8 +33,17 @@ class InfoView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
-                    child: buildText(
-                        '聯絡電話\n${controller.item.tel ?? '暫時無資料'} - 立即詢問'),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [buildTitle('聯絡電話'), buildText(' - 點擊撥打')],
+                        ),
+                        buildText(controller.item.tel ?? '暫時無資料'),
+                      ],
+                    ),
                     onTap: () {
                       controller.call(
                           Uri(scheme: 'tel', path: "+${controller.item.tel}"));
@@ -42,8 +51,20 @@ class InfoView extends StatelessWidget {
                   ),
                   (controller.item.address != '')
                       ? InkWell(
-                          child: buildText(
-                              '地址資訊\n${controller.item.address ?? '暫時無資料'}'),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  buildTitle('地址資訊'),
+                                  buildText(' - 點擊複製')
+                                ],
+                              ),
+                              buildText(controller.item.address ?? '暫時無資料'),
+                            ],
+                          ),
                           onTap: () {
                             Clipboard.setData(ClipboardData(
                                 text: controller.item.address ?? '暫時無資料'));
@@ -51,43 +72,83 @@ class InfoView extends StatelessWidget {
                           },
                         )
                       : const SizedBox.shrink(),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(Icons.assistant_navigation,
-                            color: Colors.white),
-                        Padding(
-                          padding: EdgeInsets.only(left: ASize.w(2)),
-                          child: InkWell(
-                            child: buildText('開啟導航'),
-                            onTap: () {
-                              // var uri = Uri.parse(controller.item.map!);
-                              controller.call(Uri(
-                                  scheme: 'https',
-                                  host: 'www.google.com',
-                                  path:
-                                      '/maps/search/${(controller.item.address != null) ? controller.item.address : controller.item.title}'));
-                            },
-                          ),
-                        ),
-                      ]),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: InkWell(
+                      child: buildTitle('開啟導航'),
+                      onTap: () {
+                        // var uri = Uri.parse(controller.item.map!);
+                        controller.call(Uri(
+                            scheme: 'https',
+                            host: 'www.google.com',
+                            path:
+                                '/maps/search/${(controller.item.address != null) ? controller.item.address : controller.item.title}'));
+                      },
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child:
+                        Icon(Icons.assistant_navigation, color: Colors.white),
+                  ),
                   (controller.item.opentime != '')
-                      ? buildText('營業時間\n${controller.item.opentime!}')
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildTitle('營業時間'),
+                            buildText(controller.item.opentime!),
+                          ],
+                        )
                       : const SizedBox.shrink(),
                   (controller.item.ticketinfo != '')
-                      ? buildText('門票\n${controller.item.ticketinfo!}')
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildTitle('門票'),
+                            buildText(controller.item.ticketinfo!),
+                          ],
+                        )
                       : const SizedBox.shrink(),
                   (controller.item.travellinginfo != '')
-                      ? buildText('旅遊資訊\n${controller.item.travellinginfo!}')
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildTitle('旅遊資訊'),
+                            buildText(controller.item.travellinginfo!),
+                          ],
+                        )
                       : const SizedBox.shrink(),
                   (controller.item.toldescribe == '')
-                      ? buildText('詳細資訊\n${controller.item.toldescribe!}')
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildTitle('詳細資訊'),
+                            buildText(controller.item.toldescribe!),
+                          ],
+                        )
                       : (controller.item.description != '')
-                          ? buildText('詳細資訊\n${controller.item.description!}')
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                buildTitle('詳細資訊'),
+                                buildText(controller.item.description!),
+                              ],
+                            )
                           : const SizedBox.shrink(),
                   (controller.item.remarks != '')
-                      ? buildText('注意事項\n${controller.item.remarks!}')
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildTitle('注意事項'),
+                            buildText(controller.item.remarks!),
+                          ],
+                        )
                       : const SizedBox.shrink(),
                   SizedBox(height: ASize.h(30)),
                   (controller.item.changetime != '')
@@ -97,6 +158,25 @@ class InfoView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  /// 文字設定
+  Padding buildTitle(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2.0),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+          fontFamily: "PingFangSC",
+          fontStyle: FontStyle.normal,
+          fontSize: ASize.ft(8),
+          backgroundColor: const Color(0xFFf6f6f6).withOpacity(0.5),
+        ),
+        // overflow: TextOverflow.ellipsis,
+      ),
     );
   }
 

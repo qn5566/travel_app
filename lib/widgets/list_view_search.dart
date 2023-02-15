@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 import 'package:travel/widgets/views/video_cover_view.dart';
 
 import '../config/global_config.dart';
@@ -18,7 +19,11 @@ class ListViewSearch extends StatelessWidget {
     controller.searchData(site.value);
     return Obx(
       () => controller.isLoading.value
-          ? const Center(child: CircularProgressIndicator())
+          ? Lottie.asset('assets/loading.json')
+          // const Center(
+          //         child: CircularProgressIndicator(
+          //         strokeWidth: 10,
+          //       ))
           : (controller.dataList.isNotEmpty)
               ? MediaQuery.removePadding(
                   removeTop: true,
@@ -106,9 +111,15 @@ class ListViewSearch extends StatelessWidget {
                     Positioned.fill(
                       child: Padding(
                         padding: const EdgeInsets.all(50.0),
-                        child: Image.asset(
-                          'images/icon/no_data.png',
-                          fit: BoxFit.fitWidth,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'images/icon/no_data.png',
+                              fit: BoxFit.none,
+                            ),
+                            const Text('無資料'),
+                          ],
                         ),
                       ),
                     ),

@@ -12,6 +12,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 void main() {
   Get.put(RxConfig());
   MobileAds.instance.initialize();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
