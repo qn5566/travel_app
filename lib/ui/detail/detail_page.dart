@@ -26,7 +26,8 @@ class DetailPage extends GetView<DetailController> {
               children: [
                 Padding(
                   //标题栏
-                  padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
+                  padding: EdgeInsets.only(
+                      top: ScreenUtil().statusBarHeight, right: ASize.w(5)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -51,7 +52,13 @@ class DetailPage extends GetView<DetailController> {
                             fontStyle: FontStyle.normal,
                             fontSize: ASize.ft(10),
                           )),
-                      const SizedBox(width: 36.0),
+                      // const SizedBox(width: 36.0),
+                      GestureDetector(
+                          onTap: () {
+                            controller.goToWebView();
+                          },
+                          child: const Icon(Icons.more_horiz,
+                              color: Colors.black)),
                     ],
                   ),
                 ),

@@ -31,8 +31,7 @@ class VideoCoverView extends StatelessWidget {
               height: double.infinity,
               radius: radius,
               fit: BoxFit.cover,
-              placeholderWidget:
-              Lottie.asset('assets/cover.json'),
+              placeholderWidget: Lottie.asset('assets/cover.json'),
               // Image.asset(
               //   kPlaceholderSmallImage,
               //   fit: BoxFit.cover,

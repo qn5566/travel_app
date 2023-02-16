@@ -9,12 +9,12 @@ class CommentModel {
 
   CommentModel(
       {this.comment,
-        this.device,
-        this.id,
-        this.like,
-        this.timeStamp,
-        this.titleId,
-        this.username});
+      this.device,
+      this.id,
+      this.like,
+      this.timeStamp,
+      this.titleId,
+      this.username});
 
   CommentModel.fromJson(Map<String, dynamic> json) {
     comment = json['Comment'];

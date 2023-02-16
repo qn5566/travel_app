@@ -37,11 +37,11 @@ class MoneytextWidgetState extends State<MoneytextWidget> {
                         EdgeInsets.only(left: ASize.w(3), right: ASize.w(3)),
                     child:
 
-                    // const Icon(
-                    //   Icons.travel_explore,
-                    //   color: Colors.orange,
-                    // ),
-                    Image.asset(
+                        // const Icon(
+                        //   Icons.travel_explore,
+                        //   color: Colors.orange,
+                        // ),
+                        Image.asset(
                       'images/icon/love.png',
                       width: ASize.w(8),
                     ),

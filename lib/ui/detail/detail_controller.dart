@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../config/global_config.dart';
 import '../../data/api_helper.dart';
 import '../../data/mode/comment_model.dart';
+import '../../routes/app_routes.dart';
 import '../../util/ToastUtil.dart';
 import '../../widgets/title_view.dart';
 import '../account/account_controller.dart';
@@ -54,17 +55,19 @@ class DetailController extends GetxController
     });
   }
 
-  void checkSendData(String data, {required ValueChanged<dynamic> callback}) {
+  void checkSendData(BuildContext context, String data,
+      {required ValueChanged<dynamic> callback}) {
     String username = '';
-    if (sharedPreferences.getString("username") != null) {
-      username = sharedPreferences.getString("username") ?? '';
-    }else{
-      ToastUtil.info("請先設定暱稱");
+    if (sharedPreferences.getString("username") != null &&
+        sharedPreferences.getString("username") != '') {
+      username = sharedPreferences.getString("username") ?? '未命名';
+    } else {
+      ToastUtil.info(context, "請先設定暱稱");
       return;
     }
 
     if (data.isEmpty) {
-      ToastUtil.info("請填入資訊");
+      ToastUtil.info(context, "請填入資訊");
     } else {
       int timestamp = DateTime.now().millisecondsSinceEpoch;
       DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(timestamp);
@@ -130,5 +133,11 @@ class DetailController extends GetxController
       print(item.like);
       // Get.toNamed(AppRoutes.travelDetails, arguments: item);
     }
+  }
+
+  /// 跳到網頁搜尋
+  void goToWebView() {
+    // 跳頁
+    Get.toNamed(AppRoutes.webViewPage, arguments: item);
   }
 }

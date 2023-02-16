@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "838476137369",
+    "project_id": "taiwanviewpoint-7b86e",
+    "storage_bucket": "taiwanviewpoint-7b86e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838476137369:android:5bed170e82a4efaf6c0908",
+        "android_client_info": {
+          "package_name": "com.meetstudio.travel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838476137369-gqv2qsmqreq35f7l2dk06fkt846ph9e3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYA8eZsAY1yyMhsRmkXN3tlXvMc_rWfTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838476137369-gqv2qsmqreq35f7l2dk06fkt846ph9e3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "838476137369-7pb4h7nkc27lmui60e3t9msh0emhdqih.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "meetstudio.taiwanviewpoint.com"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

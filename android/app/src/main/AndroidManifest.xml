@@ -33,7 +33,7 @@
             android:value="2" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3731028924883193~7523929898"/>
+            android:value="ca-app-pub-3731028924883193~7523929898" />
     </application>
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />

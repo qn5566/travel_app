@@ -97,8 +97,7 @@ class SearchPage extends GetView<SearchController> {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(5)),
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),

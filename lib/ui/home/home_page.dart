@@ -115,8 +115,11 @@ class HomePage extends GetView<HomeController> {
                   style: TextStyle(color: Colors.white),
                 ),
                 const Text('政府資料開放平臺', style: TextStyle(color: Colors.white)),
-                Text('版本:${controller.getAppVersion()}', style: const TextStyle(color: Colors.white)),
-                const SizedBox(height: 2,)
+                Text('版本:${controller.getAppVersion()}',
+                    style: const TextStyle(color: Colors.white)),
+                const SizedBox(
+                  height: 2,
+                )
               ],
             ),
           ),
@@ -284,10 +287,6 @@ class HomePage extends GetView<HomeController> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Image.asset(
-              //   icon,
-              //   width: ASize.w(12),
-              // ),
               const Icon(
                 Icons.menu,
                 color: Colors.white,

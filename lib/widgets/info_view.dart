@@ -68,7 +68,7 @@ class InfoView extends StatelessWidget {
                           onTap: () {
                             Clipboard.setData(ClipboardData(
                                 text: controller.item.address ?? '暫時無資料'));
-                            ToastUtil.info("複製成功!");
+                            ToastUtil.info(context, "複製成功!");
                           },
                         )
                       : const SizedBox.shrink(),

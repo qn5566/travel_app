@@ -123,7 +123,8 @@ class CommentView extends StatelessWidget {
                         FocusScope.of(context).unfocus();
                         // 清除文字
                         controller.messageController.text = '';
-                        controller.checkSendData(sendData, callback: (value) {
+                        controller.checkSendData(context, sendData,
+                            callback: (value) {
                           if (value == 'ok') {
                             controller.fetchApi();
                           }

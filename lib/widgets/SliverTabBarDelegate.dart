@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 
 class SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar widget;
+
   // final Colors color;
   //
-  const SliverTabBarDelegate(this.widget)
-      : assert(widget != null);
+  const SliverTabBarDelegate(this.widget) : assert(widget != null);
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return  Container(
+    return Container(
       child: widget,
       // color: color,
     );
