@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:travel/ui/map/map_controller.dart';
+import 'package:travel/ui/map/map_page.dart';
 
 import '../account/account_page.dart';
 import '../home/home_page.dart';
@@ -15,6 +17,7 @@ class DashboardPage extends StatelessWidget {
 
   /// 頁面設定
   static List<Widget> pages = [
+    const MapPage(),
     const HomePage(),
     const AccountPage(),
   ];
@@ -37,6 +40,10 @@ class DashboardPage extends StatelessWidget {
             backgroundColor: const Color(0xFF439D98),
             elevation: 0,
             items: [
+              _bottomNavigationBarItem(
+                icon: CupertinoIcons.arrow_branch,
+                label: '附近',
+              ),
               _bottomNavigationBarItem(
                 icon: CupertinoIcons.home,
                 label: '景點',

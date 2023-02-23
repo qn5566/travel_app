@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../config/global_config.dart';
-import '../../data/api_helper.dart';
 import '../../data/database/categoryDb.dart';
 import '../../data/mode/data_all.dart';
+import '../../data/repo/data_repo.dart';
 import '../../routes/app_routes.dart';
 
 enum SortState { id, title, region, siteLevel }
@@ -22,6 +22,7 @@ class HomeController extends GetxController
 
   /// DB設定
   CategoryDb categoryDb = CategoryDb();
+  final DataController dataController = Get.find();
 
   late TabController tabTitleController;
   late TextEditingController textEditingController;
@@ -72,13 +73,12 @@ class HomeController extends GetxController
 
     await categoryDb.open();
     if (await categoryDb.checkTableIsEmpty() > 0) {
-      categoryDb.close();
       fetchDB();
     } else {
       firstLoading(true);
-      categoryDb.close();
       fetchApi();
     }
+    categoryDb.close();
   }
 
   void updateUsername(String userName) {
@@ -89,13 +89,7 @@ class HomeController extends GetxController
   /// 抓取資料判斷
   void fetchDB() async {
     isLoading(true);
-    await categoryDb.open();
-    var poetryData = await categoryDb.queryAll();
-    categoryDb.close();
-    dataList.assignAll(List.generate(poetryData.length, (index) {
-      return DataAll.fromJson(poetryData[index]);
-    }));
-
+    dataList.assignAll(await dataController.fetchData());
     searchData([getTabTitle[0]]);
     firstLoading(false);
     isLoading(false);
@@ -104,32 +98,15 @@ class HomeController extends GetxController
   /// 抓取遠端資料
   void fetchApi() async {
     isLoading(true);
-    await categoryDb.open();
-    await ApiHelper().fetchAllDataToDb().then((value) async {
-      for (var data in value) {
-        await categoryDb.autoCheckInsertOrUpdate(data);
-      }
-      categoryDb.close();
-      isLoading(false);
+    await dataController.fetchRemoteData().then((data) {
+      dataList.assignAll(data);
       fetchDB();
-    }).catchError((e) {
-      isLoading(false);
-      if (kDebugMode) {
-        print('Error:$e');
-      }
     });
   }
 
   /// 抓取資料判斷
   void searchData(List<Object?>? whereArgs) async {
-    await categoryDb.open();
-
-    var poetryData = await categoryDb.query('Region = ?', whereArgs);
-    categoryDb.close();
-    dataList.assignAll(List.generate(poetryData.length, (index) {
-      return DataAll.fromJson(poetryData[index]);
-    }));
-    // isLoading(false);
+    dataList.assignAll(await dataController.searchData(whereArgs));
   }
 
   /// 取得版本

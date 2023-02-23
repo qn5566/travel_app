@@ -46,7 +46,9 @@ dependencies:
   toast: ^0.3.0
   firebase_messaging: ^14.2.2
   webview_flutter: ^4.0.2
-
+  google_maps_flutter: ^2.2.4
+  http: ^0.13.4
+  location: ^4.4.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
