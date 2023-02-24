@@ -10,22 +10,29 @@ import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 
 import '../../config/AdHelper.dart';
+import '../../config/global_config.dart';
 import '../../data/database/categoryDb.dart';
 import '../../data/mode/data_all.dart';
 import '../../data/repo/data_repo.dart';
+import '../../routes/app_routes.dart';
+import '../../widgets/custom_marker.dart';
 
 class MapController extends GetxController {
   Completer<GoogleMapController> mapController = Completer();
   late CameraPosition cameraInitPosition;
   late LocationData locationData;
-  final Set<Marker> markers = {};
+  final Set<CustomMarker> markers = {};
   var isLoading = true.obs;
 
   var firstLoading = false.obs;
   var dataList = <DataAll>[].obs;
+
   // 廣告宣告
   BannerAd? bannerAd;
   var isADShowing = false.obs;
+
+  /// 暫存點選到的地標
+  final selectedMarker = Rx<CustomMarker?>(null);
 
   /// DB設定
   CategoryDb categoryDb = CategoryDb();
@@ -33,7 +40,13 @@ class MapController extends GetxController {
 
   void onMapCreated(GoogleMapController controller) {
     mapController.complete(controller);
+
     isLoading(false);
+  }
+
+  void onMarkerTapped(CustomMarker marker) {
+    selectedMarker.value = marker;
+    // 處理 Marker 點擊事件
   }
 
   @override
@@ -58,11 +71,12 @@ class MapController extends GetxController {
     isLoading(true);
     dataList.assignAll(await dataController.fetchData());
     final newMarkers = dataList
-        .map((e) => Marker(
+        .map((e) => CustomMarker(
               markerId: MarkerId(e.title),
               position:
                   LatLng(double.parse(e.py ?? ''), double.parse(e.px ?? '')),
               infoWindow: InfoWindow(title: e.title),
+              dataAll: e,
             ))
         .toSet();
     markers.addAll(newMarkers);
@@ -77,27 +91,6 @@ class MapController extends GetxController {
       dataList.assignAll(data);
       fetchDB();
     });
-  }
-
-  Future<void> fetchMarkers() async {
-    final response = await http.get(Uri.parse(
-        'https://raw.githubusercontent.com/qn5566/travel/main/all_data.json'));
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body) as List<dynamic>;
-      final newMarkers = data
-          .map((e) => Marker(
-                markerId: MarkerId(e['Title']),
-                position: LatLng(double.parse(e['Py']), double.parse(e['Px'])),
-                infoWindow: InfoWindow(title: e['Title']),
-              ))
-          .toSet();
-
-      markers.addAll(newMarkers);
-      isLoading(false);
-    } else {
-      throw Exception('Failed to load markers');
-    }
   }
 
   Future<void> getMyLocation() async {
@@ -151,5 +144,25 @@ class MapController extends GetxController {
         },
       ),
     ).load();
+  }
+
+  /// 進詳細
+  void onTap(DataAll item) {
+    if (kDebugMode) {
+      print(item.title);
+    }
+    // 儲存資料 - 判斷這個item title有沒有資料
+    List<String> historyList =
+        (sharedPreferences.getStringList('history') ?? <String>[]);
+    var match = historyList.firstWhere(
+        (element) => element.contains(item.title),
+        orElse: () => '');
+    if (match == '') {
+      // 確定沒有儲存
+      historyList.add(item.title);
+      sharedPreferences.setStringList('history', historyList);
+    }
+    // 跳頁
+    Get.toNamed(AppRoutes.travelDetails, arguments: item);
   }
 }

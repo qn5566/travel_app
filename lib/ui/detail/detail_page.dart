@@ -44,21 +44,25 @@ class DetailPage extends GetView<DetailController> {
                           ),
                         ),
                       ),
-                      Text(Get.arguments.title,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: "PingFangSC",
-                            fontStyle: FontStyle.normal,
-                            fontSize: ASize.ft(10),
-                          )),
-                      // const SizedBox(width: 36.0),
+                      Container(
+                        constraints: BoxConstraints(maxWidth: ASize.w(120)),
+                        child: Text(Get.arguments.title,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: "PingFangSC",
+                              fontStyle: FontStyle.normal,
+                              fontSize: ASize.ft(10),
+                            )),
+                      ),
                       GestureDetector(
-                          onTap: () {
-                            controller.goToWebView();
-                          },
-                          child: const Icon(Icons.more_horiz,
-                              color: Colors.black)),
+                        onTap: () {
+                          controller.goToWebView();
+                        },
+                        child: const Text("更多"),
+                      )
                     ],
                   ),
                 ),
