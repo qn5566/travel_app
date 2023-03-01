@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 
 import '../../config/AdHelper.dart';
@@ -20,6 +19,7 @@ import '../../widgets/custom_marker.dart';
 class MapController extends GetxController {
   Completer<GoogleMapController> mapController = Completer();
   late CameraPosition cameraInitPosition;
+  var isMapPrepare = true.obs;
   late LocationData locationData;
   final Set<CustomMarker> markers = {};
   var isLoading = true.obs;
@@ -34,6 +34,9 @@ class MapController extends GetxController {
   /// 暫存點選到的地標
   final selectedMarker = Rx<CustomMarker?>(null);
 
+  /// 所設定可顯示Marker的距離
+  final distanceValue = 10000; // 距離小於等於 10 公里
+
   /// DB設定
   CategoryDb categoryDb = CategoryDb();
   final DataController dataController = Get.find();
@@ -41,12 +44,18 @@ class MapController extends GetxController {
   void onMapCreated(GoogleMapController controller) {
     mapController.complete(controller);
 
-    isLoading(false);
+    isMapPrepare(false);
   }
 
   void onMarkerTapped(CustomMarker marker) {
     selectedMarker.value = marker;
     // 處理 Marker 點擊事件
+  }
+
+  @override
+  void onReady() {
+    isMapPrepare(true);
+    super.onReady();
   }
 
   @override
@@ -58,6 +67,7 @@ class MapController extends GetxController {
     await getMyLocation();
     await categoryDb.open();
     if (await categoryDb.checkTableIsEmpty() > 0) {
+      isLoading(true);
       fetchDB();
     } else {
       firstLoading(true);
@@ -68,17 +78,22 @@ class MapController extends GetxController {
 
   /// 抓取資料判斷
   void fetchDB() async {
-    isLoading(true);
     dataList.assignAll(await dataController.fetchData());
-    final newMarkers = dataList
-        .map((e) => CustomMarker(
-              markerId: MarkerId(e.title),
-              position:
-                  LatLng(double.parse(e.py ?? ''), double.parse(e.px ?? '')),
-              infoWindow: InfoWindow(title: e.title),
-              dataAll: e,
-            ))
-        .toSet();
+
+    final py0 = locationData.longitude;
+    final px0 = locationData.latitude;
+    final newMarkers = dataList.where((e) {
+      final distance = Geolocator.distanceBetween(
+          double.parse(e.py ?? ''), double.parse(e.px ?? ''), px0!, py0!);
+      return distance <= distanceValue;
+    }).map((e) {
+      return CustomMarker(
+        markerId: MarkerId(e.title),
+        position: LatLng(double.parse(e.py ?? ''), double.parse(e.px ?? '')),
+        infoWindow: InfoWindow(title: e.title),
+        dataAll: e,
+      );
+    });
     markers.addAll(newMarkers);
     firstLoading(false);
     isLoading(false);
@@ -86,7 +101,6 @@ class MapController extends GetxController {
 
   /// 抓取遠端資料
   void fetchApi() async {
-    isLoading(true);
     await dataController.fetchRemoteData().then((data) {
       dataList.assignAll(data);
       fetchDB();
@@ -164,5 +178,26 @@ class MapController extends GetxController {
     }
     // 跳頁
     Get.toNamed(AppRoutes.travelDetails, arguments: item);
+  }
+
+  /// 更新附近的Marker
+  void updateNearbyMarkers() async {
+    final py0 = locationData.longitude;
+    final px0 = locationData.latitude;
+    final newMarkers = dataList.where((e) {
+      final distance = Geolocator.distanceBetween(
+          double.parse(e.py ?? ''), double.parse(e.px ?? ''), px0!, py0!);
+      return distance <= distanceValue;
+    }).map((e) {
+      return CustomMarker(
+        markerId: MarkerId(e.title),
+        position: LatLng(double.parse(e.py ?? ''), double.parse(e.px ?? '')),
+        infoWindow: InfoWindow(title: e.title),
+        dataAll: e,
+      );
+    });
+    markers.clear();
+    markers.addAll(newMarkers);
+    update();
   }
 }

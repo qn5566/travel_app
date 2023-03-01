@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:travel/config/rx_config.dart';
+import 'package:travel/ui/dashboard/dashboard_binding.dart';
 
 import 'config/global_config.dart';
 import 'firebase_options.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
     UserUtil.init(context);
     initializeDefault();
     return GetMaterialApp(
+      initialBinding: DashboardBinding(),
       initialRoute: AppRoutes.splashPage,
       getPages: AppPages.list,
       debugShowCheckedModeBanner: false,

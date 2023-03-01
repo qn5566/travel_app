@@ -23,7 +23,7 @@ class MapPage extends GetView<MapController> {
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Lottie.asset('assets/car.json'),
+                      Center(child: Lottie.asset('assets/car.json')),
                       const Text(
                         '第一次下載會比較久請稍等..',
                         style: TextStyle(color: Colors.white),
@@ -31,7 +31,9 @@ class MapPage extends GetView<MapController> {
                     ],
                   )
                 : controller.isLoading.value
-                    ? Lottie.asset('assets/loading.json')
+                    ? const SizedBox(
+                        height: 0,
+                      )
                     : GoogleMap(
                         onMapCreated: controller.onMapCreated,
                         initialCameraPosition: controller.cameraInitPosition,
@@ -44,37 +46,55 @@ class MapPage extends GetView<MapController> {
                         onTap: (LatLng latLng) {
                           controller.selectedMarker.value = null;
                         },
-
-                        // onMarkerTapped: controller.onMarkerTapped,
                       )),
-            Obx(() => controller.isLoading.value
+            Obx(
+              () => controller.isMapPrepare.value
+                  ? const SizedBox(
+                      width: 0,
+                    )
+                  : Positioned(
+                      bottom: ASize.h(5),
+                      left: ASize.w(5),
+                      child: FloatingActionButton(
+                        onPressed: () async {
+                          final mapController =
+                              await controller.mapController.future;
+                          mapController
+                              .animateCamera(CameraUpdate.newCameraPosition(
+                            CameraPosition(
+                              target: LatLng(
+                                controller.locationData.latitude!,
+                                controller.locationData.longitude!,
+                              ),
+                              zoom: 15,
+                            ),
+                          ));
+                        },
+                        backgroundColor: Colors.white,
+                        child: const Icon(
+                          CupertinoIcons.location,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+            ),
+            Obx(() => controller.isMapPrepare.value
                 ? const SizedBox(
                     width: 0,
                   )
                 : Positioned(
-                    bottom: 16,
-                    left: 16,
-                    child: IconButton(
-                      onPressed: () async {
-                        final mapController =
-                            await controller.mapController.future;
-                        mapController
-                            .animateCamera(CameraUpdate.newCameraPosition(
-                          CameraPosition(
-                            target: LatLng(
-                              controller.locationData.latitude!,
-                              controller.locationData.longitude!,
-                            ),
-                            zoom: 15,
-                          ),
-                        ));
-                      },
-                      icon: const CircleAvatar(
-                        radius: 20.0,
-                        backgroundColor: Colors.blue,
-                        child: Icon(
-                          CupertinoIcons.location,
-                          color: Colors.white,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: SizedBox(
+                      height: 50,
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            controller.updateNearbyMarkers();
+                          },
+                          child: const Text('更新附近10公里的地標'),
                         ),
                       ),
                     ),
@@ -82,7 +102,7 @@ class MapPage extends GetView<MapController> {
             Obx(() =>
                 (controller.isADShowing.value && controller.bannerAd != null)
                     ? Padding(
-                        padding: const EdgeInsets.only(top: 30.0),
+                        padding: const EdgeInsets.only(top: 66.0),
                         child: Align(
                           alignment: Alignment.topCenter,
                           child: SizedBox(
@@ -144,7 +164,13 @@ class MapPage extends GetView<MapController> {
                   )
                 : const SizedBox(
                     height: 1,
-                  ))
+                  )),
+            Obx(() => controller.isMapPrepare.value &&
+                    controller.firstLoading.value != true
+                ? Center(child: Lottie.asset('assets/loading.json'))
+                : const SizedBox(
+                    height: 0,
+                  )),
           ],
         ),
       ),

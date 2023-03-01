@@ -63,4 +63,15 @@ class ApiHelper extends GetConnect {
       },
     ).then((value) => value.body!).catchError((e) => throw e);
   }
+
+  /// 版本控管API
+  Future<Map<String, dynamic>> getInfoData() async {
+    return await get(
+      'https://raw.githubusercontent.com/qn5566/travel/main/info.json',
+      contentType: 'application/json; charset=utf-8',
+      decoder: (data) {
+        return json.decode(data);
+      },
+    ).then((value) => value.body!).catchError((e) => throw e);
+  }
 }
