@@ -20,16 +20,28 @@ class MapPage extends GetView<MapController> {
         body: Stack(
           children: [
             Obx(() => controller.firstLoading.value
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(child: Lottie.asset('assets/car.json')),
-                      const Text(
-                        '第一次下載會比較久請稍等..',
-                        style: TextStyle(color: Colors.white),
+                ? Stack(children: [
+                    Positioned.fill(
+                      child: Image.asset(
+                        'images/home/home_bg.png',
+                        fit: BoxFit.cover,
                       ),
-                    ],
-                  )
+                    ),
+                    // 毛玻璃效果 - 半透明
+                    Container(
+                      color: const Color(0xFF0E3311).withOpacity(0.5),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(child: Lottie.asset('assets/car.json')),
+                        const Text(
+                          '第一次下載會比較久請稍等..',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    )
+                  ])
                 : controller.isLoading.value
                     ? const SizedBox(
                         height: 0,
@@ -43,6 +55,9 @@ class MapPage extends GetView<MapController> {
                                 marker, // 設置當前選中的標記
                           );
                         }).toSet(),
+                        onCameraMove: (position) {
+                          controller.onCameraMove(position);
+                        },
                         onTap: (LatLng latLng) {
                           controller.selectedMarker.value = null;
                         },
@@ -94,7 +109,7 @@ class MapPage extends GetView<MapController> {
                           onPressed: () {
                             controller.updateNearbyMarkers();
                           },
-                          child: const Text('更新附近10公里的地標'),
+                          child: const Text('更新'),
                         ),
                       ),
                     ),
@@ -167,9 +182,72 @@ class MapPage extends GetView<MapController> {
                   )),
             Obx(() => controller.isMapPrepare.value &&
                     controller.firstLoading.value != true
-                ? Center(child: Lottie.asset('assets/loading.json'))
+                ? Stack(children: [
+                    Positioned.fill(
+                      child: Image.asset(
+                        'images/home/home_bg.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    // 毛玻璃效果 - 半透明
+                    Container(
+                      color: const Color(0xFF0E3311).withOpacity(0.5),
+                    ),
+                    Center(child: Lottie.asset('assets/loading.json')),
+                  ])
                 : const SizedBox(
                     height: 0,
+                  )),
+            Obx(() => controller.isMapPrepare.value
+                ? const SizedBox(
+                    width: 0,
+                  )
+                : Positioned(
+                    bottom: ASize.h(65),
+                    left: ASize.w(5),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 3,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: PopupMenuButton<String>(
+                          onSelected: controller.onItemSelected,
+                          child: Row(
+                            children: const [
+                              Icon(Icons.menu),
+                              SizedBox(width: 5),
+                              Text('選擇景點'),
+                            ],
+                          ),
+                          itemBuilder: (BuildContext context) {
+                            return [
+                              const PopupMenuItem(
+                                value: '公園',
+                                child: Text('公園'),
+                              ),
+                              const PopupMenuItem(
+                                value: '夜市',
+                                child: Text('夜市'),
+                              ),
+                              const PopupMenuItem(
+                                value: '',
+                                child: Text('全部'),
+                              ),
+                            ];
+                          },
+                        ),
+                      ),
+                    ),
                   )),
           ],
         ),

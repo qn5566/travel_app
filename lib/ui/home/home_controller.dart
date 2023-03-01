@@ -27,15 +27,19 @@ class HomeController extends GetxController
   late TabController tabTitleController;
   late TextEditingController textEditingController;
   List<String> getTabTitle = [
+    "臺北市",
     "基隆市",
+    "臺中市",
     "高雄市",
     "澎湖縣",
+    "臺南市",
     "金門縣",
     "屏東縣",
     "新竹市",
     "新竹縣",
     "桃園市",
     "苗栗縣",
+    "臺東縣",
     "彰化縣",
     "南投縣",
     "花蓮縣",
@@ -45,10 +49,6 @@ class HomeController extends GetxController
     "嘉義市",
     "嘉義縣",
     "雲林縣",
-    "台北市",
-    "台南市",
-    "台中市",
-    "台東縣",
   ];
 
   /// 子分類

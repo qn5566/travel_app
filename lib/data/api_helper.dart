@@ -74,4 +74,16 @@ class ApiHelper extends GetConnect {
       },
     ).then((value) => value.body!).catchError((e) => throw e);
   }
+
+  /// 傳送點擊紀錄
+  Future<String> sendHistory(Map<String, dynamic> body) async {
+    return await post(
+      'https://himydream.me/app/main.php',
+      // 'http://10.0.2.2/app/main.php',
+      FormData(body),
+      decoder: (data) {
+        return json.decode(data);
+      },
+    ).then((value) => value.body!).catchError((e) => throw e);
+  }
 }

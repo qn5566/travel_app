@@ -18,10 +18,28 @@ import '../../widgets/custom_marker.dart';
 
 class MapController extends GetxController {
   Completer<GoogleMapController> mapController = Completer();
-  late CameraPosition cameraInitPosition;
   var isMapPrepare = true.obs;
-  late LocationData locationData;
-  final Set<CustomMarker> markers = {};
+
+  /// 初始移動位置
+  double py0 = 0.0;
+  double px0 = 0.0;
+
+  /// 主要是Android的大概位置
+  /// 先宣告 CameraPosition
+  CameraPosition cameraInitPosition = const CameraPosition(
+      target: LatLng(
+        25.03,
+        121.56,
+      ),
+      zoom: 15);
+
+  /// 先宣告 LocationData
+  LocationData locationData = LocationData.fromMap({
+    "latitude": 25.03,
+    "longitude": 121.56,
+  });
+
+  RxSet<CustomMarker> markers = <CustomMarker>{}.obs;
   var isLoading = true.obs;
 
   var firstLoading = false.obs;
@@ -40,6 +58,9 @@ class MapController extends GetxController {
   /// DB設定
   CategoryDb categoryDb = CategoryDb();
   final DataController dataController = Get.find();
+
+  /// 選單設定
+  var selectedItem = ''.obs;
 
   void onMapCreated(GoogleMapController controller) {
     mapController.complete(controller);
@@ -80,8 +101,8 @@ class MapController extends GetxController {
   void fetchDB() async {
     dataList.assignAll(await dataController.fetchData());
 
-    final py0 = locationData.longitude;
-    final px0 = locationData.latitude;
+    py0 = locationData.longitude ?? 121.56;
+    px0 = locationData.latitude ?? 25.03;
     final newMarkers = dataList.where((e) {
       final distance = Geolocator.distanceBetween(
           double.parse(e.py ?? ''), double.parse(e.px ?? ''), px0!, py0!);
@@ -180,14 +201,23 @@ class MapController extends GetxController {
     Get.toNamed(AppRoutes.travelDetails, arguments: item);
   }
 
+  /// 監聽滑動地圖的位置
+  Future<void> onCameraMove(CameraPosition position) async {
+    // Get the current camera position
+    final LatLng latLng = position.target;
+    // Do something with the new position
+    // ... await location.getLocation();
+    py0 = latLng.longitude;
+    px0 = latLng.latitude;
+  }
+
   /// 更新附近的Marker
   void updateNearbyMarkers() async {
-    final py0 = locationData.longitude;
-    final px0 = locationData.latitude;
     final newMarkers = dataList.where((e) {
       final distance = Geolocator.distanceBetween(
           double.parse(e.py ?? ''), double.parse(e.px ?? ''), px0!, py0!);
-      return distance <= distanceValue;
+      return distance <= distanceValue &&
+          (selectedItem.value == '' || e.title.contains(selectedItem.value));
     }).map((e) {
       return CustomMarker(
         markerId: MarkerId(e.title),
@@ -198,6 +228,11 @@ class MapController extends GetxController {
     });
     markers.clear();
     markers.addAll(newMarkers);
-    update();
+  }
+
+  /// 選單選中
+  void onItemSelected(String value) {
+    selectedItem.value = value;
+    updateNearbyMarkers();
   }
 }

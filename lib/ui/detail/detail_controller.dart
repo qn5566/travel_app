@@ -53,6 +53,9 @@ class DetailController extends GetxController
         print('Error:$e');
       }
     });
+
+    // 來去儲存點擊紀錄
+    sendHistory(Get.arguments.title);
   }
 
   void checkSendData(BuildContext context, String data,
@@ -139,5 +142,21 @@ class DetailController extends GetxController
   void goToWebView() {
     // 跳頁
     Get.toNamed(AppRoutes.webViewPage, arguments: item);
+  }
+
+  /// 上傳點擊紀錄
+  void sendHistory(String title) async {
+    isLoading(true);
+    Map<String, dynamic> body = {
+      'fun': 'history',
+      'Title': title,
+    };
+    await ApiHelper().sendHistory(body).then((value) {}).catchError((e) {
+      if (kDebugMode) {
+        print('Error:$e');
+      }
+    });
+
+    isLoading(false);
   }
 }

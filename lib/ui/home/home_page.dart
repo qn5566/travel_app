@@ -71,7 +71,13 @@ class HomePage extends GetView<HomeController> {
                                 children: [
                                   Text("Hello!", style: leftTextHello),
                                   SizedBox(height: ASize.h(10)),
-                                  Text("請先去設定頁面填入暱稱", style: leftText),
+                                  Text(
+                                    "請先去設定頁面填入暱稱", style: leftText,
+                                    maxLines: 2, // 最多顯示兩行
+                                    overflow:
+                                        TextOverflow.ellipsis, // 超出部分使用省略號替代
+                                    softWrap: true, // 超出寬度時自動換行
+                                  ),
                                   SizedBox(height: ASize.h(5)),
                                 ],
                               )
