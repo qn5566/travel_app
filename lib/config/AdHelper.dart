@@ -1,10 +1,18 @@
 import 'dart:io' show Platform;
 
+import 'package:flutter/foundation.dart';
+
 class AdHelper {
   static String get bannerAdUnitId {
     if (Platform.isAndroid) {
+      if (kDebugMode) {
+        return 'ca-app-pub-3940256099942544/6300978111';
+      }
       return 'ca-app-pub-3731028924883193/6580236089';
     } else if (Platform.isIOS) {
+      if (kDebugMode) {
+        return 'ca-app-pub-3940256099942544/6300978111';
+      }
       return 'ca-app-pub-3731028924883193/8282493707';
     } else {
       throw UnsupportedError('Unsupported platform');

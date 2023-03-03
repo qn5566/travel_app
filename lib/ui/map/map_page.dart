@@ -203,7 +203,7 @@ class MapPage extends GetView<MapController> {
                     width: 0,
                   )
                 : Positioned(
-                    bottom: ASize.h(65),
+                    top: ASize.h(65),
                     left: ASize.w(5),
                     child: Container(
                       decoration: BoxDecoration(
