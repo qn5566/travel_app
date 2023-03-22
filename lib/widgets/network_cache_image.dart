@@ -8,7 +8,7 @@ import '../util/ui_util.dart';
 
 class NetworkCacheImage extends StatelessWidget {
   final String? url;
-  final String? placeholder;
+  final Widget? placeholder;
   final int? type;
   final double radius;
   final double radiusTopLeft;
@@ -24,11 +24,11 @@ class NetworkCacheImage extends StatelessWidget {
   final bool showLoading;
 
   const NetworkCacheImage({
-    Key? key,
+    super.key,
     this.url,
     this.placeholder,
     @Deprecated('this field is useless,Used to be too lazy to change the code that calls the method.')
-        this.type,
+    this.type,
     this.radius = 0.0,
     this.radiusTopLeft = 0.0,
     this.radiusTopRight = 0.0,
@@ -47,15 +47,15 @@ class NetworkCacheImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return hasRadius()
         ? ClipRRect(
-            borderRadius: hasAllRadius()
-                ? BorderRadius.all(Radius.circular(radius))
-                : BorderRadius.only(
-                    topLeft: Radius.circular(radiusTopLeft),
-                    topRight: Radius.circular(radiusTopRight),
-                    bottomLeft: Radius.circular(radiusBottomLeft),
-                    bottomRight: Radius.circular(radiusBottomRight),
-                  ),
-            child: _buildImage())
+        borderRadius: hasAllRadius()
+            ? BorderRadius.all(Radius.circular(radius))
+            : BorderRadius.only(
+          topLeft: Radius.circular(radiusTopLeft),
+          topRight: Radius.circular(radiusTopRight),
+          bottomLeft: Radius.circular(radiusBottomLeft),
+          bottomRight: Radius.circular(radiusBottomRight),
+        ),
+        child: _buildImage())
         : _buildImage();
   }
 
@@ -86,22 +86,16 @@ class NetworkCacheImage extends StatelessWidget {
         fit: fit,
         fadeInDuration: const Duration(milliseconds: 200),
         fadeOutDuration: const Duration(milliseconds: 500),
-        placeholder: (context, s) => placeholderWidget == null
-            ? _buildPlaceholderWidget()
-            : placeholderWidget,
+        placeholder: (context, s) =>
+        placeholderWidget ?? _buildPlaceholderWidget(),
         errorWidget: (context, s, e) {
-          return errorWidget == null ? _buildErrorWidget() : errorWidget;
+          return errorWidget ?? _buildErrorWidget();
         });
   }
 
   Widget _buildPlaceholderWidget() {
     if (placeholder != null) {
-      return Image.asset(
-        placeholder ?? '',
-        width: width,
-        height: height,
-        fit: BoxFit.cover,
-      );
+      return placeholder!;
     }
     return Container(
       color: placeholderColor ?? Colors.transparent,
@@ -109,16 +103,16 @@ class NetworkCacheImage extends StatelessWidget {
       height: height,
       child: showLoading
           ? Center(
-              child: Container(
-                width: ASize.w(50),
-                height: ASize.w(50),
-                child: LoadingIndicator(
-                  indicatorType: Indicator.circleStrokeSpin,
-                  // color: Colors.deepPurpleAccent,
-                ),
-              ),
-            )
-          : SizedBox.shrink(),
+        child: SizedBox(
+          width: ASize.w(50),
+          height: ASize.w(50),
+          child: const LoadingIndicator(
+            indicatorType: Indicator.circleStrokeSpin,
+            // color: Colors.deepPurpleAccent,
+          ),
+        ),
+      )
+          : const SizedBox.shrink(),
     );
   }
 

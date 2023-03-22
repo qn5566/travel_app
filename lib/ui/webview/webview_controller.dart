@@ -25,7 +25,7 @@ class CustomWebViewController extends GetxController {
     controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setBackgroundColor(const Color(0x00000000))
-      ..loadRequest(Uri.parse('https://www.google.com/search?q=${item.title}'));
+      ..loadRequest(Uri.parse('https://www.google.com/search?q=${item.name}'));
 
     webViewController = controller;
   }

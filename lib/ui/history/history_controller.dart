@@ -1,29 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:travel/data/dao/dataAllDao.dart';
 
 import '../../config/AdHelper.dart';
 import '../../config/global_config.dart';
-import '../../config/rx_config.dart';
 import '../../data/mode/data_all.dart';
 import '../../data/repo/fxDataBaseManager.dart';
 import '../../routes/app_routes.dart';
 
-class AccountController extends GetxController {
-  late TextEditingController textEditingController;
-
+class HistoryController extends GetxController {
+  /// 讀取
   var isLoading = true.obs;
 
-  var username = "".obs;
-  var dataList = <DataAll>[].obs;
-
-  late RxConfig userData;
-
-  // 儲存資料
-  late List<String> historyList;
-
-  // 廣告宣告
+  /// 廣告宣告
   BannerAd? bannerAd;
   var isADShowing = false.obs;
 
@@ -31,30 +21,34 @@ class AccountController extends GetxController {
   InterstitialAd? interstitialAd;
   bool isInterstitialAdReady = false;
 
+  /// DB設定
+  late DataAllDao allDb;
+
+  /// 儲存資料
+  late List<String> historyAllList;
+
+  /// 前端顯示資料
+  var dataAllList = <DataAll>[].obs;
+
   @override
   void onInit() async {
     super.onInit();
     adMobBanner();
     loadInterstitialAd();
 
-    if (sharedPreferences.getString(AppConstants.userName) != null) {
-      username.value = sharedPreferences.getString(AppConstants.userName)!;
-    }
-    textEditingController = TextEditingController();
-
-    userData = Get.find();
-
+    // 抓取景點歷史資料
     if (sharedPreferences.getStringList(AppConstants.homeHistory) != null) {
       // 儲存資料
-      String temp = '';
-      historyList =
-      (sharedPreferences.getStringList(AppConstants.homeHistory) ??
-          <String>[]);
-      if (historyList.isNotEmpty) {
-        searchData(historyList);
-        return;
-      }
+      sharedPreferences
+          .getStringList(AppConstants.homeHistory)
+          ?.forEach((item) async {
+        var searchDataAllResult = await searchDataAll(item);
+        if (searchDataAllResult != null) {
+          dataAllList.add(searchDataAllResult);
+        }
+      });
     }
+
     isLoading(false);
   }
 
@@ -115,53 +109,26 @@ class AccountController extends GetxController {
     }
   }
 
-  /// 更新暱稱
-  void updateUsername(String userName) {
-    sharedPreferences.setString(AppConstants.userName, userName);
-    showInterstitialAd();
-  }
-
-  /// 替換暱稱
-  void changeUsername() {
-    sharedPreferences.setString(AppConstants.userName, '');
-  }
-
-  /// 抓取資料判斷
-  void searchData(List<String> whereArgs) async {
-    // DB相關
-    var dataData = await FxDataBaseManager.dataAllDao();
-
-    List<DataAll> poetryData = [];
-    for (String title in whereArgs) {
-      var data = await dataData.findDataAllByTitle(title);
-      poetryData.addAll(data);
-    }
-
-    dataList.assignAll(List.generate(poetryData.length, (index) {
-      return poetryData[index];
-    }));
-    isLoading(false);
+  /// 抓取資料庫判斷
+  Future<DataAll?> searchDataAll(String whereArgs) async {
+    allDb = await FxDataBaseManager.dataAllDao();
+    return await allDb.findDataAllByName(whereArgs);
   }
 
   /// 刪除資料
   void deleteData() async {
     isLoading(true);
     sharedPreferences.setStringList(AppConstants.homeHistory, <String>[]);
-    dataList.assignAll(<DataAll>[]);
+    dataAllList.assignAll(<DataAll>[]);
     isLoading(false);
   }
 
-  void onTap(DataAll item) {
+  void onTapDataAll(DataAll item) {
     if (kDebugMode) {
       print(item.name);
     }
-    // 跳頁
+    showInterstitialAd();
     Get.toNamed(AppRoutes.travelDetails, arguments: item);
-  }
-
-  /// 取得版本
-  String getAppVersion() {
-    return packageInfo.version;
   }
 
   /// 關閉

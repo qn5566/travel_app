@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:travel/ui/map/map_page.dart';
 
 import '../account/account_page.dart';
+import '../history/history_page.dart';
 import '../home/home_page.dart';
 import 'dashboard_controller.dart';
 
@@ -18,6 +19,7 @@ class DashboardPage extends StatelessWidget {
   static List<Widget> pages = [
     const MapPage(),
     const HomePage(),
+    const HistoryPage(),
     const AccountPage(),
   ];
 
@@ -44,15 +46,19 @@ class DashboardPage extends StatelessWidget {
               elevation: 0,
               items: [
                 _bottomNavigationBarItem(
-                  icon: CupertinoIcons.arrow_branch,
+                  icon: Icons.near_me_rounded,
                   label: '附近',
                 ),
                 _bottomNavigationBarItem(
-                  icon: CupertinoIcons.home,
+                  icon: Icons.landscape,
                   label: '景點',
                 ),
                 _bottomNavigationBarItem(
-                  icon: CupertinoIcons.person,
+                  icon: Icons.history,
+                  label: '歷史',
+                ),
+                _bottomNavigationBarItem(
+                  icon: CupertinoIcons.settings,
                   label: '設定',
                 ),
               ],

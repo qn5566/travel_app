@@ -58,7 +58,7 @@ class ListViewSearch extends StatelessWidget {
                                 padding: EdgeInsets.only(
                                     top: ASize.w(1), left: ASize.w(1)),
                                 child: Text(
-                                  item.title,
+                                  item.name!,
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,

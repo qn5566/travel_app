@@ -15,9 +15,8 @@ import 'routes/app_routes.dart';
 import 'themes/app_theme.dart';
 
 void main() async {
-  Get.put(RxConfig());
-  MobileAds.instance.initialize();
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   // 啟用 Firebase
   await Firebase.initializeApp();
   // 啟用 Crashlytics

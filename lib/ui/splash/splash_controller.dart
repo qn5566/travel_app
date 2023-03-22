@@ -9,15 +9,34 @@ import 'package:travel/ui/dashboard/dashboard_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/global_config.dart';
+import '../../config/rx_config.dart';
 import '../../data/api_helper.dart';
 import '../../routes/app_routes.dart';
 
 class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
   String appUrl = '';
+  final RxConfig userData = Get.find();
 
   void checkVersion(BuildContext context) async {
     await ApiHelper().getInfoData().then((value) {
+      // 資料串接API
+      userData.dataAPI.value = (value['data_api'] as List).cast<String>();
+
+      // 帶入個別title的資料
+      userData.travelTitle.value =
+          (value['title_travel'] as List).cast<String>();
+
+      // 帶入個別keyWord的資料
+      userData.keyWordTravel.value =
+          (value['key_word_travel'] as List).cast<String>();
+
+      // 設定頁面的訊息
+      userData.option.value = value['option'];
+
+      // 設定頁面的小訣竅
+      userData.infoMenu.value = (value['info_menu'] as List).cast<String>();
+
       final flutterVersion = packageInfo.buildNumber; // 您的Flutter版本号
       final iosVersion = value['ios_version'] as String;
       final androidVersion = value['android_version'] as String;

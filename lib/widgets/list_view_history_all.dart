@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:travel/ui/history/history_controller.dart';
 import 'package:travel/widgets/views/video_cover_view.dart';
 
 import '../config/global_config.dart';
@@ -9,31 +10,27 @@ import '../ui/account/account_controller.dart';
 import '../util/ui_util.dart';
 import 'money_text_widget.dart';
 
-class ListViewHistory extends StatelessWidget {
-  final AccountController controller = Get.find<AccountController>();
+class ListViewAllHistory extends StatelessWidget {
+  final HistoryController controller = Get.find<HistoryController>();
 
-  ListViewHistory({super.key});
+  ListViewAllHistory({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => controller.isLoading.value
           ? Lottie.asset('assets/loading.json')
-          // const Center(
-          //         child: CircularProgressIndicator(
-          //         strokeWidth: 10,
-          //       ))
-          : (controller.dataList.isNotEmpty)
+          : (controller.dataAllList.isNotEmpty)
               ? MediaQuery.removePadding(
                   removeTop: true,
                   context: context,
                   child: ListView.builder(
-                    itemCount: controller.dataList.length,
+                    itemCount: controller.dataAllList.length,
                     itemBuilder: (context, index) {
-                      DataAll item = controller.dataList[index];
+                      DataAll item = controller.dataAllList[index];
                       return GestureDetector(
                         onTap: () {
-                          controller.onTap(item);
+                          controller.onTapDataAll(item);
                         },
                         child: Container(
                           color: Colors.white,
@@ -45,7 +42,7 @@ class ListViewHistory extends StatelessWidget {
                                 child: Stack(
                                   children: [
                                     VideoCoverView(
-                                      radius: 10,
+                                      // radius: 10,
                                       cover: item.picture1 ?? '',
                                       money: item.region,
                                     ),

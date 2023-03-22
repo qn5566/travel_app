@@ -1,31 +1,34 @@
 import 'package:flutter/foundation.dart';
 
+import '../../config/global_config.dart';
 import '../../data/api_helper.dart';
-import '../../data/database/categoryDb.dart';
 import '../../data/mode/data_all.dart';
+import '../dao/dataAllDao.dart';
+import 'fxDataBaseManager.dart';
 
 class DataController {
   /// DB設定
-  CategoryDb categoryDb = CategoryDb();
+  late DataAllDao dataData;
 
   /// 抓取資料判斷
   Future<List<DataAll>> fetchData() async {
-    await categoryDb.open();
-    var poetryData = await categoryDb.queryAll();
-    categoryDb.close();
+    dataData = await FxDataBaseManager.dataAllDao();
+    var poetryData = await dataData.getAllDataAll();
     return List.generate(poetryData.length, (index) {
-      return DataAll.fromJson(poetryData[index]);
+      return poetryData[index];
     });
   }
 
-  /// 抓取遠端資料
+  /// 抓取遠端資料並存入DB
   Future<List<DataAll>> fetchRemoteData() async {
-    await categoryDb.open();
-    await ApiHelper().fetchAllDataToDb().then((value) async {
-      for (var data in value) {
-        await categoryDb.autoCheckInsertOrUpdate(data);
+    dataData = await FxDataBaseManager.dataAllDao();
+    await ApiHelper().fetchAllData().then((value) async {
+      sharedPreferences.setString(AppConstants.homeUpdateShareKey,
+          value.xMLHead?.updatetime ?? DateTime.now().toString());
+      var infoData = value.xMLHead?.infos!.info;
+      for (var data in infoData!) {
+        await dataData.insertUpdateDataAll(data);
       }
-      categoryDb.close();
     }).catchError((e) {
       if (kDebugMode) {
         print('Error:$e');
@@ -35,12 +38,11 @@ class DataController {
   }
 
   /// 抓取資料判斷
-  Future<List<DataAll>> searchData(List<Object?>? whereArgs) async {
-    await categoryDb.open();
-    var poetryData = await categoryDb.query('Region = ?', whereArgs);
-    categoryDb.close();
+  Future<List<DataAll>> searchData(String whereArgs) async {
+    dataData = await FxDataBaseManager.dataAllDao();
+    var poetryData = await dataData.findDataAllByRegion(whereArgs);
     return List.generate(poetryData.length, (index) {
-      return DataAll.fromJson(poetryData[index]);
+      return poetryData[index];
     });
   }
 }

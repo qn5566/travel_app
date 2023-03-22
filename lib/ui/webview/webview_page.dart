@@ -42,7 +42,7 @@ class CustomWebViewPage extends GetView<CustomWebViewController> {
                   ),
                   Container(
                     constraints: BoxConstraints(maxWidth: ASize.w(120)),
-                    child: Text(Get.arguments.title,
+                    child: Text(Get.arguments.name,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         style: TextStyle(

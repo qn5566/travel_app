@@ -11,9 +11,11 @@ import 'package:location/location.dart';
 
 import '../../config/AdHelper.dart';
 import '../../config/global_config.dart';
+import '../../data/dao/dataAllDao.dart';
 import '../../data/database/categoryDb.dart';
 import '../../data/mode/data_all.dart';
 import '../../data/repo/data_repo.dart';
+import '../../data/repo/fxDataBaseManager.dart';
 import '../../routes/app_routes.dart';
 import '../../widgets/custom_marker.dart';
 
@@ -60,7 +62,6 @@ class MapController extends GetxController {
   final distanceValue = 10000; // 距離小於等於 10 公里
 
   /// DB設定
-  CategoryDb categoryDb = CategoryDb();
   final DataController dataController = Get.find();
 
   /// 選單設定
@@ -93,15 +94,34 @@ class MapController extends GetxController {
 
     /// 取得自己的位置
     await getMyLocation();
-    await categoryDb.open();
-    if (await categoryDb.checkTableIsEmpty() > 0) {
-      isLoading(true);
-      fetchDB();
+
+    // DB資料判斷
+    String updateTime =
+        sharedPreferences.getString(AppConstants.homeUpdateShareKey) ?? '';
+    if (updateTime != '') {
+      DateTime dateTime = DateTime.parse(updateTime);
+      DateTime now = DateTime.now();
+      // 不需要太常更新1個禮拜一次即可
+      DateTime lastWeek = now.subtract(const Duration(days: 7));
+
+      if (dateTime.day >= lastWeek.day) {
+        fetchDB();
+      } else {
+        fetchApi();
+      }
     } else {
-      firstLoading(true);
-      fetchApi();
+      /// DB相關
+      DataAllDao dataData = await FxDataBaseManager.dataAllDao();
+
+      var count = await dataData.checkTableIsEmpty();
+      if (count! > 0) {
+        isLoading(true);
+        fetchDB();
+      } else {
+        firstLoading(true);
+        fetchApi();
+      }
     }
-    categoryDb.close();
   }
 
   /// 抓取資料判斷
@@ -111,14 +131,14 @@ class MapController extends GetxController {
     py0 = locationData.longitude ?? 121.56;
     px0 = locationData.latitude ?? 25.03;
     final newMarkers = dataList.where((e) {
-      final distance = Geolocator.distanceBetween(
-          double.parse(e.py ?? ''), double.parse(e.px ?? ''), px0!, py0!);
+      final distance =
+          Geolocator.distanceBetween(e.py ?? 0.0, e.px ?? 0.0, px0!, py0!);
       return distance <= distanceValue;
     }).map((e) {
       return CustomMarker(
-        markerId: MarkerId(e.title),
-        position: LatLng(double.parse(e.py ?? ''), double.parse(e.px ?? '')),
-        infoWindow: InfoWindow(title: e.title),
+        markerId: MarkerId(e.name!),
+        position: LatLng(e.py ?? 0.0, e.px ?? 0.0),
+        infoWindow: InfoWindow(title: e.name),
         dataAll: e,
       );
     });
@@ -130,7 +150,6 @@ class MapController extends GetxController {
   /// 抓取遠端資料
   void fetchApi() async {
     await dataController.fetchRemoteData().then((data) {
-      dataList.assignAll(data);
       fetchDB();
     });
   }
@@ -191,18 +210,19 @@ class MapController extends GetxController {
   /// 進詳細
   void onTap(DataAll item) {
     if (kDebugMode) {
-      print(item.title);
+      print(item.name);
     }
     // 儲存資料 - 判斷這個item title有沒有資料
     List<String> historyList =
-        (sharedPreferences.getStringList('history') ?? <String>[]);
+        (sharedPreferences.getStringList(AppConstants.homeHistory) ??
+            <String>[]);
     var match = historyList.firstWhere(
-        (element) => element.contains(item.title),
+        (element) => element.contains(item.name!),
         orElse: () => '');
     if (match == '') {
       // 確定沒有儲存
-      historyList.add(item.title);
-      sharedPreferences.setStringList('history', historyList);
+      historyList.add(item.name!);
+      sharedPreferences.setStringList(AppConstants.homeHistory, historyList);
     }
     // 跳頁
     Get.toNamed(AppRoutes.travelDetails, arguments: item);
@@ -221,15 +241,15 @@ class MapController extends GetxController {
   /// 更新附近的Marker
   void updateNearbyMarkers() async {
     final newMarkers = dataList.where((e) {
-      final distance = Geolocator.distanceBetween(
-          double.parse(e.py ?? ''), double.parse(e.px ?? ''), px0!, py0!);
+      final distance =
+          Geolocator.distanceBetween(e.py ?? 0.0, e.px ?? 0.0, px0!, py0!);
       return distance <= distanceValue &&
-          (selectedItem.value == '' || e.title.contains(selectedItem.value));
+          (selectedItem.value == '' || e.name!.contains(selectedItem.value));
     }).map((e) {
       return CustomMarker(
-        markerId: MarkerId(e.title),
-        position: LatLng(double.parse(e.py ?? ''), double.parse(e.px ?? '')),
-        infoWindow: InfoWindow(title: e.title),
+        markerId: MarkerId(e.name!),
+        position: LatLng(e.py ?? 0.0, e.px ?? 0.0),
+        infoWindow: InfoWindow(title: e.name),
         dataAll: e,
       );
     });

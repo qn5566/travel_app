@@ -82,7 +82,7 @@ class InfoView extends StatelessWidget {
                             scheme: 'https',
                             host: 'www.google.com',
                             path:
-                                '/maps/search/${(controller.item.address != null) ? controller.item.address : controller.item.title}'));
+                                '/maps/search/${(controller.item.address != null) ? controller.item.address : controller.item.name}'));
                       },
                     ),
                   ),

@@ -1,6 +1,89 @@
+import 'package:floor/floor.dart';
+
+class DataHome {
+  XMLHead? xMLHead;
+
+  DataHome({this.xMLHead});
+
+  DataHome.fromJson(Map<String, dynamic> json) {
+    xMLHead = json['XML_Head'] != null
+        ? new XMLHead.fromJson(json['XML_Head'])
+        : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.xMLHead != null) {
+      data['XML_Head'] = this.xMLHead!.toJson();
+    }
+    return data;
+  }
+}
+
+class XMLHead {
+  String? listname;
+  String? language;
+  String? orgname;
+  String? updatetime;
+  Infos? infos;
+
+  XMLHead(
+      {this.listname,
+        this.language,
+        this.orgname,
+        this.updatetime,
+        this.infos});
+
+  XMLHead.fromJson(Map<String, dynamic> json) {
+    listname = json['Listname'];
+    language = json['Language'];
+    orgname = json['Orgname'];
+    updatetime = json['Updatetime'];
+    infos = json['Infos'] != null ? new Infos.fromJson(json['Infos']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['Listname'] = this.listname;
+    data['Language'] = this.language;
+    data['Orgname'] = this.orgname;
+    data['Updatetime'] = this.updatetime;
+    if (this.infos != null) {
+      data['Infos'] = this.infos!.toJson();
+    }
+    return data;
+  }
+}
+
+class Infos {
+  List<DataAll>? info;
+
+  Infos({this.info});
+
+  Infos.fromJson(Map<String, dynamic> json) {
+    if (json['Info'] != null) {
+      info = <DataAll>[];
+      json['Info'].forEach((v) {
+        info!.add(new DataAll.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.info != null) {
+      data['Info'] = this.info!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+@entity
 class DataAll {
+  @primaryKey
   String? id;
-  String title = "尚未資料";
+
+  String? name;
   String? zone;
   String? toldescribe;
   String? description;
@@ -19,17 +102,17 @@ class DataAll {
   String? picdescribe3;
   String? map;
   String? gov;
-  String? px;
-  String? py;
+  double? px;
+  double? py;
   String? orgclass;
   String? class1;
   String? class2;
   String? class3;
-  String? siteLevel;
+  String? level;
   String? website;
   String? parkinginfo;
-  String? parkinginfoPx;
-  String? parkinginfoPy;
+  double? parkinginfoPx;
+  double? parkinginfoPy;
   String? ticketinfo;
   String? remarks;
   String? keyword;
@@ -37,48 +120,49 @@ class DataAll {
 
   DataAll(
       {this.id,
-      this.zone,
-      this.toldescribe,
-      this.description,
-      this.tel,
-      this.address,
-      this.zipcode,
-      this.region,
-      this.town,
-      this.travellinginfo,
-      this.opentime,
-      this.picture1,
-      this.picdescribe1,
-      this.picture2,
-      this.picdescribe2,
-      this.picture3,
-      this.picdescribe3,
-      this.map,
-      this.gov,
-      this.px,
-      this.py,
-      this.orgclass,
-      this.class1,
-      this.class2,
-      this.class3,
-      this.siteLevel,
-      this.website,
-      this.parkinginfo,
-      this.parkinginfoPx,
-      this.parkinginfoPy,
-      this.ticketinfo,
-      this.remarks,
-      this.keyword,
-      this.changetime});
+        this.name,
+        this.zone,
+        this.toldescribe,
+        this.description,
+        this.tel,
+        this.address,
+        this.zipcode,
+        this.region,
+        this.town,
+        this.travellinginfo,
+        this.opentime,
+        this.picture1,
+        this.picdescribe1,
+        this.picture2,
+        this.picdescribe2,
+        this.picture3,
+        this.picdescribe3,
+        this.map,
+        this.gov,
+        this.px,
+        this.py,
+        this.orgclass,
+        this.class1,
+        this.class2,
+        this.class3,
+        this.level,
+        this.website,
+        this.parkinginfo,
+        this.parkinginfoPx,
+        this.parkinginfoPy,
+        this.ticketinfo,
+        this.remarks,
+        this.keyword,
+        this.changetime});
 
-  DataAll.fromJson(Map json) {
+  DataAll.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
-    title = json['Title'] ?? "";
+    name = json['Name'];
     zone = json['Zone'];
     toldescribe = json['Toldescribe'];
     description = json['Description'];
     tel = json['Tel'];
-    address = json['Address'];
+    address = json['Add'];
     zipcode = json['Zipcode'];
     region = json['Region'];
     town = json['Town'];
@@ -98,7 +182,7 @@ class DataAll {
     class1 = json['Class1'];
     class2 = json['Class2'];
     class3 = json['Class3'];
-    siteLevel = json['Site_level'];
+    level = json['Level'];
     website = json['Website'];
     parkinginfo = json['Parkinginfo'];
     parkinginfoPx = json['Parkinginfo_Px'];
@@ -112,12 +196,12 @@ class DataAll {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['Id'] = this.id;
-    data['Title'] = this.title;
+    data['Name'] = this.name;
     data['Zone'] = this.zone;
     data['Toldescribe'] = this.toldescribe;
     data['Description'] = this.description;
     data['Tel'] = this.tel;
-    data['Address'] = this.address;
+    data['Add'] = this.address;
     data['Zipcode'] = this.zipcode;
     data['Region'] = this.region;
     data['Town'] = this.town;
@@ -137,7 +221,7 @@ class DataAll {
     data['Class1'] = this.class1;
     data['Class2'] = this.class2;
     data['Class3'] = this.class3;
-    data['Site_level'] = this.siteLevel;
+    data['Level'] = this.level;
     data['Website'] = this.website;
     data['Parkinginfo'] = this.parkinginfo;
     data['Parkinginfo_Px'] = this.parkinginfoPx;

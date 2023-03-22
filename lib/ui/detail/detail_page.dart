@@ -46,7 +46,7 @@ class DetailPage extends GetView<DetailController> {
                       ),
                       Container(
                         constraints: BoxConstraints(maxWidth: ASize.w(120)),
-                        child: Text(Get.arguments.title,
+                        child: Text(Get.arguments.name,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
@@ -67,7 +67,7 @@ class DetailPage extends GetView<DetailController> {
                   ),
                 ),
                 AspectRatio(
-                  aspectRatio: 1.2,
+                  aspectRatio: 1.8,
                   child: Stack(
                     children: [
                       Positioned.fill(

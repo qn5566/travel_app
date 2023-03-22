@@ -45,17 +45,17 @@ class SearchController extends GetxController {
   // 進詳細
   void onTap(DataAll item) {
     if (kDebugMode) {
-      print(item.title);
+      print(item.name!);
     }
     // 儲存資料 - 判斷這個item title有沒有資料
     List<String> historyList =
         (sharedPreferences.getStringList('history') ?? <String>[]);
     var match = historyList.firstWhere(
-        (element) => element.contains(item.title),
+        (element) => element.contains(item.name!),
         orElse: () => '');
     if (match == '') {
       // 確定沒有儲存
-      historyList.add(item.title);
+      historyList.add(item.name!);
       sharedPreferences.setStringList('history', historyList);
     }
     //跳頁

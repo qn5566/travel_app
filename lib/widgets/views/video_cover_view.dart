@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../config/global_config.dart';
 import '../../util/ui_util.dart';
 import '../network_cache_image.dart';
 
@@ -32,15 +31,8 @@ class VideoCoverView extends StatelessWidget {
               radius: radius,
               fit: BoxFit.cover,
               placeholderWidget: Lottie.asset('assets/cover.json'),
-              // Image.asset(
-              //   kPlaceholderSmallImage,
-              //   fit: BoxFit.cover,
-              // ),
-              errorWidget: Image.asset(
-                kPlaceholderEmptyImage,
-                fit: BoxFit.cover,
-              ),
-              placeholder: kPlaceholderEmptyImage,
+              errorWidget: Lottie.asset('assets/not_found.json'),
+              placeholder: Lottie.asset('assets/not_found.json'),
             ),
           ),
         ],

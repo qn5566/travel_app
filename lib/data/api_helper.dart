@@ -1,39 +1,22 @@
 import 'dart:convert';
 
-import 'package:get/get_connect/connect.dart';
+import 'package:get/get.dart';
 
+import '../config/rx_config.dart';
 import 'mode/comment_model.dart';
 import 'mode/data_all.dart';
 
 /// 資料取得的地方
 class ApiHelper extends GetConnect {
-  Future<List<DataAll>> fetchAllData() async {
-    return await get(
-      'https://raw.githubusercontent.com/qn5566/travel/main/all_data.json',
-      // 'http://10.0.2.2:5000/data',
-      contentType: 'application/json; charset=utf-8',
-      decoder: (data) {
-        // print(data);
-        return List<DataAll>.from(
-            json.decode(data).map((e) => DataAll.fromJson(e)));
-      },
-    ).then((value) => value.body!).catchError((e) => throw e);
-  }
+  RxConfig userData = Get.find();
 
-  /// 取得data進入db
-  Future<List<Map<String, dynamic>>> fetchAllDataToDb() async {
+  /// 取得景點資訊的API
+  Future<DataHome> fetchAllData() async {
     return await get(
-      'https://raw.githubusercontent.com/qn5566/travel/main/all_data.json',
-      // 'http://10.0.2.2:5000/data',
+      userData.dataAPI[0],
       contentType: 'application/json; charset=utf-8',
       decoder: (data) {
-        // print(data);
-        return List<Map<String, dynamic>>.from(
-          json.decode(data).map((e) {
-            DataAll temp = DataAll.fromJson(e);
-            return temp.toJson();
-          }),
-        );
+        return DataHome.fromJson(data);
       },
     ).then((value) => value.body!).catchError((e) => throw e);
   }
@@ -43,7 +26,6 @@ class ApiHelper extends GetConnect {
     Map<String, dynamic> body = {'TitleId': titleId, 'fun': 'getComment'};
     return await post(
       'https://himydream.me/app/main.php',
-      // 'http://10.0.2.2/app/main.php',
       FormData(body),
       decoder: (data) {
         return List<CommentModel>.from(
@@ -56,7 +38,6 @@ class ApiHelper extends GetConnect {
   Future<String> sendCommentData(Map<String, dynamic> body) async {
     return await post(
       'https://himydream.me/app/main.php',
-      // 'http://10.0.2.2/app/main.php',
       FormData(body),
       decoder: (data) {
         return json.decode(data);
@@ -79,7 +60,6 @@ class ApiHelper extends GetConnect {
   Future<String> sendHistory(Map<String, dynamic> body) async {
     return await post(
       'https://himydream.me/app/main.php',
-      // 'http://10.0.2.2/app/main.php',
       FormData(body),
       decoder: (data) {
         return json.decode(data);

@@ -37,25 +37,6 @@ class UserUtil {
     prefs = await SharedPreferences.getInstance();
     info = await PackageInfo.fromPlatform();
   }
-
-  static UserSex toValue(String sexStr) {
-    if (sexStr == '1') {
-      return UserSex.man;
-    } else if (sexStr == '2') {
-      return UserSex.girl;
-    }
-
-    return UserSex.unknown;
-  }
-
-  static String sexIcon(UserSex sex) {
-    if (UserSex.man == sex) {
-      return 'images/user/tag_man.png';
-    } else if (UserSex.girl == sex) {
-      return 'images/user/tag_woman.png';
-    }
-    return '';
-  }
 }
 
 SharedPreferences get sharedPreferences {
@@ -66,9 +47,14 @@ PackageInfo get packageInfo {
   return info;
 }
 
-//数据库key前缀
-const String history_cartoon_prex = 'cartoon';
-const String history_fiction_prex = 'fiction';
+/// 靜態常量參數設定
+class AppConstants {
+  // 基本設定
+  static const String userName = 'username';
+
+  static const String homeUpdateShareKey = 'update';
+  static const String homeHistory = 'history';
+}
 
 /// MARK -  一些固定的图片资源路径
 // 小矩形图片占位

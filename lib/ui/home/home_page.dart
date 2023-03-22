@@ -6,9 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../config/global_config.dart';
+import '../../config/style_info.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/list_view_home.dart';
-import '../dashboard/dashboard_controller.dart';
 import 'home_controller.dart';
 
 /*
@@ -37,99 +37,15 @@ class HomePage extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    DashboardController dashboardController = Get.find<DashboardController>();
-    if (sharedPreferences.getString("username") != null) {
-      controller.username.value = sharedPreferences.getString("username")!;
+    if (sharedPreferences.getString(AppConstants.userName) != null) {
+      controller.username.value =
+      sharedPreferences.getString(AppConstants.userName)!;
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
         key: controller.scaffoldKey,
-        drawer: Drawer(
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("images/home/background_left.png"),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    children: <Widget>[
-                      DrawerHeader(
-                        decoration: const BoxDecoration(
-                          color: Colors.transparent,
-                        ),
-                        child: Obx(() => (controller.username.value.isEmpty)
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text("Hello!", style: leftTextHello),
-                                  SizedBox(height: ASize.h(10)),
-                                  Text(
-                                    "請先去設定頁面填入暱稱", style: leftText,
-                                    maxLines: 2, // 最多顯示兩行
-                                    overflow:
-                                        TextOverflow.ellipsis, // 超出部分使用省略號替代
-                                    softWrap: true, // 超出寬度時自動換行
-                                  ),
-                                  SizedBox(height: ASize.h(5)),
-                                ],
-                              )
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text("Hello!", style: leftText),
-                                  SizedBox(height: ASize.h(20)),
-                                  Text(controller.username.value,
-                                      style: leftText),
-                                ],
-                              )),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 20, right: 20),
-                        child: Divider(
-                          color: Colors.white,
-                          thickness: 2,
-                        ),
-                      ),
-                      ListTile(
-                        title: Text('景點', style: leftText),
-                        onTap: () {
-                          dashboardController.changeTabIndex(0);
-                          return controller.closeDrawer();
-                        },
-                      ),
-                      ListTile(
-                        title: Text('設定', style: leftText),
-                        onTap: () {
-                          dashboardController.changeTabIndex(1);
-                          return controller.closeDrawer();
-                        },
-                      )
-                    ],
-                  ),
-                ),
-                const Text(
-                  '資料來源',
-                  style: TextStyle(color: Colors.white),
-                ),
-                const Text('政府資料開放平臺', style: TextStyle(color: Colors.white)),
-                Text('版本:${controller.getAppVersion()}',
-                    style: const TextStyle(color: Colors.white)),
-                const SizedBox(
-                  height: 2,
-                )
-              ],
-            ),
-          ),
-        ),
         body: Container(
           color: Colors.white,
           child: Stack(
@@ -149,7 +65,7 @@ class HomePage extends GetView<HomeController> {
                   color: Colors.transparent,
                   child: Column(
                     children: [
-                      _navigationBar(),
+                      _navigationBar(context),
                       Expanded(
                         child: _contentView(),
                       )
@@ -179,7 +95,9 @@ class HomePage extends GetView<HomeController> {
         SizedBox(
           height: ASize.w(18),
           child: TabBar(
-            tabs: controller.getTabTitle.map((e) => Tab(text: e)).toList(),
+            tabs: controller.userData.travelTitle
+                .map((e) => Tab(text: e))
+                .toList(),
             controller: controller.tabTitleController,
             isScrollable: true,
             indicatorColor: Colors.white,
@@ -200,7 +118,7 @@ class HomePage extends GetView<HomeController> {
         Expanded(
           child: TabBarView(
             controller: controller.tabTitleController,
-            children: controller.getTabTitle.map((e) {
+            children: controller.userData.travelTitle.map((e) {
               return ListViewHome(site: e);
             }).toList(),
           ),
@@ -210,7 +128,7 @@ class HomePage extends GetView<HomeController> {
   }
 
   /// 导航条
-  Widget _navigationBar() {
+  Widget _navigationBar(BuildContext context) {
     double topMargin = ScreenUtil().statusBarHeight;
     double navigationBarHeight = 50.0;
     return Container(
@@ -221,105 +139,184 @@ class HomePage extends GetView<HomeController> {
           Expanded(
             child: Container(),
           ),
-          _searchBar('請輸入關鍵字', height: navigationBarHeight)
+          _buildSearchBar(context, '請輸入關鍵字', height: navigationBarHeight)
         ],
       ),
     );
   }
 
-  /// 搜索栏
-  Widget _searchBar(String placeholderText, {required double height}) {
+  /// 搜索欄
+  Widget _buildSearchBar(BuildContext context, String placeholderText,
+      {required double height}) {
     return Container(
       height: height,
       color: Colors.transparent,
       child: Row(
         children: [
-          _buildNavigationItem('選單', 'images/home/home_sign_in.png', onTap: () {
-            controller.openDrawer();
-          }),
-          Expanded(
-            child: GestureDetector(
-              child: Container(
-                height: ASize.w(16),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Colors.white,
-                ),
-                child: Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8, right: 8),
-                      child: Icon(
-                        Icons.search,
-                        color: Colors.black38,
-                      ),
-                    ),
-                    Text(
-                      placeholderText,
+          Obx(() => GestureDetector(
+            child: Padding(
+              padding: EdgeInsets.only(
+                right: ASize.w(5),
+                left: ASize.w(5),
+              ),
+              child: SizedBox(
+                height: ASize.h(16),
+                child: Center(
+                  child: Text("清除",
                       style: TextStyle(
-                        fontSize: ASize.ft(6),
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black.withOpacity(0.26),
-                      ),
-                    )
-                  ],
+                          color: (controller.keywords.value.isNotEmpty)
+                              ? Colors.redAccent
+                              : Colors.black,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "PingFang-SC",
+                          fontStyle: FontStyle.normal,
+                          fontSize: ASize.ft(7))),
                 ),
               ),
-              onTap: () {
-                controller.toSearch();
-              },
+            ),
+            onTap: () {
+              controller.messageController.text = "";
+              controller.keywords.value = "";
+              // 搜索
+              controller.searchDataRegion(controller.keywords.value);
+            },
+          )),
+          Expanded(
+            child: Container(
+              height: ASize.w(16),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+                color: Colors.white,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      left: 5,
+                    ),
+                    child: Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Expanded(
+                    child: CupertinoTextField(
+                      controller: controller.messageController,
+                      keyboardType: TextInputType.text,
+                      maxLines: 1,
+                      maxLength: 10,
+                      placeholder: placeholderText,
+                      placeholderStyle: TextStyle(
+                          fontSize: ASize.ft(6),
+                          fontWeight: FontWeight.normal,
+                          color: Colors.black),
+                      decoration:
+                      const BoxDecoration(color: Colors.transparent),
+                      onChanged: (value) {
+                        controller.keywords.value = value;
+                        if (kDebugMode) {
+                          print('keywords:${controller.keywords.value}');
+                        }
+                      },
+                    ),
+                  ),
+                  GestureDetector(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        right: ASize.w(2),
+                      ),
+                      child: Container(
+                        height: ASize.h(12),
+                        padding: EdgeInsets.symmetric(horizontal: ASize.w(2)),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(ASize.w(10)),
+                          color: Colors.green,
+                        ),
+                        child: Center(
+                          child: Text(controller.userData.keyWordTravel[0],
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "PingFang-SC",
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: ASize.ft(7))),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      String text = controller.userData.keyWordTravel[0];
+                      controller.messageController.text = text;
+                      controller.keywords.value = text;
+                      controller.searchDataRegion(text);
+                    },
+                  ),
+                  GestureDetector(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        right: ASize.w(2),
+                      ),
+                      child: Container(
+                        height: ASize.h(12),
+                        padding: EdgeInsets.symmetric(horizontal: ASize.w(2)),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(ASize.w(10)),
+                          color: Colors.blueAccent[200],
+                        ),
+                        child: Center(
+                          child: Text(controller.userData.keyWordTravel[1],
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: "PingFang-SC",
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: ASize.ft(7))),
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      String text = controller.userData.keyWordTravel[1];
+                      controller.messageController.text = text;
+                      controller.keywords.value = text;
+                      controller.searchDataRegion(text);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-          SizedBox(
-            width: ASize.w(20),
-          )
+          Obx(() => GestureDetector(
+            child: Padding(
+              padding: EdgeInsets.only(
+                right: ASize.w(5),
+                left: ASize.w(5),
+              ),
+              child: SizedBox(
+                height: ASize.h(16),
+                child: Center(
+                  child: Text("搜索",
+                      style: TextStyle(
+                          color: (controller.keywords.value.isNotEmpty)
+                              ? Colors.white
+                              : StyleInfo.gray_7C7C8D,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "PingFang-SC",
+                          fontStyle: FontStyle.normal,
+                          fontSize: ASize.ft(7))),
+                ),
+              ),
+            ),
+            onTap: () {
+              if (controller.keywords.value.isNotEmpty) {
+                FocusScope.of(context).requestFocus(FocusNode());
+                // 搜索
+                controller.searchDataRegion(controller.keywords.value);
+              }
+            },
+          ))
         ],
       ),
     );
   }
-
-  /// 构建导航栏左右的按钮
-  /// [title] 按钮标题
-  /// [icon] 按钮的图片
-  /// [onTap] 点击事件的回调
-  Widget _buildNavigationItem(String title, String icon,
-          {required VoidCallback onTap}) =>
-      GestureDetector(
-        behavior: HitTestBehavior.translucent,
-        onTap: onTap,
-        child: SizedBox(
-          width: 50,
-          height: 80,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.menu,
-                color: Colors.white,
-              ),
-              SizedBox(
-                height: ASize.ft(0),
-              ),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: ASize.ft(5),
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-
-  /// 毛玻璃背景(不需要毛玻璃了)
-  /// [height] 图片高度
-  /// https://www.jianshu.com/p/381c6609c5f1
-  Positioned _backgroundImageView({double height = 0}) => Positioned.fill(
-        child: Image.asset(
-          'images/home/home_bg.jpg',
-          fit: BoxFit.fill,
-        ),
-      );
 }
