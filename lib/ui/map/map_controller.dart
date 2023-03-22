@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,9 @@ import '../../routes/app_routes.dart';
 import '../../widgets/custom_marker.dart';
 
 class MapController extends GetxController {
+  /// FirebaseAnalytics
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   Completer<GoogleMapController> mapController = Completer();
   var isMapPrepare = true.obs;
 
@@ -66,6 +70,9 @@ class MapController extends GetxController {
     mapController.complete(controller);
 
     isMapPrepare(false);
+
+    /// 傳送自定義事件
+    analytics.logEvent(name: '查看地圖', parameters: {'status': 'success'});
   }
 
   void onMarkerTapped(CustomMarker marker) {

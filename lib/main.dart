@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,10 +14,16 @@ import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
 import 'themes/app_theme.dart';
 
-void main() {
+void main() async {
   Get.put(RxConfig());
   MobileAds.instance.initialize();
   WidgetsFlutterBinding.ensureInitialized();
+  // 啟用 Firebase
+  await Firebase.initializeApp();
+  // 啟用 Crashlytics
+  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   runApp(const MyApp());
 }
 
