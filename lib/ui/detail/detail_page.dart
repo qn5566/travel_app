@@ -23,7 +23,7 @@ class DetailPage extends GetView<DetailController> {
             slivers: <Widget>[
               SliverAppBar(
                 // backgroundColor: Colors.green,
-                expandedHeight: ScreenUtil().setHeight(ASize.h(100)),
+                expandedHeight: ScreenUtil().setHeight(ASize.h(140)),
                 floating: false,
                 pinned: true,
                 flexibleSpace: FlexibleSpaceBar(
@@ -66,7 +66,7 @@ class DetailPage extends GetView<DetailController> {
                                   Container(
                                     color: Colors.black38,
                                     constraints:
-                                        BoxConstraints(maxWidth: ASize.w(400)),
+                                        BoxConstraints(maxWidth: ASize.w(130)),
                                     child: Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Text(controller.item.name!,
@@ -82,12 +82,12 @@ class DetailPage extends GetView<DetailController> {
                                     ),
                                   ),
                                   GestureDetector(
-                                    onTap: () {
-                                      controller.goToWebView();
-                                    },
-                                    child: const Icon(Icons.more_vert)
-                                    // const Text("更多"),
-                                  )
+                                      onTap: () {
+                                        controller.goToWebView();
+                                      },
+                                      child: const Icon(Icons.more_vert)
+                                      // const Text("更多"),
+                                      )
                                 ],
                               ),
                             ),
@@ -98,18 +98,22 @@ class DetailPage extends GetView<DetailController> {
                   ),
                 ),
                 bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(10.0),
+                  preferredSize: const Size.fromHeight(20.0),
                   child: Container(
                     color: Colors.black38,
-                    child: TabBar(
-                      isScrollable: true,
-                      indicatorColor: Colors.white,
-                      labelColor: Colors.white,
-                      unselectedLabelColor: Colors.grey,
-                      indicatorWeight: 1.0,
-                      tabs: controller.subTitle,
-                      controller: controller.tabInfoController,
-                    ),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          TabBar(
+                            isScrollable: true,
+                            indicatorColor: Colors.white,
+                            labelColor: Colors.white,
+                            unselectedLabelColor: Colors.grey,
+                            indicatorWeight: 1.0,
+                            tabs: controller.subTitle,
+                            controller: controller.tabInfoController,
+                          ),
+                        ]),
                   ),
                 ),
               ),

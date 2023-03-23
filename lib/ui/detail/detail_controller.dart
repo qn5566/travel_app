@@ -13,7 +13,6 @@ import '../../data/mode/comment_model.dart';
 import '../../routes/app_routes.dart';
 import '../../util/ToastUtil.dart';
 import '../../widgets/title_view.dart';
-import '../account/account_controller.dart';
 
 class DetailController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -45,7 +44,9 @@ class DetailController extends GetxController
   /// 獲取Comment data
   void fetchApi() async {
     isLoading(true);
-    await ApiHelper().fetchCommentData(Get.arguments.id).then((value) {
+    // 來去儲存點擊紀錄
+    sendHistory(item.name ?? '');
+    await ApiHelper().fetchCommentData(item.id!).then((value) {
       dataList.assignAll(value);
       isLoading(false);
       update();
@@ -53,10 +54,8 @@ class DetailController extends GetxController
       if (kDebugMode) {
         print('Error:$e');
       }
+      isLoading(false);
     });
-
-    // 來去儲存點擊紀錄
-    sendHistory(Get.arguments.name);
   }
 
   void checkSendData(BuildContext context, String data,
@@ -83,7 +82,7 @@ class DetailController extends GetxController
 
       Map<String, dynamic> body = {
         'fun': 'updateComment',
-        'TitleId': Get.arguments.id,
+        'TitleId': item.id,
         'Username': username,
         'Comment': data,
         'Like': 5,
