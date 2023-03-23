@@ -39,7 +39,7 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     if (sharedPreferences.getString(AppConstants.userName) != null) {
       controller.username.value =
-      sharedPreferences.getString(AppConstants.userName)!;
+          sharedPreferences.getString(AppConstants.userName)!;
     }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -154,33 +154,33 @@ class HomePage extends GetView<HomeController> {
       child: Row(
         children: [
           Obx(() => GestureDetector(
-            child: Padding(
-              padding: EdgeInsets.only(
-                right: ASize.w(5),
-                left: ASize.w(5),
-              ),
-              child: SizedBox(
-                height: ASize.h(16),
-                child: Center(
-                  child: Text("清除",
-                      style: TextStyle(
-                          color: (controller.keywords.value.isNotEmpty)
-                              ? Colors.redAccent
-                              : Colors.black,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "PingFang-SC",
-                          fontStyle: FontStyle.normal,
-                          fontSize: ASize.ft(7))),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: ASize.w(5),
+                    left: ASize.w(5),
+                  ),
+                  child: SizedBox(
+                    height: ASize.h(16),
+                    child: Center(
+                      child: Text("清除",
+                          style: TextStyle(
+                              color: (controller.keywords.value.isNotEmpty)
+                                  ? Colors.redAccent
+                                  : Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: "PingFang-SC",
+                              fontStyle: FontStyle.normal,
+                              fontSize: ASize.ft(7))),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            onTap: () {
-              controller.messageController.text = "";
-              controller.keywords.value = "";
-              // 搜索
-              controller.searchDataRegion(controller.keywords.value);
-            },
-          )),
+                onTap: () {
+                  controller.messageController.text = "";
+                  controller.keywords.value = "";
+                  // 搜索
+                  controller.searchDataRegion(controller.keywords.value);
+                },
+              )),
           Expanded(
             child: Container(
               height: ASize.w(16),
@@ -213,7 +213,7 @@ class HomePage extends GetView<HomeController> {
                           fontWeight: FontWeight.normal,
                           color: Colors.black),
                       decoration:
-                      const BoxDecoration(color: Colors.transparent),
+                          const BoxDecoration(color: Colors.transparent),
                       onChanged: (value) {
                         controller.keywords.value = value;
                         if (kDebugMode) {
@@ -287,34 +287,34 @@ class HomePage extends GetView<HomeController> {
             ),
           ),
           Obx(() => GestureDetector(
-            child: Padding(
-              padding: EdgeInsets.only(
-                right: ASize.w(5),
-                left: ASize.w(5),
-              ),
-              child: SizedBox(
-                height: ASize.h(16),
-                child: Center(
-                  child: Text("搜索",
-                      style: TextStyle(
-                          color: (controller.keywords.value.isNotEmpty)
-                              ? Colors.white
-                              : StyleInfo.gray_7C7C8D,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "PingFang-SC",
-                          fontStyle: FontStyle.normal,
-                          fontSize: ASize.ft(7))),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: ASize.w(5),
+                    left: ASize.w(5),
+                  ),
+                  child: SizedBox(
+                    height: ASize.h(16),
+                    child: Center(
+                      child: Text("搜索",
+                          style: TextStyle(
+                              color: (controller.keywords.value.isNotEmpty)
+                                  ? Colors.white
+                                  : StyleInfo.gray_7C7C8D,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: "PingFang-SC",
+                              fontStyle: FontStyle.normal,
+                              fontSize: ASize.ft(7))),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            onTap: () {
-              if (controller.keywords.value.isNotEmpty) {
-                FocusScope.of(context).requestFocus(FocusNode());
-                // 搜索
-                controller.searchDataRegion(controller.keywords.value);
-              }
-            },
-          ))
+                onTap: () {
+                  if (controller.keywords.value.isNotEmpty) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    // 搜索
+                    controller.searchDataRegion(controller.keywords.value);
+                  }
+                },
+              ))
         ],
       ),
     );

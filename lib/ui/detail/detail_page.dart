@@ -19,110 +19,113 @@ class DetailPage extends GetView<DetailController> {
       debugShowCheckedModeBanner: false,
       home: Builder(builder: (context) {
         return Scaffold(
-          body: Container(
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  //标题栏
-                  padding: EdgeInsets.only(
-                      top: ScreenUtil().statusBarHeight, right: ASize.w(5)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.back();
-                        },
-                        behavior: HitTestBehavior.opaque,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: ASize.w(5)),
-                          child: const Icon(
-                            Icons.arrow_back_ios,
-                            color: Colors.black,
+          body: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                // backgroundColor: Colors.green,
+                expandedHeight: ScreenUtil().setHeight(ASize.h(100)),
+                floating: false,
+                pinned: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: AspectRatio(
+                    aspectRatio: 1.2,
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: VideoCoverView(
+                            // radius: 10,
+                            cover: Get.arguments.picture1 ?? '',
+                            money: Get.arguments.region,
                           ),
                         ),
-                      ),
-                      Container(
-                        constraints: BoxConstraints(maxWidth: ASize.w(120)),
-                        child: Text(Get.arguments.name,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: "PingFangSC",
-                              fontStyle: FontStyle.normal,
-                              fontSize: ASize.ft(10),
-                            )),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          controller.goToWebView();
-                        },
-                        child: const Text("更多"),
-                      )
-                    ],
-                  ),
-                ),
-                AspectRatio(
-                  aspectRatio: 1.8,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: VideoCoverView(
-                          // radius: 10,
-                          cover: Get.arguments.picture1 ?? '',
-                          money: Get.arguments.region,
-                        ),
-                      ),
-                      MoneytextWidget(Get.arguments.region ?? "尚未資料"),
-                      //align at bottom center using Align()
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                            color: Colors.black38,
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Text(
-                                controller.item.picdescribe1!,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: "PingFangSC",
-                                  fontStyle: FontStyle.normal,
-                                  fontSize: ASize.ft(7),
-                                ),
+                        Column(
+                          children: [
+                            Padding(
+                              //标题栏
+                              padding: EdgeInsets.only(
+                                  top: ScreenUtil().statusBarHeight,
+                                  right: ASize.w(5)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.back();
+                                    },
+                                    behavior: HitTestBehavior.opaque,
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.only(left: ASize.w(5)),
+                                      child: const Icon(
+                                        Icons.arrow_back_ios,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    color: Colors.black38,
+                                    constraints:
+                                        BoxConstraints(maxWidth: ASize.w(400)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Text(controller.item.name!,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: "PingFangSC",
+                                            fontStyle: FontStyle.normal,
+                                            fontSize: ASize.ft(10),
+                                          )),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.goToWebView();
+                                    },
+                                    child: const Icon(Icons.more_vert)
+                                    // const Text("更多"),
+                                  )
+                                ],
                               ),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
-                TabBar(
-                  isScrollable: true,
-                  indicatorColor: Colors.black,
-                  labelColor: Colors.red,
-                  unselectedLabelColor: Colors.grey,
-                  indicatorWeight: 2.5,
-                  tabs: controller.subTitle,
-                  controller: controller.tabInfoController,
-                ),
-                Expanded(
-                  child: Container(
-                    color: Colors.black,
-                    child: TabBarView(
-                      controller: controller.tabInfoController,
-                      children: [
-                        InfoView(),
-                        CommentView(),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
                 ),
-              ],
-            ),
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(10.0),
+                  child: Container(
+                    color: Colors.black38,
+                    child: TabBar(
+                      isScrollable: true,
+                      indicatorColor: Colors.white,
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.grey,
+                      indicatorWeight: 1.0,
+                      tabs: controller.subTitle,
+                      controller: controller.tabInfoController,
+                    ),
+                  ),
+                ),
+              ),
+              SliverFillRemaining(
+                child: Container(
+                  color: Colors.black,
+                  child: TabBarView(
+                    controller: controller.tabInfoController,
+                    children: [
+                      InfoView(),
+                      CommentView(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       }),

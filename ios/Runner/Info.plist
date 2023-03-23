@@ -42,11 +42,11 @@
 		<true/>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>您的位置將用於顯示當前位置</string>
+	<string>可以動態查看您身邊週遭的景點</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>您的位置將用於顯示當前位置</string>
+	<string>可以動態查看您身邊週遭的景點</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>您的位置將用於顯示當前位置</string>
+	<string>可以動態查看您身邊週遭的景點</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
