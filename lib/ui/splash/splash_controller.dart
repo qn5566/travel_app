@@ -16,6 +16,7 @@ import '../../routes/app_routes.dart';
 class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
   String appUrl = '';
+  bool shouldNavigateToDashboard = true;
   final RxConfig userData = Get.find();
 
   void checkVersion(BuildContext context) async {
@@ -47,6 +48,7 @@ class SplashController extends GetxController
         final info = value['info'] as String;
         appUrl = value['android_url'] as String;
         _showVersionDialog(context, info);
+        shouldNavigateToDashboard = false;
         return;
       } else if (Platform.isIOS &&
           compareVersion(flutterVersion, iosVersion) < 0) {
@@ -54,6 +56,7 @@ class SplashController extends GetxController
         final info = value['info'] as String;
         appUrl = value['ios_url'] as String;
         _showVersionDialog(context, info);
+        shouldNavigateToDashboard = false;
         return;
       }
     }).catchError((e) {
@@ -63,8 +66,10 @@ class SplashController extends GetxController
       return;
     });
 
-    await Future.delayed(const Duration(milliseconds: 1000));
-    Get.toNamed(AppRoutes.dashboard);
+    if (shouldNavigateToDashboard) {
+      await Future.delayed(const Duration(milliseconds: 1000));
+      Get.toNamed(AppRoutes.dashboard);
+    }
   }
 
   void _showVersionDialog(BuildContext context, String info) {
