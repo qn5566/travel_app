@@ -127,7 +127,7 @@ class HistoryController extends GetxController {
     if (kDebugMode) {
       print(item.name);
     }
-    showInterstitialAd();
+    // showInterstitialAd(); 關閉全屏廣告
     Get.toNamed(AppRoutes.travelDetails, arguments: item);
   }
 

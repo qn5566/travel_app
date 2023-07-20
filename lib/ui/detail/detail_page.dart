@@ -18,14 +18,60 @@ class DetailPage extends GetView<DetailController> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Builder(builder: (context) {
-        return Scaffold(
+        return
+          Scaffold(
           body: CustomScrollView(
             slivers: <Widget>[
               SliverAppBar(
-                // backgroundColor: Colors.green,
+                backgroundColor: Colors.transparent,
                 expandedHeight: ScreenUtil().setHeight(ASize.h(140)),
-                floating: false,
-                pinned: true,
+                floating: true,
+                pinned: false,
+                snap: false,
+                title: Container(
+                  color: Colors.black38,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        behavior: HitTestBehavior.opaque,
+                        child: Padding(
+                          padding: EdgeInsets.only(left: ASize.w(5)),
+                          child: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        constraints: BoxConstraints(maxWidth: ASize.w(130)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text(controller.item.name!,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "PingFangSC",
+                                fontStyle: FontStyle.normal,
+                                fontSize: ASize.ft(10),
+                              )),
+                        ),
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            controller.goToWebView();
+                          },
+                          child: const Icon(Icons.more_vert)
+                          // const Text("更多"),
+                          )
+                    ],
+                  ),
+                ),
                 flexibleSpace: FlexibleSpaceBar(
                   background: AspectRatio(
                     aspectRatio: 1.2,
@@ -37,61 +83,6 @@ class DetailPage extends GetView<DetailController> {
                             cover: Get.arguments.picture1 ?? '',
                             money: Get.arguments.region,
                           ),
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              //标题栏
-                              padding: EdgeInsets.only(
-                                  top: ScreenUtil().statusBarHeight,
-                                  right: ASize.w(5)),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.back();
-                                    },
-                                    behavior: HitTestBehavior.opaque,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: ASize.w(5)),
-                                      child: const Icon(
-                                        Icons.arrow_back_ios,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    color: Colors.black38,
-                                    constraints:
-                                        BoxConstraints(maxWidth: ASize.w(130)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Text(controller.item.name!,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: "PingFangSC",
-                                            fontStyle: FontStyle.normal,
-                                            fontSize: ASize.ft(10),
-                                          )),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                      onTap: () {
-                                        controller.goToWebView();
-                                      },
-                                      child: const Icon(Icons.more_vert)
-                                      // const Text("更多"),
-                                      )
-                                ],
-                              ),
-                            ),
-                          ],
                         ),
                       ],
                     ),

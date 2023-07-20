@@ -4,7 +4,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:location/location.dart';
@@ -12,7 +11,6 @@ import 'package:location/location.dart';
 import '../../config/AdHelper.dart';
 import '../../config/global_config.dart';
 import '../../data/dao/dataAllDao.dart';
-import '../../data/database/categoryDb.dart';
 import '../../data/mode/data_all.dart';
 import '../../data/repo/data_repo.dart';
 import '../../data/repo/fxDataBaseManager.dart';
@@ -243,8 +241,14 @@ class MapController extends GetxController {
     final newMarkers = dataList.where((e) {
       final distance =
           Geolocator.distanceBetween(e.py ?? 0.0, e.px ?? 0.0, px0!, py0!);
-      return distance <= distanceValue &&
-          (selectedItem.value == '' || e.name!.contains(selectedItem.value));
+      if (selectedItem.value == '景點') {
+        return distance <= distanceValue &&
+            (selectedItem.value == '' ||
+                !e.name!.contains('公園') && !e.name!.contains('夜市'));
+      } else {
+        return distance <= distanceValue &&
+            (selectedItem.value == '' || e.name!.contains(selectedItem.value));
+      }
     }).map((e) {
       return CustomMarker(
         markerId: MarkerId(e.name!),

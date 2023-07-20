@@ -240,6 +240,10 @@ class MapPage extends GetView<MapController> {
                                 child: Text('夜市'),
                               ),
                               const PopupMenuItem(
+                                value: '景點',
+                                child: Text('景點'),
+                              ),
+                              const PopupMenuItem(
                                 value: '',
                                 child: Text('全部'),
                               ),
