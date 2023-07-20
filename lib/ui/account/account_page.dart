@@ -8,7 +8,7 @@ import 'package:marquee/marquee.dart';
 
 import '../../config/style_info.dart';
 import '../../util/ui_util.dart';
-import '../../widgets/article_widget.dart';
+import '../../widgets/ClickableImage.dart';
 import 'account_controller.dart';
 
 /*
@@ -41,18 +41,18 @@ class AccountPage extends GetView<AccountController> {
                 children: [
                   SizedBox(height: ScreenUtil().statusBarHeight + 10),
                   Obx(() => (controller.isADShowing.value &&
-                      controller.bannerAd != null)
+                          controller.bannerAd != null)
                       ? Align(
-                    alignment: Alignment.topCenter,
-                    child: SizedBox(
-                      width: controller.bannerAd!.size.width.toDouble(),
-                      height: controller.bannerAd!.size.height.toDouble(),
-                      child: AdWidget(ad: controller.bannerAd!),
-                    ),
-                  )
+                          alignment: Alignment.topCenter,
+                          child: SizedBox(
+                            width: controller.bannerAd!.size.width.toDouble(),
+                            height: controller.bannerAd!.size.height.toDouble(),
+                            child: AdWidget(ad: controller.bannerAd!),
+                          ),
+                        )
                       : SizedBox(
-                    height: ASize.h(0),
-                  )),
+                          height: ASize.h(0),
+                        )),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
                     child: Row(
@@ -67,166 +67,166 @@ class AccountPage extends GetView<AccountController> {
                             )),
                         Obx(() => (controller.username.value == '')
                             ? Expanded(
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: SizedBox(
-                                  width: ASize.w(100),
-                                  child: CupertinoTextField(
-                                    textAlign: TextAlign.center,
-                                    controller:
-                                    controller.textEditingController,
-                                    keyboardType: TextInputType.text,
-                                    maxLines: 1,
-                                    maxLength: 10,
-                                    placeholder: "請輸入暱稱",
-                                    placeholderStyle: TextStyle(
-                                        fontSize: ASize.ft(8),
-                                        fontWeight: FontWeight.normal,
-                                        color: Colors.black),
-                                    decoration:
-                                    // const BoxDecoration(color: Colors.transparent),
-                                    BoxDecoration(
-                                        borderRadius:
-                                        BorderRadius.all(
-                                            Radius.circular(
-                                                ASize.w(18))),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey
-                                                .withOpacity(0.5),
-                                            spreadRadius: 5,
-                                            blurRadius: 7,
-                                            offset: const Offset(0,
-                                                3), // changes position of shadow
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: SizedBox(
+                                        width: ASize.w(100),
+                                        child: CupertinoTextField(
+                                          textAlign: TextAlign.center,
+                                          controller:
+                                              controller.textEditingController,
+                                          keyboardType: TextInputType.text,
+                                          maxLines: 1,
+                                          maxLength: 10,
+                                          placeholder: "請輸入暱稱",
+                                          placeholderStyle: TextStyle(
+                                              fontSize: ASize.ft(8),
+                                              fontWeight: FontWeight.normal,
+                                              color: Colors.black),
+                                          decoration:
+                                              // const BoxDecoration(color: Colors.transparent),
+                                              BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              ASize.w(18))),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.5),
+                                                      spreadRadius: 5,
+                                                      blurRadius: 7,
+                                                      offset: const Offset(0,
+                                                          3), // changes position of shadow
+                                                    ),
+                                                  ],
+                                                  color: Colors.white),
+                                          onChanged: (value) {
+                                            if (kDebugMode) {
+                                              print(value);
+                                            }
+                                            key = value;
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          right: ASize.w(2),
+                                        ),
+                                        child: Container(
+                                          height: ASize.h(16),
+                                          width: ASize.w(30),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(ASize.w(30))),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 5,
+                                                blurRadius: 7,
+                                                offset: const Offset(0,
+                                                    3), // changes position of shadow
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                        color: Colors.white),
-                                    onChanged: (value) {
-                                      if (kDebugMode) {
-                                        print(value);
-                                      }
-                                      key = value;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    right: ASize.w(2),
-                                  ),
-                                  child: Container(
-                                    height: ASize.h(16),
-                                    width: ASize.w(30),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(ASize.w(30))),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey
-                                              .withOpacity(0.5),
-                                          spreadRadius: 5,
-                                          blurRadius: 7,
-                                          offset: const Offset(0,
-                                              3), // changes position of shadow
+                                          child: Center(
+                                            child: Text("確認",
+                                                style: TextStyle(
+                                                    color: (key.isNotEmpty)
+                                                        ? Colors.black
+                                                        : StyleInfo.gray_7C7C8D,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: "PingFang-SC",
+                                                    fontStyle: FontStyle.normal,
+                                                    fontSize: ASize.ft(7))),
+                                          ),
                                         ),
-                                      ],
-                                    ),
-                                    child: Center(
-                                      child: Text("確認",
-                                          style: TextStyle(
-                                              color: (key.isNotEmpty)
-                                                  ? Colors.black
-                                                  : StyleInfo.gray_7C7C8D,
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: "PingFang-SC",
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: ASize.ft(7))),
-                                    ),
-                                  ),
+                                      ),
+                                      onTap: () {
+                                        if (key.isNotEmpty) {
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
+
+                                          controller.updateUsername(key);
+
+                                          controller.username.value = key;
+                                        }
+                                      },
+                                    )
+                                  ],
                                 ),
-                                onTap: () {
-                                  if (key.isNotEmpty) {
-                                    FocusScope.of(context)
-                                        .requestFocus(FocusNode());
-
-                                    controller.updateUsername(key);
-
-                                    controller.username.value = key;
-                                  }
-                                },
                               )
-                            ],
-                          ),
-                        )
                             : Expanded(
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Text(controller.username.value,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontFamily: "PingFangSC",
-                                      fontStyle: FontStyle.normal,
-                                      fontSize: ASize.ft(8),
-                                    )),
-                              ),
-                              GestureDetector(
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    right: ASize.w(2),
-                                  ),
-                                  child: Container(
-                                    height: ASize.h(16),
-                                    width: ASize.w(30),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(ASize.w(30))),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey
-                                              .withOpacity(0.5),
-                                          spreadRadius: 5,
-                                          blurRadius: 7,
-                                          offset: const Offset(0,
-                                              3), // changes position of shadow
-                                        ),
-                                      ],
-                                    ),
-                                    child: Center(
-                                      child: Text("替換",
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Text(controller.username.value,
                                           style: TextStyle(
-                                              color:
-                                              StyleInfo.gray_7C7C8D,
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: "PingFang-SC",
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: ASize.ft(7))),
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: "PingFangSC",
+                                            fontStyle: FontStyle.normal,
+                                            fontSize: ASize.ft(8),
+                                          )),
                                     ),
-                                  ),
+                                    GestureDetector(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                          right: ASize.w(2),
+                                        ),
+                                        child: Container(
+                                          height: ASize.h(16),
+                                          width: ASize.w(30),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(ASize.w(30))),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 5,
+                                                blurRadius: 7,
+                                                offset: const Offset(0,
+                                                    3), // changes position of shadow
+                                              ),
+                                            ],
+                                          ),
+                                          child: Center(
+                                            child: Text("替換",
+                                                style: TextStyle(
+                                                    color:
+                                                        StyleInfo.gray_7C7C8D,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontFamily: "PingFang-SC",
+                                                    fontStyle: FontStyle.normal,
+                                                    fontSize: ASize.ft(7))),
+                                          ),
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
+                                        controller.changeUsername();
+                                        controller.username.value = '';
+                                        key = '';
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                onTap: () {
-                                  FocusScope.of(context)
-                                      .requestFocus(FocusNode());
-                                  controller.changeUsername();
-                                  controller.username.value = '';
-                                  key = '';
-                                },
-                              ),
-                            ],
-                          ),
-                        )),
+                              )),
                       ],
                     ),
                   ),
@@ -249,10 +249,34 @@ class AccountPage extends GetView<AccountController> {
                     ),
                   ),
                   SizedBox(height: ASize.h(10)),
-                  ArticleWidget(
-                      title: controller.userData.infoMenu[0],
-                      subtitle: controller.userData.infoMenu[1],
-                      content: controller.userData.infoMenu[2]),
+                  const Text(
+                    '歡迎下載另外一款姐妹版APP',
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: ASize.h(10)),
+                  SizedBox(
+                    height: ASize.h(100),
+                    width: ASize.w(100),
+                    child: ClickableImage(
+                      imageUrl: 'images/icon/event_icon_512.png',
+                      androidUrl:
+                          'https://play.google.com/store/apps/details?id=com.meetstudio.event',
+                      iosUrl:
+                          'https://apps.apple.com/us/app/%E5%8F%B0%E7%81%A3%E5%90%83%E5%96%9D%E7%8E%A9%E6%A8%82%E5%9C%B0%E5%9C%96/id6446348643',
+                    ),
+                  ),
+                  SizedBox(height: ASize.h(4)),
+                  const Text(
+                    '這一款有包含各地區活動，以及餐廳喔!~',
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
+                  const Text(
+                    '點擊圖片就可以下載',
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
               Align(
