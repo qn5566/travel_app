@@ -118,6 +118,7 @@ class HomePage extends GetView<HomeController> {
         Expanded(
           child: TabBarView(
             controller: controller.tabTitleController,
+            physics: const NeverScrollableScrollPhysics(), // 禁用滑動
             children: controller.userData.travelTitle.map((e) {
               return ListViewHome(site: e);
             }).toList(),
@@ -218,6 +219,15 @@ class HomePage extends GetView<HomeController> {
                         controller.keywords.value = value;
                         if (kDebugMode) {
                           print('keywords:${controller.keywords.value}');
+                        }
+                      },
+                      onSubmitted: (value) {
+                        // 在這裡執行搜尋的操作
+                        if (controller.keywords.value.isNotEmpty) {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          // 搜索
+                          controller
+                              .searchDataRegion(controller.keywords.value);
                         }
                       },
                     ),
