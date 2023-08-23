@@ -74,9 +74,11 @@ class MapController extends GetxController {
     analytics.logEvent(name: '查看地圖', parameters: {'status': 'success'});
   }
 
-  void onMarkerTapped(CustomMarker marker) {
-    selectedMarker.value = marker;
+  void onMarkerTapped(DataAll item) {
+    // selectedMarker.value = marker;
     // 處理 Marker 點擊事件
+
+    onTap(item);
   }
 
   @override
@@ -128,6 +130,7 @@ class MapController extends GetxController {
 
     py0 = locationData.longitude ?? 121.56;
     px0 = locationData.latitude ?? 25.03;
+
     final newMarkers = dataList.where((e) {
       final distance =
           Geolocator.distanceBetween(e.py ?? 0.0, e.px ?? 0.0, px0!, py0!);
@@ -136,8 +139,9 @@ class MapController extends GetxController {
       return CustomMarker(
         markerId: MarkerId(e.name!),
         position: LatLng(e.py ?? 0.0, e.px ?? 0.0),
-        infoWindow: InfoWindow(title: e.name),
+        infoWindow: InfoWindow(title: e.name, onTap: () => onMarkerTapped(e)),
         dataAll: e,
+        onTap: () => onMarkerTapped(e), // 添加這一行
       );
     });
     markers.addAll(newMarkers);
@@ -254,8 +258,9 @@ class MapController extends GetxController {
       return CustomMarker(
         markerId: MarkerId(e.name!),
         position: LatLng(e.py ?? 0.0, e.px ?? 0.0),
-        infoWindow: InfoWindow(title: e.name),
+        infoWindow: InfoWindow(title: e.name, onTap: () => onMarkerTapped(e)),
         dataAll: e,
+        onTap: () => onMarkerTapped(e), // 添加這一行
       );
     });
     markers.clear();

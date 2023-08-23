@@ -100,7 +100,7 @@ class MapPage extends GetView<MapController> {
                     width: 0,
                   )
                 : Positioned(
-                    bottom: 0,
+                    bottom: ASize.h(30),
                     left: 0,
                     right: 0,
                     child: SizedBox(
@@ -138,56 +138,6 @@ class MapPage extends GetView<MapController> {
                     : const SizedBox(
                         height: 1,
                       )),
-            Obx(() => controller.selectedMarker.value != null
-                ? Positioned(
-                    bottom: ASize.h(30),
-                    left: ASize.w(30),
-                    right: ASize.w(30),
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                controller.onTap(
-                                    controller.selectedMarker.value!.dataAll);
-                              },
-                              child: Text(controller
-                                  .selectedMarker.value!.markerId.value),
-                            ),
-                            controller.selectedMarker.value!.dataAll.address !=
-                                    null
-                                ? GestureDetector(
-                                    onTap: () {
-                                      controller.onTap(controller
-                                          .selectedMarker.value!.dataAll);
-                                    },
-                                    child: Text(
-                                      controller.selectedMarker.value!.dataAll
-                                              .address ??
-                                          '',
-                                      maxLines: 1,
-                                    ),
-                                  )
-                                : const SizedBox(
-                                    height: 0,
-                                  ),
-                            GestureDetector(
-                              onTap: () {
-                                controller.onTap(
-                                    controller.selectedMarker.value!.dataAll);
-                              },
-                              child: const Text('查看更多'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                : const SizedBox(
-                    height: 1,
-                  )),
             Obx(() => controller.isMapPrepare.value &&
                     controller.firstLoading.value != true
                 ? Stack(children: [
