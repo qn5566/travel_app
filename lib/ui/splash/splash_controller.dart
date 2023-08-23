@@ -1,11 +1,8 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_ticket_provider_mixin.dart';
-import 'package:travel/ui/dashboard/dashboard_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/global_config.dart';
@@ -91,18 +88,22 @@ class SplashController extends GetxController
               TextButton(
                   child: const Text('更新', style: TextStyle(color: Colors.red)),
                   onPressed: () async {
-                    final Uri url = Uri.parse(appUrl);
-                    if (await canLaunchUrl(url)) {
-                      await launchUrl(url);
-                    } else {
-                      throw 'Could not launch $appUrl';
-                    }
+                    _launchUrl(appUrl);
                   }),
             ],
           ),
         );
       },
     );
+  }
+
+  /// 執行跳轉
+  void _launchUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   int compareVersion(String currentVersion, String newVersion) {
