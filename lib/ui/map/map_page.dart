@@ -14,6 +14,8 @@ class MapPage extends GetView<MapController> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> items = ["全部", "景點", "公園", "夜市"];
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -206,53 +208,60 @@ class MapPage extends GetView<MapController> {
                     top: ASize.h(65),
                     left: ASize.w(5),
                     child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 3,
-                            blurRadius: 7,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: PopupMenuButton<String>(
-                          onSelected: controller.onItemSelected,
-                          child: Row(
-                            children: const [
-                              Icon(Icons.menu),
-                              SizedBox(width: 5),
-                              Text('選擇景點'),
-                            ],
-                          ),
-                          itemBuilder: (BuildContext context) {
-                            return [
-                              const PopupMenuItem(
-                                value: '公園',
-                                child: Text('公園'),
+                      margin: EdgeInsets.only(
+                          left: ASize.w(10), right: ASize.w(10)),
+                      child: Wrap(
+                        spacing: ASize.w(10),
+                        runSpacing: ASize.w(10),
+                        children: items.map(
+                          (e) {
+                            bool isSelected =
+                                controller.selectedItem.value == e;
+                            return GestureDetector(
+                              child: Container(
+                                height: ASize.w(14),
+                                decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : const Color(0xFF666666),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(ASize.w(50)),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        blurRadius: 5,
+                                        spreadRadius: 2,
+                                        offset: Offset(0, 3),
+                                      )
+                                    ]),
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                    left: ASize.w(8),
+                                    right: ASize.w(8),
+                                    top: ASize.w(2.5),
+                                  ),
+                                  child: Text(
+                                    e,
+                                    style: TextStyle(
+                                      fontSize: ASize.ft(6),
+                                      fontWeight: FontWeight.w400,
+                                      color: isSelected
+                                          ? Colors.black
+                                          : const Color(0xFF8BA3A6),
+                                    ),
+                                  ),
+                                ),
                               ),
-                              const PopupMenuItem(
-                                value: '夜市',
-                                child: Text('夜市'),
-                              ),
-                              const PopupMenuItem(
-                                value: '景點',
-                                child: Text('景點'),
-                              ),
-                              const PopupMenuItem(
-                                value: '',
-                                child: Text('全部'),
-                              ),
-                            ];
+                              onTap: () {
+                                controller.selectedItem.value = e;
+                                controller.onItemSelected(e);
+                              },
+                            );
                           },
-                        ),
+                        ).toList(),
                       ),
-                    ),
-                  )),
+                    ))),
           ],
         ),
       ),

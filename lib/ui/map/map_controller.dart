@@ -63,7 +63,7 @@ class MapController extends GetxController {
   final DataController dataController = Get.find();
 
   /// 選單設定
-  var selectedItem = ''.obs;
+  var selectedItem = '全部'.obs;
 
   void onMapCreated(GoogleMapController controller) {
     mapController.complete(controller);
@@ -243,11 +243,12 @@ class MapController extends GetxController {
           Geolocator.distanceBetween(e.py ?? 0.0, e.px ?? 0.0, px0!, py0!);
       if (selectedItem.value == '景點') {
         return distance <= distanceValue &&
-            (selectedItem.value == '' ||
+            (selectedItem.value == '全部' ||
                 !e.name!.contains('公園') && !e.name!.contains('夜市'));
       } else {
         return distance <= distanceValue &&
-            (selectedItem.value == '' || e.name!.contains(selectedItem.value));
+            (selectedItem.value == '全部' ||
+                e.name!.contains(selectedItem.value));
       }
     }).map((e) {
       return CustomMarker(
