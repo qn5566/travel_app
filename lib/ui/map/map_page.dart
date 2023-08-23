@@ -111,7 +111,13 @@ class MapPage extends GetView<MapController> {
                           onPressed: () {
                             controller.updateNearbyMarkers();
                           },
-                          child: const Text('更新'),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red, // 設置按鈕的背景顏色
+                          ),
+                          child: const Text(
+                            '更新\n現在位置',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                     ),
