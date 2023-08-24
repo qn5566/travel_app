@@ -1,3 +1,12 @@
+# Xcode
+ios/Runner.xcodeproj
+
+# CocoaPods
+ios/Podfile
+
+# macOS
+macos/
+
 # Miscellaneous
 *.class
 *.log
