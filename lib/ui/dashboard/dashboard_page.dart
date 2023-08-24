@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:travel/ui/map/map_page.dart';
 
+import '../../config/style_info.dart';
 import '../account/account_page.dart';
 import '../history/history_page.dart';
 import '../home/home_page.dart';
@@ -42,7 +43,7 @@ class DashboardPage extends StatelessWidget {
               showSelectedLabels: true,
               showUnselectedLabels: true,
               type: BottomNavigationBarType.fixed,
-              backgroundColor: const Color(0xFF439D98),
+              backgroundColor: StyleInfo.mainColor,
               elevation: 0,
               items: [
                 _bottomNavigationBarItem(

@@ -58,7 +58,7 @@ class HomePage extends GetView<HomeController> {
               ),
               // 毛玻璃效果 - 半透明
               Container(
-                color: const Color(0xFF0E3311).withOpacity(0.5),
+                color: StyleInfo.assistColor.withOpacity(0.5),
               ),
               Positioned.fill(
                 child: Container(

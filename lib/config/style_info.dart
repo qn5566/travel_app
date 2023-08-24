@@ -6,9 +6,6 @@ import '../util/ui_util.dart';
 class StyleInfo {
   /// MARK - 颜色标准
 
-  // 主色 洋红
-  static const Color main_red = Color(0xFFFF4747);
-
   // 主色 黑色
   static const Color main_black = Colors.black;
 
@@ -54,11 +51,11 @@ class StyleInfo {
   // 集五福 - 新春版，文字黄色
   static const Color main_new_year_yellow = Color(0xffffeebe);
 
-  /// 主色调 这里已经废弃，请不要使用
-  static const Color mainColor = Color(0xFF233150);
+  /// 主色调
+  static const Color mainColor = Color(0xFF4CAF50);
 
   /// 辅助颜色
-  static const Color assistColor = Color(0xFF3B92FF);
+  static const Color assistColor = Color(0xFF757575);
 
   /// 底色
   static const Color backgroundColor = Color(0xFFF6F5FA);
