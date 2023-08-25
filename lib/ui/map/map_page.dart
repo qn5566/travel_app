@@ -5,6 +5,7 @@ import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
+import 'package:travel/config/style_info.dart';
 import 'package:travel/util/ui_util.dart';
 
 import 'map_controller.dart';
@@ -100,11 +101,10 @@ class MapPage extends GetView<MapController> {
                     width: 0,
                   )
                 : Positioned(
-                    bottom: ASize.h(30),
+                    bottom: ASize.h(5),
                     left: 0,
                     right: 0,
                     child: SizedBox(
-                      height: 50,
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: ElevatedButton(
@@ -112,7 +112,7 @@ class MapPage extends GetView<MapController> {
                             controller.updateNearbyMarkers();
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.red, // 設置按鈕的背景顏色
+                            primary: StyleInfo.deleteButton, // 設置按鈕的背景顏色
                           ),
                           child: const Text(
                             '更新\n現在位置',
@@ -173,39 +173,51 @@ class MapPage extends GetView<MapController> {
                           (e) {
                             bool isSelected =
                                 controller.selectedItem.value == e;
+                            Color backgroundColor;
+                            if (e == '景點') {
+                              backgroundColor = StyleInfo.searchTextTagTwo;
+                            } else if (e == '公園') {
+                              backgroundColor = StyleInfo.searchTextTagOne;
+                            } else if (e == '夜市') {
+                              backgroundColor = StyleInfo.searchTextHomeHitTwo;
+                            } else {
+                              backgroundColor = StyleInfo.searchTextResHitOne;
+                            }
                             return GestureDetector(
                               child: Container(
-                                height: ASize.w(14),
                                 decoration: BoxDecoration(
+                                  color: backgroundColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(ASize.w(50)),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 5,
+                                      spreadRadius: 2,
+                                      offset: const Offset(0, 3),
+                                    )
+                                  ],
+                                  border: Border.all(
                                     color: isSelected
                                         ? Colors.white
-                                        : const Color(0xFF666666),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(ASize.w(50)),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        blurRadius: 5,
-                                        spreadRadius: 2,
-                                        offset: Offset(0, 3),
-                                      )
-                                    ]),
+                                        : Colors.transparent,
+                                    width: 2,
+                                  ),
+                                ),
                                 child: Padding(
                                   padding: EdgeInsets.only(
                                     left: ASize.w(8),
                                     right: ASize.w(8),
                                     top: ASize.w(2.5),
+                                    bottom: ASize.w(2.5),
                                   ),
                                   child: Text(
                                     e,
                                     style: TextStyle(
-                                      fontSize: ASize.ft(6),
-                                      fontWeight: FontWeight.w400,
-                                      color: isSelected
-                                          ? Colors.black
-                                          : const Color(0xFF8BA3A6),
-                                    ),
+                                        fontSize: ASize.ft(6),
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white),
                                   ),
                                 ),
                               ),

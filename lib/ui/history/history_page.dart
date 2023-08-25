@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:travel/config/style_info.dart';
 import 'package:travel/ui/history/history_controller.dart';
 
 import '../../util/ui_util.dart';
@@ -66,7 +67,7 @@ class HistoryPage extends GetView<HistoryController> {
                     onPressed: () {
                       controller.deleteData();
                     },
-                    backgroundColor: Colors.red,
+                    backgroundColor: StyleInfo.deleteButton,
                     label: const Text(
                       '刪除全部資料',
                       style: TextStyle(color: Colors.white),

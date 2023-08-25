@@ -17,15 +17,8 @@ class CommentView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(
-          child: Image.asset(
-            'images/info/background_commit.png',
-            fit: BoxFit.cover,
-          ),
-        ),
-        // 毛玻璃效果 - 半透明
         Container(
-          color: const Color(0xFF0E3311).withOpacity(0.5),
+          color: StyleInfo.infoBGColor,
         ),
         Padding(
           padding: const EdgeInsets.only(
@@ -54,7 +47,7 @@ class CommentView extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: ASize.ft(10.0),
                                         fontWeight: FontWeight.w500,
-                                        color: StyleInfo.white),
+                                        color: StyleInfo.infoTextColor),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -63,7 +56,7 @@ class CommentView extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: ASize.ft(8.0),
                                         fontWeight: FontWeight.w500,
-                                        color: StyleInfo.white),
+                                        color: StyleInfo.infoTextColor),
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -72,11 +65,11 @@ class CommentView extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: ASize.ft(6.0),
                                         fontWeight: FontWeight.w500,
-                                        color: StyleInfo.white_07),
+                                        color: StyleInfo.infoTextColor),
                                   ),
                                   SizedBox(height: ASize.h(2)),
                                   const Divider(
-                                    color: Colors.white,
+                                    color: StyleInfo.infoTextColor,
                                     thickness: 1,
                                   ),
                                 ],

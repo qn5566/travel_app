@@ -57,14 +57,38 @@ class StyleInfo {
   /// 辅助颜色
   static const Color assistColor = Color(0xFF6587E0);
 
+  /// 詳細頁背景色
+  static const Color infoBGColor = Color(0xFFF0EFEE);
+
+  /// 詳細的文字配色
+  static const Color infoTextColor = Color(0xFF7C7474);
+
+  /// 設定頁面文字配色
+  static const Color settingTextColor = Color(0xFF7D8088);
+
+  /// 設定頁面文字配色
+  static const Color settingButtonColor = Color(0xFFC6C7CB);
+
+  /// 設定頁面按鈕中文配色
+  static const Color settingCHButtonColor = Color(0xFF6587E0);
+
+  /// 設定頁面按鈕英文配色
+  static const Color settingENButtonColor = Color(0xFF99B1ED);
+
   /// 底色
   static const Color backgroundColor = Color(0xFFF6F5FA);
 
   /// 分割线颜色
   static const Color separatorColor = Color(0xFFF9F9FB);
 
+  /// 分割线颜色
+  static const Color separatorSettingColor = Color(0xFFB1AEAE);
+
   ///  辅助文字色(列表详情文字)
   static const Color grayC5CAD3 = Color(0xFFC5CAD3);
+
+  /// 刪除按鈕
+  static const Color deleteButton = Color(0xFFF4BABA);
 
   ///  辅助文字色(文字颜色)
   static const Color black727B8C = Color(0xFF727B8C);
@@ -84,6 +108,11 @@ class StyleInfo {
   static const Color searchTextResHitOne = Color(0xFFFD7A6E);
 
   static const Color searchTextResHitTwo = Color(0xFF73BEBA);
+
+  static const Color searchTextTagOne = Color(0xFF7FAF77);
+
+  static const Color searchTextTagTwo = Color(0xFF8878B4);
+
   /// 首页，图片标准圆角
   static final double imageRadius = ASize.w(12);
 

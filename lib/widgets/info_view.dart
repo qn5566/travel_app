@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../config/style_info.dart';
 import '../ui/detail/detail_controller.dart';
 import '../util/ToastUtil.dart';
 import '../util/ui_util.dart';
@@ -14,15 +15,8 @@ class InfoView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(
-          child: Image.asset(
-            'images/info/background_club.png',
-            fit: BoxFit.fill,
-          ),
-        ),
-        // 毛玻璃效果 - 半透明
         Container(
-          color: const Color(0xFF0E3311).withOpacity(0.5),
+          color: StyleInfo.infoBGColor,
         ),
         SingleChildScrollView(
           child: Padding(
@@ -89,7 +83,7 @@ class InfoView extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.only(bottom: 10),
                     child:
-                        Icon(Icons.assistant_navigation, color: Colors.white),
+                        Icon(Icons.assistant_navigation, color: StyleInfo.infoTextColor),
                   ),
                   (controller.item.opentime != '')
                       ? Column(
@@ -168,12 +162,11 @@ class InfoView extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: Colors.white,
+          color: StyleInfo.infoTextColor,
           fontWeight: FontWeight.w500,
           fontFamily: "PingFangSC",
           fontStyle: FontStyle.normal,
           fontSize: ASize.ft(8),
-          backgroundColor: const Color(0xFFf6f6f6).withOpacity(0.5),
         ),
         // overflow: TextOverflow.ellipsis,
       ),
@@ -187,7 +180,7 @@ class InfoView extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: Colors.white,
+          color: StyleInfo.infoTextColor,
           fontWeight: FontWeight.w500,
           fontFamily: "PingFangSC",
           fontStyle: FontStyle.normal,
