@@ -52,10 +52,10 @@ class StyleInfo {
   static const Color main_new_year_yellow = Color(0xffffeebe);
 
   /// 主色调
-  static const Color mainColor = Color(0xFF4CAF50);
+  static const Color mainColor = Color(0xFF73BEBA);
 
   /// 辅助颜色
-  static const Color assistColor = Color(0xFF757575);
+  static const Color assistColor = Color(0xFF6587E0);
 
   /// 底色
   static const Color backgroundColor = Color(0xFFF6F5FA);
@@ -73,6 +73,17 @@ class StyleInfo {
 
   static const Color backImageColor = const Color.fromRGBO(23, 23, 23, 1);
 
+  static const Color searchTextEventHitOne = Color(0xFFC773BE);
+
+  static const Color searchTextEventHitTwo = Color(0xFFF6B5A6);
+
+  static const Color searchTextHomeHitOne = Color(0xFF82BC8F);
+
+  static const Color searchTextHomeHitTwo = Color(0xFFD1B378);
+
+  static const Color searchTextResHitOne = Color(0xFFFD7A6E);
+
+  static const Color searchTextResHitTwo = Color(0xFF73BEBA);
   /// 首页，图片标准圆角
   static final double imageRadius = ASize.w(12);
 

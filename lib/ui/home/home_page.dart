@@ -239,10 +239,10 @@ class HomePage extends GetView<HomeController> {
                       ),
                       child: Container(
                         height: ASize.h(12),
-                        padding: EdgeInsets.symmetric(horizontal: ASize.w(2)),
+                        padding: EdgeInsets.symmetric(horizontal: ASize.w(5)),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(ASize.w(10)),
-                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(ASize.w(5)),
+                          color: StyleInfo.searchTextHomeHitOne,
                         ),
                         child: Center(
                           child: Text(controller.userData.keyWordTravel[0],
@@ -269,15 +269,15 @@ class HomePage extends GetView<HomeController> {
                       ),
                       child: Container(
                         height: ASize.h(12),
-                        padding: EdgeInsets.symmetric(horizontal: ASize.w(2)),
+                        padding: EdgeInsets.symmetric(horizontal: ASize.w(5)),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(ASize.w(10)),
-                          color: Colors.blueAccent[200],
+                          borderRadius: BorderRadius.circular(ASize.w(5)),
+                          color: StyleInfo.searchTextHomeHitTwo,
                         ),
                         child: Center(
                           child: Text(controller.userData.keyWordTravel[1],
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w700,
                                   fontFamily: "PingFang-SC",
                                   fontStyle: FontStyle.normal,
