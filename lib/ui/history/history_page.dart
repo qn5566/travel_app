@@ -67,7 +67,7 @@ class HistoryPage extends GetView<HistoryController> {
                     onPressed: () {
                       controller.deleteData();
                     },
-                    backgroundColor: StyleInfo.deleteButton,
+                    backgroundColor: Colors.red,
                     label: const Text(
                       '刪除全部資料',
                       style: TextStyle(color: Colors.white),

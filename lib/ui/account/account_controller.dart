@@ -164,6 +164,10 @@ class AccountController extends GetxController {
     return packageInfo.version;
   }
 
+  String getAppBuildNumber() {
+    return packageInfo.buildNumber;
+  }
+
   /// 關閉
   @override
   void dispose() {

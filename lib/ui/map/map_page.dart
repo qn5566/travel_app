@@ -108,14 +108,22 @@ class MapPage extends GetView<MapController> {
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: const Color(0xFFE60012),
+                            // 文字顏色為白色
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            // 設定按鈕的 padding
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8), // 設定按鈕圓角
+                            ),
+                          ),
                           onPressed: () {
                             controller.updateNearbyMarkers();
                           },
-                          style: ElevatedButton.styleFrom(
-                            primary: StyleInfo.deleteButton, // 設置按鈕的背景顏色
-                          ),
                           child: const Text(
-                            '更新\n現在位置',
+                            '更新附近資料',
                             textAlign: TextAlign.center,
                           ),
                         ),
