@@ -24,11 +24,11 @@ class AppPages {
         page: () => const DetailPage(),
         binding: DetailBinding(),
         transition: Transition.rightToLeft),
-    GetPage(
-        name: AppRoutes.searchPage,
-        page: () => const SearchPage(),
-        binding: SearchBinding(),
-        transition: Transition.rightToLeft),
+    // GetPage(
+    //     name: AppRoutes.searchPage,
+    //     page: () => const SearchPage(),
+    //     binding: SearchBinding(),
+    //     transition: Transition.rightToLeft),
     GetPage(
         name: AppRoutes.splashPage,
         page: () => const SplashPage(),

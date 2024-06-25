@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:travel/ui/map/map_page.dart';
@@ -31,7 +32,7 @@ class DashboardPage extends StatelessWidget {
       builder: (controller) {
         return WillPopScope(
           onWillPop: () async {
-            return false; // 阻止返回
+            return await _showExitConfirmationDialog(context) ?? false;
           },
           child: Scaffold(
             body: pages[controller.tabIndex],
@@ -74,6 +75,32 @@ class DashboardPage extends StatelessWidget {
     return BottomNavigationBarItem(
       icon: Icon(icon),
       label: label,
+    );
+  }
+
+  /// 確認關閉的彈窗
+  Future<bool?> _showExitConfirmationDialog(BuildContext context) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: const Text('確定要離開嗎？'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('取消'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(false); // 关闭对话框，并返回false
+              },
+            ),
+            TextButton(
+              child: const Text('確定'),
+              onPressed: () {
+                SystemNavigator.pop(); // 关闭应用程序
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
