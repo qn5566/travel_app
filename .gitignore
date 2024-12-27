@@ -6,6 +6,9 @@ ios/Podfile
 
 # macOS
 macos/
+windows/
+linux/
+web/
 
 # Miscellaneous
 *.class
