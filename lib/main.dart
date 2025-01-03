@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
@@ -5,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:travel/config/rx_config.dart';
 import 'package:travel/ui/dashboard/dashboard_binding.dart';
 
 import 'config/global_config.dart';
@@ -31,9 +32,15 @@ class MyApp extends StatelessWidget {
 
   /// Firebase 初始設定
   Future<void> initializeDefault() async {
-    FirebaseApp app = await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    FirebaseApp app;
+    if (Platform.isAndroid) {
+      app = await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } else {
+      app = await Firebase.initializeApp();
+    }
+
     if (kDebugMode) {
       print('Initialized default app $app');
     }
