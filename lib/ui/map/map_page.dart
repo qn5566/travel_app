@@ -133,7 +133,8 @@ class MapPage extends GetView<MapController> {
             Obx(() =>
                 (controller.isADShowing.value && controller.bannerAd != null)
                     ? Padding(
-                        padding: const EdgeInsets.only(top: 66.0),
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * 0.08),
                         child: Align(
                           alignment: Alignment.topCenter,
                           child: SizedBox(
@@ -169,7 +170,7 @@ class MapPage extends GetView<MapController> {
                     width: 0,
                   )
                 : Positioned(
-                    top: ASize.h(65),
+                    top: ASize.h(MediaQuery.of(context).size.height * 0.07),
                     left: ASize.w(5),
                     child: Container(
                       margin: EdgeInsets.only(
