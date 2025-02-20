@@ -62,7 +62,7 @@ String kPlaceholderSmallImage = 'images/placeholder/placeholder_small.jpg';
 // 小矩形图片占位
 String kPlaceholderEmptyImage = 'images/placeholder/error_banner.jpg';
 // 開機圖片
-String splashImage = 'images/icon/hitaiwan.png';
+String splashImage = 'images/pics/hi_taiwan.webp';
 // 第一次抓取資料
 String firstLoading = 'images/icon/loading_data.gif';
 

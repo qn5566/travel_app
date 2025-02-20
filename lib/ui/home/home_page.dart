@@ -52,7 +52,7 @@ class HomePage extends GetView<HomeController> {
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  'images/home/home_bg.png',
+                  'images/home/home_bg.webp',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -91,12 +91,16 @@ class HomePage extends GetView<HomeController> {
   Widget _contentView() {
     return Column(
       children: [
-        Padding(padding: EdgeInsets.only(top: ASize.w(0))),
         SizedBox(
           height: ASize.w(18),
           child: TabBar(
+            padding: EdgeInsets.zero,
+            // 關閉內邊距
             tabs: controller.userData.travelTitle
-                .map((e) => Tab(text: e))
+                .map((e) => Container(
+                      constraints: const BoxConstraints(minWidth: 0), // 避免內建間距
+                      child: Tab(text: e),
+                    ))
                 .toList(),
             controller: controller.tabTitleController,
             isScrollable: true,

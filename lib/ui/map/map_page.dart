@@ -26,7 +26,7 @@ class MapPage extends GetView<MapController> {
                 ? Stack(children: [
                     Positioned.fill(
                       child: Image.asset(
-                        'images/home/home_bg.png',
+                        'images/home/home_bg.webp',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -151,7 +151,7 @@ class MapPage extends GetView<MapController> {
                 ? Stack(children: [
                     Positioned.fill(
                       child: Image.asset(
-                        'images/home/home_bg.png',
+                        'images/home/home_bg.webp',
                         fit: BoxFit.cover,
                       ),
                     ),
