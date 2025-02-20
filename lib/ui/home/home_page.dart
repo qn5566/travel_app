@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../config/global_config.dart';
 import '../../config/style_info.dart';
 import '../../util/ui_util.dart';
-import '../../widgets/list_view_home.dart';
+import '../../widgets/gird_view_home.dart';
 import 'home_controller.dart';
 
 /*
@@ -124,7 +124,7 @@ class HomePage extends GetView<HomeController> {
             controller: controller.tabTitleController,
             physics: const NeverScrollableScrollPhysics(), // 禁用滑動
             children: controller.userData.travelTitle.map((e) {
-              return ListViewHome(site: e);
+              return GridViewHome(site: e); // 使用 GridViewHome
             }).toList(),
           ),
         )
