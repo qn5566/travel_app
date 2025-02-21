@@ -33,9 +33,12 @@ class InfoView extends StatelessWidget {
                       children: [
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [buildTitle('聯絡電話'), buildText(' - 點擊撥打')],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            buildTitle('聯絡電話'),
+                            buildTextBottomLine(controller.item.tel ?? '暫時無資料')
+                          ],
                         ),
-                        buildText(controller.item.tel ?? '暫時無資料'),
                       ],
                     ),
                     onTap: () {
@@ -43,7 +46,8 @@ class InfoView extends StatelessWidget {
                           Uri(scheme: 'tel', path: "+${controller.item.tel}"));
                     },
                   ),
-                  (controller.item.address != '')
+                  (controller.item.address != '' &&
+                          controller.item.address != null)
                       ? InkWell(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -53,10 +57,9 @@ class InfoView extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   buildTitle('地址資訊'),
-                                  buildText(' - 點擊複製')
+                                  buildText(controller.item.address ?? '暫時無資料')
                                 ],
                               ),
-                              buildText(controller.item.address ?? '暫時無資料'),
                             ],
                           ),
                           onTap: () {
@@ -66,87 +69,108 @@ class InfoView extends StatelessWidget {
                           },
                         )
                       : const SizedBox.shrink(),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: InkWell(
-                      child: buildTitle('開啟導航'),
-                      onTap: () {
-                        // var uri = Uri.parse(controller.item.map!);
-                        controller.call(Uri(
-                            scheme: 'https',
-                            host: 'www.google.com',
-                            path:
-                                '/maps/search/${(controller.item.address != null) ? controller.item.address : controller.item.name}'));
-                      },
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 10),
-                    child:
-                        Icon(Icons.assistant_navigation, color: StyleInfo.infoTextColor),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        child: buildTitle('開啟導航'),
+                        onTap: () {
+                          // var uri = Uri.parse(controller.item.map!);
+                          controller.call(Uri(
+                              scheme: 'https',
+                              host: 'www.google.com',
+                              path:
+                                  '/maps/search/${(controller.item.address != '' && controller.item.address != null) ? controller.item.address : controller.item.name}'));
+                        },
+                      ),
+                      InkWell(
+                        child: const Icon(Icons.assistant_navigation,
+                            color: Colors.blue),
+                        onTap: () {
+                          // var uri = Uri.parse(controller.item.map!);
+                          controller.call(Uri(
+                              scheme: 'https',
+                              host: 'www.google.com',
+                              path:
+                                  '/maps/search/${(controller.item.address != '' && controller.item.address != null) ? controller.item.address : controller.item.name}'));
+                        },
+                      ),
+                    ],
                   ),
                   (controller.item.opentime != '')
                       ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('營業時間'),
                             buildText(controller.item.opentime!),
                           ],
                         )
                       : const SizedBox.shrink(),
-                  (controller.item.ticketinfo != '')
+                  (controller.item.ticketinfo != '' &&
+                          controller.item.ticketinfo != null)
                       ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('門票'),
                             buildText(controller.item.ticketinfo!),
                           ],
                         )
                       : const SizedBox.shrink(),
-                  (controller.item.travellinginfo != '')
+                  (controller.item.travellinginfo != '' &&
+                          controller.item.travellinginfo != null)
                       ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('旅遊資訊'),
                             buildText(controller.item.travellinginfo!),
                           ],
                         )
                       : const SizedBox.shrink(),
-                  (controller.item.toldescribe == '')
+                  (controller.item.toldescribe == '' &&
+                          controller.item.description == '')
                       ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('詳細資訊'),
                             buildText(controller.item.toldescribe!),
                           ],
                         )
-                      : (controller.item.description != '')
+                      : (controller.item.description != '' &&
+                              controller.item.description != null)
                           ? Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 buildTitle('詳細資訊'),
                                 buildText(controller.item.description!),
                               ],
                             )
                           : const SizedBox.shrink(),
-                  (controller.item.remarks != '')
+                  (controller.item.remarks != '' &&
+                          controller.item.remarks != null)
                       ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('注意事項'),
                             buildText(controller.item.remarks!),
                           ],
                         )
                       : const SizedBox.shrink(),
-                  SizedBox(height: ASize.h(30)),
+                  SizedBox(height: ASize.h(10)),
                   (controller.item.changetime != '')
-                      ? buildText('最後更新時間\n${controller.item.changetime!}')
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                              buildTitle('更新時間'),
+                              buildText(controller.item.changetime!),
+                            ])
                       : const SizedBox.shrink(),
                 ]),
           ),
@@ -174,20 +198,34 @@ class InfoView extends StatelessWidget {
   }
 
   /// 文字設定
-  Padding buildText(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: StyleInfo.infoTextColor,
-          fontWeight: FontWeight.w500,
-          fontFamily: "PingFangSC",
-          fontStyle: FontStyle.normal,
-          fontSize: ASize.ft(8),
-        ),
-        // overflow: TextOverflow.ellipsis,
+  Text buildText(String text) {
+    return Text(
+      text,
+      style: TextStyle(
+        color: StyleInfo.infoTextColor,
+        fontWeight: FontWeight.w500,
+        fontFamily: "PingFangSC",
+        fontStyle: FontStyle.normal,
+        fontSize: ASize.ft(8),
       ),
+      // overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  /// 底線文字設定
+  Text buildTextBottomLine(String text) {
+    return Text(
+      text,
+      style: TextStyle(
+        color: Colors.blue,
+        fontWeight: FontWeight.w500,
+        fontFamily: "PingFangSC",
+        fontStyle: FontStyle.normal,
+        fontSize: ASize.ft(8),
+        decoration: TextDecoration.underline,
+        decorationColor: Colors.blue,
+      ),
+      // overflow: TextOverflow.ellipsis,
     );
   }
 }

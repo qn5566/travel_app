@@ -24,9 +24,9 @@ class DetailPage extends GetView<DetailController> {
             slivers: <Widget>[
               SliverAppBar(
                 backgroundColor: Colors.transparent,
-                expandedHeight: ScreenUtil().setHeight(ASize.h(140)),
-                floating: true,
-                pinned: false,
+                expandedHeight: ScreenUtil().setHeight(ASize.h(200)),
+                floating: false,
+                pinned: true,
                 snap: false,
                 title: Container(
                   color: Colors.black38,
@@ -66,7 +66,7 @@ class DetailPage extends GetView<DetailController> {
                           onTap: () {
                             controller.goToWebView();
                           },
-                          child: const Icon(Icons.more_vert)
+                          child: const Icon(Icons.search, color: Colors.white)
                           // const Text("更多"),
                           )
                     ],
