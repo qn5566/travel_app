@@ -52,7 +52,7 @@ class StyleInfo {
   static const Color main_new_year_yellow = Color(0xffffeebe);
 
   /// 主色调
-  static const Color mainColor = Color(0xFF73BEBA);
+  static const Color mainColor = Color(0xFF4b6b9a);
 
   /// 辅助颜色
   static const Color assistColor = Color(0xFF6587E0);

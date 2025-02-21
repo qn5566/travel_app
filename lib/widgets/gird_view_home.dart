@@ -55,7 +55,7 @@ class GridViewHome extends StatelessWidget {
                                     money: item.region,
                                   ),
                                   Align(
-                                    alignment: Alignment.bottomLeft,
+                                    alignment: Alignment.bottomCenter,
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 4.0, vertical: 2.0),
@@ -70,7 +70,7 @@ class GridViewHome extends StatelessWidget {
                                             fontStyle: FontStyle.normal,
                                             fontSize: ASize.ft(6),
                                           ),
-                                          maxLines: 2,
+                                          maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),

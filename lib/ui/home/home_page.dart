@@ -111,6 +111,7 @@ class HomePage extends GetView<HomeController> {
               fontSize: ASize.ft(6),
               fontWeight: FontWeight.w500,
               fontStyle: FontStyle.normal,
+              color: Colors.black,
             ),
             labelStyle: TextStyle(
               fontSize: ASize.ft(8),
