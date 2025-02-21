@@ -14,7 +14,7 @@ import '../../routes/app_routes.dart';
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
-  var scaffoldKey = GlobalKey<ScaffoldState>();
+  // var scaffoldKey = GlobalKey<ScaffoldState>();
   final String title = '旅遊地圖';
 
   var firstLoading = false.obs;
@@ -107,9 +107,9 @@ class HomeController extends GetxController
     if (keyword.isNotEmpty) {
       dataList.assignAll(backupDataList
           .where((restaurant) =>
-      restaurant.name!.contains(keyword) ||
-          (restaurant.description != null &&
-              restaurant.description!.contains(keyword)))
+              restaurant.name!.contains(keyword) ||
+              (restaurant.description != null &&
+                  restaurant.description!.contains(keyword)))
           .toList());
     } else {
       dataList.assignAll(backupDataList);
@@ -154,9 +154,10 @@ class HomeController extends GetxController
     }
     // 儲存資料 - 判斷這個item title有沒有資料
     List<String> historyList =
-    (sharedPreferences.getStringList(AppConstants.homeHistory) ?? <String>[]);
+        (sharedPreferences.getStringList(AppConstants.homeHistory) ??
+            <String>[]);
     var match = historyList.firstWhere(
-            (element) => element.contains(item.name!),
+        (element) => element.contains(item.name!),
         orElse: () => '');
     if (match == '') {
       // 確定沒有儲存
@@ -171,11 +172,11 @@ class HomeController extends GetxController
     Get.toNamed(AppRoutes.searchPage);
   }
 
-  void openDrawer() {
-    scaffoldKey.currentState?.openDrawer();
-  }
-
-  void closeDrawer() {
-    scaffoldKey.currentState?.openEndDrawer();
-  }
+// void openDrawer() {
+//   scaffoldKey.currentState?.openDrawer();
+// }
+//
+// void closeDrawer() {
+//   scaffoldKey.currentState?.openEndDrawer();
+// }
 }

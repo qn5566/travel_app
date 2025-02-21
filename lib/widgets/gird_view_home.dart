@@ -47,7 +47,7 @@ class GridViewHome extends StatelessWidget {
                               controller.onTap(item);
                             },
                             child: Container(
-                              color: Colors.white,
+                              color: Colors.transparent,
                               child: Stack(
                                 children: [
                                   VideoCoverView(

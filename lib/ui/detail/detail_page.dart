@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -6,7 +5,6 @@ import 'package:get/get.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/comment_view.dart';
 import '../../widgets/info_view.dart';
-import '../../widgets/money_text_widget.dart';
 import '../../widgets/views/video_cover_view.dart';
 import 'detail_controller.dart';
 
@@ -18,8 +16,7 @@ class DetailPage extends GetView<DetailController> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Builder(builder: (context) {
-        return
-          Scaffold(
+        return Scaffold(
           body: CustomScrollView(
             slivers: <Widget>[
               SliverAppBar(
@@ -92,19 +89,17 @@ class DetailPage extends GetView<DetailController> {
                   preferredSize: const Size.fromHeight(20.0),
                   child: Container(
                     color: Colors.black38,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          TabBar(
-                            isScrollable: true,
-                            indicatorColor: Colors.white,
-                            labelColor: Colors.white,
-                            unselectedLabelColor: Colors.grey,
-                            indicatorWeight: 1.0,
-                            tabs: controller.subTitle,
-                            controller: controller.tabInfoController,
-                          ),
-                        ]),
+                    child: TabBar(
+                      isScrollable: true,
+                      indicatorColor: Colors.white,
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.grey,
+                      tabAlignment: TabAlignment.start,
+                      indicatorWeight: 1.0,
+                      tabs: controller.subTitle,
+                      controller: controller.tabInfoController,
+                      padding: EdgeInsets.zero,
+                    ),
                   ),
                 ),
               ),

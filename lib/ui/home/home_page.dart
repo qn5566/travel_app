@@ -45,7 +45,7 @@ class HomePage extends GetView<HomeController> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        key: controller.scaffoldKey,
+        // key: controller.scaffoldKey,
         body: Container(
           color: Colors.white,
           child: Stack(
@@ -103,6 +103,7 @@ class HomePage extends GetView<HomeController> {
                     ))
                 .toList(),
             controller: controller.tabTitleController,
+            tabAlignment: TabAlignment.start,
             isScrollable: true,
             indicatorColor: Colors.white,
             indicatorWeight: 2,

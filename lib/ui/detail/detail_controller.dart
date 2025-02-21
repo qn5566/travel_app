@@ -12,7 +12,6 @@ import '../../data/api_helper.dart';
 import '../../data/mode/comment_model.dart';
 import '../../routes/app_routes.dart';
 import '../../util/ToastUtil.dart';
-import '../../widgets/title_view.dart';
 
 class DetailController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -23,7 +22,8 @@ class DetailController extends GetxController
   late TabController tabInfoController;
   late TextEditingController messageController;
   bool isShowTitle = false;
-  GlobalKey<TitleViewState> titleStateKey = GlobalKey();
+
+  // GlobalKey<TitleViewState> titleStateKey = GlobalKey();
   final item = Get.arguments as DataAll;
 
   /// 子分類

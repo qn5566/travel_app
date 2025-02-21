@@ -85,7 +85,10 @@ class CommentView extends StatelessWidget {
               Container(
                 // padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 height: 50,
-                color: Colors.white,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0), // 設置圓角
+                ),
                 child: Row(
                   children: [
                     Expanded(
@@ -98,8 +101,10 @@ class CommentView extends StatelessWidget {
                           maxLines: 1,
                           maxLength: 30,
                           placeholder: "寫下你的感想",
-                          decoration:
-                              const BoxDecoration(color: Colors.transparent),
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                           onChanged: (value) {
                             sendData = value;
                             if (kDebugMode) {
