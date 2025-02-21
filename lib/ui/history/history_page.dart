@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:travel/config/style_info.dart';
 import 'package:travel/ui/history/history_controller.dart';
 
+import '../../util/ad_manager_util.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/list_view_history_all.dart';
 
@@ -46,7 +44,7 @@ class HistoryPage extends GetView<HistoryController> {
                               width: controller.bannerAd!.size.width.toDouble(),
                               height:
                                   controller.bannerAd!.size.height.toDouble(),
-                              child: AdWidget(ad: controller.bannerAd!),
+                              child: AdManagerUtil().bannerAdWidget(),
                             ),
                           )
                         : SizedBox(

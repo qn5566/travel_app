@@ -7,8 +7,9 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:location/location.dart';
+import 'package:travel/config/AdHelper.dart';
+import 'package:travel/util/ad_manager_util.dart';
 
-import '../../config/AdHelper.dart';
 import '../../config/global_config.dart';
 import '../../data/dao/dataAllDao.dart';
 import '../../data/mode/data_all.dart';
@@ -190,23 +191,9 @@ class MapController extends GetxController {
 
   /// 設定廣告
   void adMobBanner() {
-    BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          bannerAd = ad as BannerAd;
-          isADShowing(true);
-        },
-        onAdFailedToLoad: (ad, err) {
-          if (kDebugMode) {
-            print('Failed to load a banner ad: ${err.message}');
-          }
-          ad.dispose();
-        },
-      ),
-    ).load();
+    AdManagerUtil.initializeAd(AdHelper.mapAdUnitId);
+    bannerAd = AdManagerUtil.bannerAd;
+    isADShowing = AdManagerUtil.isADShowing;
   }
 
   /// 進詳細

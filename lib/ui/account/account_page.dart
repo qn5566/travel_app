@@ -3,10 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:marquee/marquee.dart';
 
 import '../../config/style_info.dart';
+import '../../util/ad_manager_util.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/ClickableImage.dart';
 import 'account_controller.dart';
@@ -49,7 +48,7 @@ class AccountPage extends GetView<AccountController> {
                               width: controller.bannerAd!.size.width.toDouble(),
                               height:
                                   controller.bannerAd!.size.height.toDouble(),
-                              child: AdWidget(ad: controller.bannerAd!),
+                              child: AdManagerUtil().bannerAdWidget(),
                             ),
                           )
                         : SizedBox(
@@ -299,7 +298,8 @@ class AccountPage extends GetView<AccountController> {
                                   style: TextStyle(color: Colors.black)),
                               Text('版本:${controller.getAppVersion()}',
                                   style: const TextStyle(color: Colors.black)),
-                              Text('BuildNumber:${controller.getAppBuildNumber()}',
+                              Text(
+                                  'BuildNumber:${controller.getAppBuildNumber()}',
                                   style: const TextStyle(color: Colors.black)),
                             ])
                       ],

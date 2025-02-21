@@ -9,6 +9,7 @@ import '../../config/rx_config.dart';
 import '../../data/mode/data_all.dart';
 import '../../data/repo/fxDataBaseManager.dart';
 import '../../routes/app_routes.dart';
+import '../../util/ad_manager_util.dart';
 
 class AccountController extends GetxController {
   late TextEditingController textEditingController;
@@ -48,8 +49,8 @@ class AccountController extends GetxController {
       // 儲存資料
       String temp = '';
       historyList =
-      (sharedPreferences.getStringList(AppConstants.homeHistory) ??
-          <String>[]);
+          (sharedPreferences.getStringList(AppConstants.homeHistory) ??
+              <String>[]);
       if (historyList.isNotEmpty) {
         searchData(historyList);
         return;
@@ -60,23 +61,9 @@ class AccountController extends GetxController {
 
   /// 設定廣告
   void adMobBanner() {
-    BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          bannerAd = ad as BannerAd;
-          isADShowing(true);
-        },
-        onAdFailedToLoad: (ad, err) {
-          if (kDebugMode) {
-            print('Failed to load a banner ad: ${err.message}');
-          }
-          ad.dispose();
-        },
-      ),
-    ).load();
+    AdManagerUtil.initializeAd(AdHelper.accountAdUnitId);
+    bannerAd = AdManagerUtil.bannerAd;
+    isADShowing = AdManagerUtil.isADShowing;
   }
 
   /// 全屏廣告

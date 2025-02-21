@@ -11,6 +11,7 @@ import '../../data/mode/data_all.dart';
 import '../../data/repo/data_repo.dart';
 import '../../data/repo/fxDataBaseManager.dart';
 import '../../routes/app_routes.dart';
+import '../../util/ad_manager_util.dart';
 
 class HomeController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -128,23 +129,9 @@ class HomeController extends GetxController
 
   /// 設定廣告
   void adMobBanner() {
-    BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          bannerAd = ad as BannerAd;
-          isADShowing(true);
-        },
-        onAdFailedToLoad: (ad, err) {
-          if (kDebugMode) {
-            print('Failed to load a banner ad: ${err.message}');
-          }
-          ad.dispose();
-        },
-      ),
-    ).load();
+    AdManagerUtil.initializeAd(AdHelper.bannerAdUnitId);
+    bannerAd = AdManagerUtil.bannerAd;
+    isADShowing = AdManagerUtil.isADShowing;
   }
 
   /// 進詳細

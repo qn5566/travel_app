@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lottie/lottie.dart';
 import 'package:travel/config/style_info.dart';
+import 'package:travel/util/ad_manager_util.dart';
 import 'package:travel/util/ui_util.dart';
 
 import 'map_controller.dart';
@@ -140,7 +140,7 @@ class MapPage extends GetView<MapController> {
                           child: SizedBox(
                             width: controller.bannerAd!.size.width.toDouble(),
                             height: controller.bannerAd!.size.height.toDouble(),
-                            child: AdWidget(ad: controller.bannerAd!),
+                            child: AdManagerUtil().bannerAdWidget(),
                           ),
                         ),
                       )

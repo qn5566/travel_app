@@ -8,6 +8,7 @@ import '../../config/global_config.dart';
 import '../../data/mode/data_all.dart';
 import '../../data/repo/fxDataBaseManager.dart';
 import '../../routes/app_routes.dart';
+import '../../util/ad_manager_util.dart';
 
 class HistoryController extends GetxController {
   /// 讀取
@@ -54,23 +55,9 @@ class HistoryController extends GetxController {
 
   /// 設定廣告
   void adMobBanner() {
-    BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          bannerAd = ad as BannerAd;
-          isADShowing(true);
-        },
-        onAdFailedToLoad: (ad, err) {
-          if (kDebugMode) {
-            print('Failed to load a banner ad: ${err.message}');
-          }
-          ad.dispose();
-        },
-      ),
-    ).load();
+    AdManagerUtil.initializeAd(AdHelper.historyAdUnitId);
+    bannerAd = AdManagerUtil.bannerAd;
+    isADShowing = AdManagerUtil.isADShowing;
   }
 
   /// 全屏廣告
