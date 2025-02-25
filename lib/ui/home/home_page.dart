@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:marquee/marquee.dart';
 
 import '../../config/global_config.dart';
 import '../../config/style_info.dart';
@@ -66,6 +67,35 @@ class HomePage extends GetView<HomeController> {
                   child: Column(
                     children: [
                       _navigationBar(context),
+                      Obx(() {
+                        if (controller.dataCommentModelList.isNotEmpty) {
+                          return Container(
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            color: Colors.black.withOpacity(0.1),
+                            child: Marquee(
+                              text: controller.dataCommentModelList
+                                  .map((comment) =>
+                              "${comment.titleName!}-${comment.comment ?? ''}@${comment.username ?? ''}")
+                                  .join('   '),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                              scrollAxis: Axis.horizontal,
+                              blankSpace: 20.0,
+                              velocity: 100.0,
+                              pauseAfterRound: const Duration(seconds: 1),
+                              startPadding: 10.0,
+                              accelerationDuration: const Duration(seconds: 1),
+                              accelerationCurve: Curves.linear,
+                              decelerationDuration: const Duration(milliseconds: 500),
+                              decelerationCurve: Curves.easeOut,
+                            ),
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      }),
                       Expanded(
                         child: _contentView(),
                       )

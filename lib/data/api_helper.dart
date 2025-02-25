@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 
+import '../config/global_config.dart';
 import '../config/rx_config.dart';
 import 'mode/comment_model.dart';
 import 'mode/data_all.dart';
@@ -25,7 +26,7 @@ class ApiHelper extends GetConnect {
   Future<List<CommentModel>> fetchCommentData(String titleId) async {
     Map<String, dynamic> body = {'TitleId': titleId, 'fun': 'getComment'};
     return await post(
-      'https://himydream.me/app/main.php',
+      baseMainUrl,
       FormData(body),
       decoder: (data) {
         return List<CommentModel>.from(
@@ -37,7 +38,7 @@ class ApiHelper extends GetConnect {
   /// 傳送評論資料
   Future<String> sendCommentData(Map<String, dynamic> body) async {
     return await post(
-      'https://himydream.me/app/main.php',
+      baseMainUrl,
       FormData(body),
       decoder: (data) {
         return json.decode(data);
@@ -59,10 +60,26 @@ class ApiHelper extends GetConnect {
   /// 傳送點擊紀錄
   Future<String> sendHistory(Map<String, dynamic> body) async {
     return await post(
-      'https://himydream.me/app/main.php',
+      baseMainUrl,
       FormData(body),
       decoder: (data) {
         return json.decode(data);
+      },
+    ).then((value) => value.body!).catchError((e) => throw e);
+  }
+
+  /// 獲取最新的留言
+  Future<List<CommentModel>> getNewComment() async {
+    Map<String, dynamic> body = {
+      'fun': 'getCommentNews',
+      'limit': 10,
+    };
+    return await post(
+      baseMainUrl,
+      FormData(body),
+      decoder: (data) {
+        return List<CommentModel>.from(
+            json.decode(data).map((e) => CommentModel.fromJson(e)));
       },
     ).then((value) => value.body!).catchError((e) => throw e);
   }

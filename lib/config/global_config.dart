@@ -68,3 +68,5 @@ String firstLoading = 'images/icon/loading_data.gif';
 
 /// 自訂化文字
 const String emptyData = '尚未資料';
+
+const String baseMainUrl = 'https://himydream.me/app/main.php';

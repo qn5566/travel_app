@@ -83,6 +83,7 @@ class DetailController extends GetxController
       Map<String, dynamic> body = {
         'fun': 'updateComment',
         'TitleId': item.id,
+        'TitleName': item.name,
         'Username': username,
         'Comment': data,
         'Like': 5,

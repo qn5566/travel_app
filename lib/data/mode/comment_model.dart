@@ -5,6 +5,7 @@ class CommentModel {
   int? like;
   String? timeStamp;
   String? titleId;
+  String? titleName;
   String? username;
 
   CommentModel(
@@ -14,6 +15,7 @@ class CommentModel {
       this.like,
       this.timeStamp,
       this.titleId,
+      this.titleName,
       this.username});
 
   CommentModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class CommentModel {
     like = json['Like'];
     timeStamp = json['TimeStamp'];
     titleId = json['TitleId'];
+    titleName = json['TitleName'];
     username = json['Username'];
   }
 
@@ -34,6 +37,7 @@ class CommentModel {
     data['Like'] = this.like;
     data['TimeStamp'] = this.timeStamp;
     data['TitleId'] = this.titleId;
+    data['TitleName'] = this.titleName;
     data['Username'] = this.username;
     return data;
   }

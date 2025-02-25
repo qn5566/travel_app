@@ -6,7 +6,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../config/AdHelper.dart';
 import '../../config/global_config.dart';
 import '../../config/rx_config.dart';
+import '../../data/api_helper.dart';
 import '../../data/dao/dataAllDao.dart';
+import '../../data/mode/comment_model.dart';
 import '../../data/mode/data_all.dart';
 import '../../data/repo/data_repo.dart';
 import '../../data/repo/fxDataBaseManager.dart';
@@ -21,6 +23,7 @@ class HomeController extends GetxController
   var firstLoading = false.obs;
   var isLoading = true.obs;
   var dataList = <DataAll>[].obs;
+  var dataCommentModelList = <CommentModel>[].obs;
   var username = "".obs;
 
   final DataController dataController = Get.find();
@@ -73,6 +76,8 @@ class HomeController extends GetxController
       fetchApi();
     }
 
+    fetchNewComm();
+
     adMobBanner();
   }
 
@@ -95,6 +100,19 @@ class HomeController extends GetxController
     await dataController.fetchRemoteData().then((data) {
       dataList.assignAll(data);
       fetchDB();
+    });
+  }
+
+  /// 獲取最新的Comment data
+  void fetchNewComm() async {
+    /// 獲取最新Comment data
+    await ApiHelper().getNewComment().then((value) {
+      dataCommentModelList.assignAll(value);
+      update();
+    }).catchError((e) {
+      if (kDebugMode) {
+        print('Error:$e');
+      }
     });
   }
 
@@ -158,12 +176,4 @@ class HomeController extends GetxController
   void toSearch() {
     Get.toNamed(AppRoutes.searchPage);
   }
-
-// void openDrawer() {
-//   scaffoldKey.currentState?.openDrawer();
-// }
-//
-// void closeDrawer() {
-//   scaffoldKey.currentState?.openEndDrawer();
-// }
 }
