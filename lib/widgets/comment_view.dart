@@ -13,6 +13,21 @@ class CommentView extends StatelessWidget {
   final DetailController controller = Get.find<DetailController>();
   String sendData = '';
 
+  static final TextStyle _textName = TextStyle(
+      fontSize: ASize.ft(8.0),
+      fontWeight: FontWeight.bold,
+      color: StyleInfo.infoTextUserNameColor);
+
+  static final TextStyle _textComment = TextStyle(
+      fontSize: ASize.ft(6.0),
+      fontWeight: FontWeight.normal,
+      color: StyleInfo.infoTextColor);
+
+  static final TextStyle _textInfo = TextStyle(
+      fontSize: ASize.ft(6.0),
+      fontWeight: FontWeight.w200,
+      color: StyleInfo.infoTextColor);
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -44,30 +59,20 @@ class CommentView extends StatelessWidget {
                                 children: [
                                   Text(
                                     item.username!,
-                                    style: TextStyle(
-                                        fontSize: ASize.ft(10.0),
-                                        fontWeight: FontWeight.w500,
-                                        color: StyleInfo.infoTextColor),
+                                    style: _textName,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   Text(
-                                    item.comment!,
-                                    style: TextStyle(
-                                        fontSize: ASize.ft(8.0),
-                                        fontWeight: FontWeight.w500,
-                                        color: StyleInfo.infoTextColor),
+                                    item.comment!.replaceAll(' ', ''),
+                                    style: _textComment,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   Text(
                                     item.timeStamp!,
-                                    style: TextStyle(
-                                        fontSize: ASize.ft(6.0),
-                                        fontWeight: FontWeight.w500,
-                                        color: StyleInfo.infoTextColor),
+                                    style: _textInfo,
                                   ),
-                                  SizedBox(height: ASize.h(2)),
                                   const Divider(
                                     color: StyleInfo.infoTextColor,
                                     thickness: 1,

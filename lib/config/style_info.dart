@@ -60,8 +60,11 @@ class StyleInfo {
   /// 詳細頁背景色
   static const Color infoBGColor = Color(0xFFF0EFEE);
 
-  /// 詳細的文字配色
-  static const Color infoTextColor = Color(0xFF7C7474);
+  /// 詳細的文字配色 - 使用者名稱
+  static const Color infoTextUserNameColor = Color(0xFF7C7474);
+
+  /// 詳細的文字配色 - 文字
+  static const Color infoTextColor = Colors.black;
 
   /// 設定頁面文字配色
   static const Color settingTextColor = Color(0xFF7D8088);

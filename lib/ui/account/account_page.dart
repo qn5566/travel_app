@@ -16,6 +16,14 @@ import 'account_controller.dart';
 class AccountPage extends GetView<AccountController> {
   const AccountPage({super.key});
 
+  static TextStyle titleName = TextStyle(
+    color: StyleInfo.settingTextColor,
+    fontWeight: FontWeight.normal,
+    fontFamily: "PingFangSC",
+    fontStyle: FontStyle.normal,
+    fontSize: ASize.ft(8),
+  );
+
   @override
   Widget build(BuildContext context) {
     String key = '';
@@ -56,153 +64,120 @@ class AccountPage extends GetView<AccountController> {
                           )),
                     Padding(
                       padding:
-                          const EdgeInsets.only(left: 20, right: 20, top: 5),
-                      child: Row(
-                        children: [
-                          Text("暱稱:",
-                              style: TextStyle(
-                                color: StyleInfo.settingTextColor,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "PingFangSC",
-                                fontStyle: FontStyle.normal,
-                                fontSize: ASize.ft(8),
-                              )),
-                          Obx(() => (controller.username.value == '')
-                              ? Expanded(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8, right: 8),
-                                        child: SizedBox(
-                                          width: ASize.w(80),
-                                          child: CupertinoTextField(
-                                            textAlign: TextAlign.center,
-                                            controller: controller
-                                                .textEditingController,
-                                            keyboardType: TextInputType.text,
-                                            maxLines: 1,
-                                            maxLength: 10,
-                                            placeholder: "請輸入暱稱",
-                                            placeholderStyle: TextStyle(
-                                                fontSize: ASize.ft(8),
-                                                fontWeight: FontWeight.normal,
-                                                color: Colors.white),
-                                            onChanged: (value) {
-                                              if (kDebugMode) {
-                                                print(value);
-                                              }
-                                              key = value;
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                            right: ASize.w(2),
-                                          ),
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: ASize.w(5)),
-                                            height: ASize.h(16),
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  StyleInfo.settingButtonColor,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(ASize.w(30))),
-                                            ),
-                                            child: Center(
-                                              child: Text("確認",
-                                                  style: TextStyle(
-                                                      color: (key.isNotEmpty)
-                                                          ? StyleInfo
-                                                              .settingTextColor
-                                                          : StyleInfo
-                                                              .gray_7C7C8D,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: "PingFang-SC",
-                                                      fontStyle:
-                                                          FontStyle.normal,
-                                                      fontSize: ASize.ft(7))),
-                                            ),
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          if (key.isNotEmpty) {
-                                            FocusScope.of(context)
-                                                .requestFocus(FocusNode());
-
-                                            controller.updateUsername(key);
-
-                                            controller.username.value = key;
-                                          }
-                                        },
-                                      )
-                                    ],
+                          const EdgeInsets.only(left: 20, right: 20, top: 10),
+                      child: Obx(() => (controller.username.value == '')
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 1),
+                                  child: Text("暱稱:", style: titleName),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 8, right: 8),
+                                  child: SizedBox(
+                                    width: ASize.w(80),
+                                    child: CupertinoTextField(
+                                      textAlign: TextAlign.center,
+                                      controller:
+                                          controller.textEditingController,
+                                      keyboardType: TextInputType.text,
+                                      maxLines: 1,
+                                      maxLength: 10,
+                                      placeholder: "請輸入暱稱",
+                                      placeholderStyle: titleName,
+                                      onChanged: (value) {
+                                        if (kDebugMode) {
+                                          print(value);
+                                        }
+                                        key = value;
+                                      },
+                                    ),
                                   ),
-                                )
-                              : Expanded(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 8, right: 8),
-                                        child: Text(controller.username.value,
+                                ),
+                                GestureDetector(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: ASize.w(2)),
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: ASize.w(5)),
+                                      height: ASize.h(16),
+                                      decoration: BoxDecoration(
+                                        color: StyleInfo.settingButtonColor,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(ASize.w(30))),
+                                      ),
+                                      child: Center(
+                                        child: Text("確認",
                                             style: TextStyle(
-                                              color: StyleInfo.settingTextColor,
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: "PingFangSC",
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: ASize.ft(8),
-                                            )),
+                                                color: (key.isNotEmpty)
+                                                    ? StyleInfo.settingTextColor
+                                                    : StyleInfo.gray_7C7C8D,
+                                                fontWeight: FontWeight.w700,
+                                                fontFamily: "PingFang-SC",
+                                                fontStyle: FontStyle.normal,
+                                                fontSize: ASize.ft(7))),
                                       ),
-                                      GestureDetector(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                            right: ASize.w(2),
-                                          ),
-                                          child: Container(
-                                            height: ASize.h(16),
-                                            width: ASize.w(30),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(ASize.w(30))),
-                                              color:
-                                                  StyleInfo.settingButtonColor,
-                                            ),
-                                            child: Center(
-                                              child: Text("替換",
-                                                  style: TextStyle(
-                                                      color:
-                                                          StyleInfo.gray_7C7C8D,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                      fontFamily: "PingFang-SC",
-                                                      fontStyle:
-                                                          FontStyle.normal,
-                                                      fontSize: ASize.ft(7))),
-                                            ),
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          FocusScope.of(context)
-                                              .requestFocus(FocusNode());
-                                          controller.changeUsername();
-                                          controller.username.value = '';
-                                          key = '';
-                                        },
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                )),
-                        ],
-                      ),
+                                  onTap: () {
+                                    if (key.isNotEmpty) {
+                                      FocusScope.of(context)
+                                          .requestFocus(FocusNode());
+                                      controller.updateUsername(key);
+                                      controller.username.value = key;
+                                    }
+                                  },
+                                )
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 1),
+                                  child: Text("暱稱:", style: titleName),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 8, right: 8),
+                                  child: Text(controller.username.value,
+                                      style: TextStyle(
+                                        color: StyleInfo.settingTextColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontFamily: "PingFangSC",
+                                        fontStyle: FontStyle.normal,
+                                        fontSize: ASize.ft(8),
+                                      )),
+                                ),
+                                GestureDetector(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: ASize.w(2)),
+                                    child: Container(
+                                      height: ASize.h(14),
+                                      width: ASize.w(28),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(ASize.w(30))),
+                                        color: StyleInfo.settingButtonColor,
+                                      ),
+                                      child: Center(
+                                        child: Text("替換", style: titleName),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    FocusScope.of(context)
+                                        .requestFocus(FocusNode());
+                                    controller.changeUsername();
+                                    controller.username.value = '';
+                                    key = '';
+                                  },
+                                ),
+                              ],
+                            )),
                     ),
                     SizedBox(height: ASize.h(10)),
                     const Text(
