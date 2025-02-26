@@ -127,14 +127,6 @@ class HomePage extends GetView<HomeController> {
                     ),
                     onPressed: () {
                       showRankingDialog(context);
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (BuildContext context) {
-                      //     return AlertDialog(
-                      //       content: PopViewSettingPage(controller: controller),
-                      //     );
-                      //   },
-                      // );
                     },
                     child: const Text('熱門景點'),
                   ),
@@ -396,6 +388,7 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
+  /// 顯示排行榜
   void showRankingDialog(BuildContext context) {
     showDialog(
       context: context,
