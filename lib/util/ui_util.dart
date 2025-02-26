@@ -12,7 +12,7 @@ class ASize {
 
   /// 设置高度
   /// [height] 高度会自动适配，height 就是UI效果图上面标注的尺寸
-  static double h(num height) => ScreenUtil().setWidth(height * 2.0);
+  static double h(num height) => ScreenUtil().setHeight(height * 2.0);
 
   /// 设置字体大小
   /// [fontSize] 字体大小会自动适配，fontSize 就是UI效果图上面标注的大小
