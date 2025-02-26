@@ -66,6 +66,9 @@ class HistoryPage extends GetView<HistoryController> {
                       controller.deleteData();
                     },
                     backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0), // 設置圓角弧度
+                    ),
                     label: const Text(
                       '刪除全部資料',
                       style: TextStyle(color: Colors.white),

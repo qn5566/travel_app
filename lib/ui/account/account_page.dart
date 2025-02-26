@@ -100,27 +100,24 @@ class AccountPage extends GetView<AccountController> {
                                 ],
                               ),
                               GestureDetector(
-                                child: Padding(
-                                  padding: EdgeInsets.only(right: ASize.w(2)),
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: ASize.w(5)),
-                                    height: ASize.h(16),
-                                    decoration: BoxDecoration(
-                                      color: StyleInfo.settingButtonColor,
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Center(
-                                      child: Text("確認",
-                                          style: TextStyle(
-                                              color: (key.isNotEmpty)
-                                                  ? StyleInfo.settingTextColor
-                                                  : StyleInfo.gray_7C7C8D,
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: "PingFang-SC",
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: ASize.ft(7))),
-                                    ),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: ASize.w(5)),
+                                  height: ASize.h(16),
+                                  decoration: BoxDecoration(
+                                    color: StyleInfo.settingButtonColor,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Center(
+                                    child: Text("確認",
+                                        style: TextStyle(
+                                            color: (key.isNotEmpty)
+                                                ? StyleInfo.settingTextColor
+                                                : StyleInfo.gray_7C7C8D,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: "PingFang-SC",
+                                            fontStyle: FontStyle.normal,
+                                            fontSize: ASize.ft(7))),
                                   ),
                                 ),
                                 onTap: () {
@@ -159,18 +156,15 @@ class AccountPage extends GetView<AccountController> {
                                 ],
                               ),
                               GestureDetector(
-                                child: Padding(
-                                  padding: EdgeInsets.only(right: ASize.w(2)),
-                                  child: Container(
-                                    height: ASize.h(14),
-                                    width: ASize.w(28),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      color: StyleInfo.settingButtonColor,
-                                    ),
-                                    child: Center(
-                                      child: Text("替換", style: titleName),
-                                    ),
+                                child: Container(
+                                  height: ASize.h(14),
+                                  width: ASize.w(28),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    color: StyleInfo.settingButtonColor,
+                                  ),
+                                  child: Center(
+                                    child: Text("替換", style: titleName),
                                   ),
                                 ),
                                 onTap: () {
