@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -6,9 +8,12 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../config/AdHelper.dart';
 import '../../config/global_config.dart';
 import '../../config/rx_config.dart';
+import '../../data/api_helper.dart';
+import '../../data/mode/comment_model.dart';
 import '../../data/mode/data_all.dart';
 import '../../data/repo/fxDataBaseManager.dart';
 import '../../routes/app_routes.dart';
+import '../../util/ToastUtil.dart';
 import '../../util/ad_manager_util.dart';
 
 class AccountController extends GetxController {
@@ -18,6 +23,7 @@ class AccountController extends GetxController {
 
   var username = "".obs;
   var dataList = <DataAll>[].obs;
+  var dataListComment = <CommentModel>[].obs;
 
   late RxConfig userData;
 
@@ -32,16 +38,20 @@ class AccountController extends GetxController {
   InterstitialAd? interstitialAd;
   bool isInterstitialAdReady = false;
 
+  late TextEditingController messageController;
+
   @override
   void onInit() async {
     super.onInit();
     adMobBanner();
     loadInterstitialAd();
+    fetchApi();
 
     if (sharedPreferences.getString(AppConstants.userName) != null) {
       username.value = sharedPreferences.getString(AppConstants.userName)!;
     }
     textEditingController = TextEditingController();
+    messageController = TextEditingController();
 
     userData = Get.find();
 
@@ -57,6 +67,73 @@ class AccountController extends GetxController {
       }
     }
     isLoading(false);
+  }
+
+  /// 獲取Comment data - message board
+  void fetchApi() async {
+    isLoading(true);
+    await ApiHelper().fetchCommentDataMessageBoard().then((value) {
+      dataListComment.assignAll(value);
+      isLoading(false);
+      update();
+    }).catchError((e) {
+      if (kDebugMode) {
+        print('Error:$e');
+      }
+      isLoading(false);
+    });
+  }
+
+  void checkSendData(BuildContext context, String data,
+      {required ValueChanged<dynamic> callback}) {
+    String username = '';
+    if (sharedPreferences.getString("username") != null &&
+        sharedPreferences.getString("username") != '') {
+      username = sharedPreferences.getString("username") ?? '未命名';
+    } else {
+      ToastUtil.info(context, "請先設定暱稱");
+      return;
+    }
+
+    if (data.isEmpty) {
+      ToastUtil.info(context, "請填入資訊");
+    } else {
+      int timestamp = DateTime.now().millisecondsSinceEpoch;
+      DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(timestamp);
+      String datetime =
+          "${tsdate.year}/${tsdate.month}/${tsdate.day} ${tsdate.hour}:${tsdate.minute}";
+      if (kDebugMode) {
+        print(datetime);
+      }
+
+      Map<String, dynamic> body = {
+        'fun': 'updateMessageBoard',
+        'Username': username,
+        'Comment': data,
+        'Like': 5,
+        'Device': Platform.isAndroid ? 'Android' : 'iOS',
+        'TimeStamp': datetime
+      };
+
+      sendCommentMessageBoardApi(body, callback: (value) {
+        callback(value);
+      });
+    }
+  }
+
+  /// 傳送Comment data - MessageBoard
+  void sendCommentMessageBoardApi(Map<String, dynamic> body,
+      {required ValueChanged<dynamic> callback}) async {
+    isLoading(true);
+    await ApiHelper().sendCommentDataMessageBoard(body).then((value) {
+      isLoading(false);
+      callback('ok');
+    }).catchError((e) {
+      if (kDebugMode) {
+        print('Error:$e');
+      }
+      callback('ok');
+    });
   }
 
   /// 設定廣告

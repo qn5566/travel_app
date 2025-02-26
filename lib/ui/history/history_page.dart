@@ -25,7 +25,7 @@ class HistoryPage extends GetView<HistoryController> {
               children: [
                 Positioned.fill(
                   child: Image.asset(
-                    'images/setting/background_setting_2.png',
+                    'images/setting/background_setting_2.webp',
                     fit: BoxFit.fitHeight,
                     height: double.infinity,
                     width: double.infinity,

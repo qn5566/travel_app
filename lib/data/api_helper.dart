@@ -83,4 +83,28 @@ class ApiHelper extends GetConnect {
       },
     ).then((value) => value.body!).catchError((e) => throw e);
   }
+
+  /// 取得評論的資料
+  Future<List<CommentModel>> fetchCommentDataMessageBoard() async {
+    Map<String, dynamic> body = {'limit': 50, 'fun': 'getMessageBoard'};
+    return await post(
+      baseMainUrl,
+      FormData(body),
+      decoder: (data) {
+        return List<CommentModel>.from(
+            json.decode(data).map((e) => CommentModel.fromJson(e)));
+      },
+    ).then((value) => value.body!).catchError((e) => throw e);
+  }
+
+  /// 傳送評論資料
+  Future<String> sendCommentDataMessageBoard(Map<String, dynamic> body) async {
+    return await post(
+      baseMainUrl,
+      FormData(body),
+      decoder: (data) {
+        return json.decode(data);
+      },
+    ).then((value) => value.body!).catchError((e) => throw e);
+  }
 }
