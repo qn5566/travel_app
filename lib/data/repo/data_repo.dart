@@ -45,4 +45,7 @@ class DataController {
       return poetryData[index];
     });
   }
+
+  /// 抓取歷史排行榜資料
+
 }

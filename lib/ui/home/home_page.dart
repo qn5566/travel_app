@@ -8,6 +8,9 @@ import 'package:marquee/marquee.dart';
 
 import '../../config/global_config.dart';
 import '../../config/style_info.dart';
+import '../../data/mode/data_all.dart';
+import '../../data/mode/history_model.dart';
+import '../../routes/app_routes.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/gird_view_home.dart';
 import 'home_controller.dart';
@@ -68,14 +71,14 @@ class HomePage extends GetView<HomeController> {
                     children: [
                       _navigationBar(context),
                       Obx(() {
-                        if (controller.dataCommentModelList.isNotEmpty) {
+                        if (controller.dataListCommentModel.isNotEmpty) {
                           return Container(
                             height: MediaQuery.of(context).size.height * 0.03,
                             color: Colors.black.withOpacity(0.1),
                             child: Marquee(
-                              text: controller.dataCommentModelList
+                              text: controller.dataListCommentModel
                                   .map((comment) =>
-                              "${comment.titleName!}-${comment.comment ?? ''}@${comment.username ?? ''}")
+                                      "${comment.titleName!}-${comment.comment ?? ''}@${comment.username ?? ''}")
                                   .join('   '),
                               style: const TextStyle(
                                 color: Colors.white,
@@ -88,7 +91,8 @@ class HomePage extends GetView<HomeController> {
                               startPadding: 10.0,
                               accelerationDuration: const Duration(seconds: 2),
                               accelerationCurve: Curves.linear,
-                              decelerationDuration: const Duration(milliseconds: 1),
+                              decelerationDuration:
+                                  const Duration(milliseconds: 1),
                               decelerationCurve: Curves.easeOut,
                             ),
                           );
@@ -109,6 +113,32 @@ class HomePage extends GetView<HomeController> {
                 height: 50,
                 width: 10,
                 child: SizedBox.shrink(),
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0), // 設置圓角
+                      ),
+                    ),
+                    onPressed: () {
+                      showRankingDialog(context);
+                      // showDialog(
+                      //   context: context,
+                      //   builder: (BuildContext context) {
+                      //     return AlertDialog(
+                      //       content: PopViewSettingPage(controller: controller),
+                      //     );
+                      //   },
+                      // );
+                    },
+                    child: const Text('熱門景點'),
+                  ),
+                ),
               ),
             ],
           ),
@@ -363,6 +393,62 @@ class HomePage extends GetView<HomeController> {
               ))
         ],
       ),
+    );
+  }
+
+  void showRankingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('點擊次數最高的景點', textAlign: TextAlign.center),
+          content: SizedBox(
+            height: ASize.h(150), // Adjust the height as needed
+            width: double.maxFinite,
+            child: Obx(() {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: controller.dataListHistory.length,
+                itemBuilder: (context, index) {
+                  HistoryModel history = controller.dataListHistory[index];
+                  return ListTile(
+                    title: Text(
+                      '${history.title}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                      '點擊次數: ${history.value}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    leading: CircleAvatar(
+                      child: Text(
+                        '${index + 1}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      /// 直接跳轉搜尋頁面
+                      DataAll data = DataAll(
+                        name: history.title,
+                      );
+                      Get.toNamed(AppRoutes.webViewPage, arguments: data);
+                    },
+                  );
+                },
+              );
+            }),
+          ),
+        );
+      },
     );
   }
 }

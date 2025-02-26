@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:travel/data/mode/history_model.dart';
 
 import '../../config/AdHelper.dart';
 import '../../config/global_config.dart';
@@ -23,7 +24,8 @@ class HomeController extends GetxController
   var firstLoading = false.obs;
   var isLoading = true.obs;
   var dataList = <DataAll>[].obs;
-  var dataCommentModelList = <CommentModel>[].obs;
+  var dataListCommentModel = <CommentModel>[].obs;
+  var dataListHistory = <HistoryModel>[].obs;
   var username = "".obs;
 
   final DataController dataController = Get.find();
@@ -77,7 +79,7 @@ class HomeController extends GetxController
     }
 
     fetchNewComm();
-
+    fetchHistoryRank();
     adMobBanner();
   }
 
@@ -107,7 +109,19 @@ class HomeController extends GetxController
   void fetchNewComm() async {
     /// 獲取最新Comment data
     await ApiHelper().getNewComment().then((value) {
-      dataCommentModelList.assignAll(value);
+      dataListCommentModel.assignAll(value);
+      update();
+    }).catchError((e) {
+      if (kDebugMode) {
+        print('Error:$e');
+      }
+    });
+  }
+
+  void fetchHistoryRank() async {
+    /// 獲取最新Comment data
+    await ApiHelper().fetchHistoryRank().then((value) {
+      dataListHistory.assignAll(value);
       update();
     }).catchError((e) {
       if (kDebugMode) {

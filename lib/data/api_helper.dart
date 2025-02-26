@@ -6,6 +6,7 @@ import '../config/global_config.dart';
 import '../config/rx_config.dart';
 import 'mode/comment_model.dart';
 import 'mode/data_all.dart';
+import 'mode/history_model.dart';
 
 /// 資料取得的地方
 class ApiHelper extends GetConnect {
@@ -104,6 +105,23 @@ class ApiHelper extends GetConnect {
       FormData(body),
       decoder: (data) {
         return json.decode(data);
+      },
+    ).then((value) => value.body!).catchError((e) => throw e);
+  }
+
+  /// 獲取歷史排行榜
+  Future<List<HistoryModel>> fetchHistoryRank() async {
+    Map<String, dynamic> body = {
+      'limit': 20,
+      'fun': 'getHistoryRanking',
+      'table': 'history'
+    };
+    return await post(
+      baseMainUrl,
+      FormData(body),
+      decoder: (data) {
+        return List<HistoryModel>.from(
+            json.decode(data).map((e) => HistoryModel.fromJson(e)));
       },
     ).then((value) => value.body!).catchError((e) => throw e);
   }
