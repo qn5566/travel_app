@@ -108,8 +108,7 @@ class AccountPage extends GetView<AccountController> {
                                     height: ASize.h(16),
                                     decoration: BoxDecoration(
                                       color: StyleInfo.settingButtonColor,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(ASize.w(30))),
+                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
                                     child: Center(
                                       child: Text("確認",
@@ -166,8 +165,7 @@ class AccountPage extends GetView<AccountController> {
                                     height: ASize.h(14),
                                     width: ASize.w(28),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(ASize.w(30))),
+                                      borderRadius: BorderRadius.circular(10.0),
                                       color: StyleInfo.settingButtonColor,
                                     ),
                                     child: Center(
@@ -195,6 +193,11 @@ class AccountPage extends GetView<AccountController> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 60, horizontal: 16),
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0), // 設置圓角
+                      ),
+                    ),
                     onPressed: () {
                       showDialog(
                         context: context,
@@ -220,6 +223,8 @@ class AccountPage extends GetView<AccountController> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10.0), // 設置圓角
+                      border:
+                          Border.all(color: Colors.grey, width: 1.0), // 添加邊框
                     ),
                     child: Row(
                       children: [

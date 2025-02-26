@@ -60,8 +60,8 @@ class DashboardPage extends StatelessWidget {
                   label: '歷史',
                 ),
                 _bottomNavigationBarItem(
-                  icon: CupertinoIcons.settings,
-                  label: '設定',
+                  icon: CupertinoIcons.chat_bubble,
+                  label: '留言板',
                 ),
               ],
             ),
