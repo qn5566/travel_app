@@ -42,7 +42,7 @@ class HistoryController extends GetxController {
       // 儲存資料
       sharedPreferences
           .getStringList(AppConstants.homeHistory)
-          ?.forEach((item) async {
+          ?.reversed.forEach((item) async {
         var searchDataAllResult = await searchDataAll(item);
         if (searchDataAllResult != null) {
           dataAllList.add(searchDataAllResult);
