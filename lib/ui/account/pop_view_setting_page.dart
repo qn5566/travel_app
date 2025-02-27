@@ -109,6 +109,35 @@ class PopViewSettingPage extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: ASize.h(2)),
+          const Text(
+            '幫忙打分給予支持，大感謝',
+            style: TextStyle(
+                fontWeight: FontWeight.w700, color: StyleInfo.assistColor),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: InkWell(
+              onTap: () {
+                if (Theme.of(context).platform == TargetPlatform.android) {
+                  _launchUrl(
+                      'https://play.google.com/store/apps/details?id=com.meetstudio.travel&reviewId=0');
+                } else if (Theme.of(context).platform == TargetPlatform.iOS) {
+                  _launchUrl(
+                      'https://apps.apple.com/us/app/id1671108420?action=write-review');
+                }
+              },
+              child: ClipRRect(
+                borderRadius: kBorderRadius, // 設置圓角半徑
+                child: Image.asset(
+                  'images/setting/rate_us_banner.webp',
+                  fit: BoxFit.cover,
+                  height: ASize.h(20),
+                  alignment: Alignment.center,
+                ),
+              ),
+            ),
+          ),
           const Padding(
             padding: EdgeInsets.only(left: 20, right: 20, top: 8, bottom: 8),
             child: Divider(

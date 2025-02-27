@@ -108,6 +108,8 @@ class CommentView extends StatelessWidget {
                           maxLines: 1,
                           maxLength: 30,
                           placeholder: "寫下你的感想",
+                          placeholderStyle: const TextStyle(color: Colors.grey),
+                          style: const TextStyle(color: Colors.black),
                           decoration: BoxDecoration(
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(10.0),

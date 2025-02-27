@@ -5,7 +5,7 @@ import 'package:travel/ui/account/account_controller.dart';
 import '../config/style_info.dart';
 import '../data/mode/comment_model.dart';
 import '../util/ui_util.dart';
-import 'DashedDivider.dart';
+import 'dashed_divider.dart';
 
 class CommentViewMessageBoard extends StatelessWidget {
   CommentViewMessageBoard({Key? key}) : super(key: key);

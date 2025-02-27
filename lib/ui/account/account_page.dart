@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:travel/ui/account/PopViewSettingPage.dart';
+import 'package:travel/ui/account/pop_view_setting_page.dart';
 
 import '../../config/style_info.dart';
 import '../../util/ad_manager_util.dart';
@@ -199,7 +199,7 @@ class AccountPage extends GetView<AccountController> {
                 alignment: Alignment.bottomRight,
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 60, horizontal: 16),
+                      const EdgeInsets.symmetric(vertical: 80, horizontal: 16),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(

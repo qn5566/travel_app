@@ -129,7 +129,8 @@ class HomePage extends GetView<HomeController> {
                     onPressed: () {
                       showRankingDialog(context);
                     },
-                    child: const Text('熱門景點'),
+                    child: const Text('熱門景點',
+                        style: TextStyle(color: Colors.blue)),
                   ),
                 ),
               ),

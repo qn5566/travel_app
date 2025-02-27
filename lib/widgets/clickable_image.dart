@@ -6,7 +6,8 @@ class ClickableImage extends StatelessWidget {
   final String androidUrl;
   final String iosUrl;
 
-  ClickableImage({required this.imageUrl, required this.androidUrl, required this.iosUrl});
+  ClickableImage(
+      {required this.imageUrl, required this.androidUrl, required this.iosUrl});
 
   void _launchUrl(String url) async {
     if (await canLaunch(url)) {
