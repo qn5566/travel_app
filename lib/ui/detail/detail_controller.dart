@@ -75,7 +75,10 @@ class DetailController extends GetxController
       int timestamp = DateTime.now().millisecondsSinceEpoch;
       DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(timestamp);
       String datetime =
-          "${tsdate.year}/${tsdate.month}/${tsdate.day} ${tsdate.hour}:${tsdate.minute}";
+          "${tsdate.year}/${tsdate.month.toString().padLeft(2, '0')}/"
+          "${tsdate.day.toString().padLeft(2, '0')} "
+          "${tsdate.hour.toString().padLeft(2, '0')}:"
+          "${tsdate.minute.toString().padLeft(2, '0')}";
       if (kDebugMode) {
         print(datetime);
       }

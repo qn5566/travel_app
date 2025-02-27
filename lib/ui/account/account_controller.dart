@@ -15,7 +15,8 @@ import '../../routes/app_routes.dart';
 import '../../util/ToastUtil.dart';
 import '../../util/ad_manager_util.dart';
 
-class AccountController extends GetxController with SingleGetTickerProviderMixin{
+class AccountController extends GetxController
+    with SingleGetTickerProviderMixin {
   late TextEditingController textEditingController;
 
   var isLoading = true.obs;
@@ -106,7 +107,10 @@ class AccountController extends GetxController with SingleGetTickerProviderMixin
       int timestamp = DateTime.now().millisecondsSinceEpoch;
       DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(timestamp);
       String datetime =
-          "${tsdate.year}/${tsdate.month}/${tsdate.day} ${tsdate.hour}:${tsdate.minute}";
+          "${tsdate.year}/${tsdate.month.toString().padLeft(2, '0')}/"
+          "${tsdate.day.toString().padLeft(2, '0')} "
+          "${tsdate.hour.toString().padLeft(2, '0')}:"
+          "${tsdate.minute.toString().padLeft(2, '0')}";
       if (kDebugMode) {
         print(datetime);
       }
@@ -237,11 +241,11 @@ class AccountController extends GetxController with SingleGetTickerProviderMixin
     return packageInfo.buildNumber;
   }
 
-  void startAnimation()  {
+  void startAnimation() {
     animationController.repeat();
   }
 
-  void stopAnimation()  {
+  void stopAnimation() {
     animationController.stop();
   }
 
