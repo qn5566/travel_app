@@ -11,7 +11,6 @@ import '../../config/rx_config.dart';
 import '../../data/api_helper.dart';
 import '../../data/mode/comment_model.dart';
 import '../../data/mode/data_all.dart';
-import '../../data/repo/fxDataBaseManager.dart';
 import '../../routes/app_routes.dart';
 import '../../util/ToastUtil.dart';
 import '../../util/ad_manager_util.dart';
@@ -55,17 +54,17 @@ class AccountController extends GetxController {
 
     userData = Get.find();
 
-    if (sharedPreferences.getStringList(AppConstants.homeHistory) != null) {
-      // 儲存資料
-      String temp = '';
-      historyList =
-          (sharedPreferences.getStringList(AppConstants.homeHistory) ??
-              <String>[]);
-      if (historyList.isNotEmpty) {
-        searchData(historyList);
-        return;
-      }
-    }
+    // if (sharedPreferences.getStringList(AppConstants.homeHistory) != null) {
+    //   // 儲存資料
+    //   String temp = '';
+    //   historyList =
+    //       (sharedPreferences.getStringList(AppConstants.homeHistory) ??
+    //           <String>[]);
+    //   if (historyList.isNotEmpty) {
+    //     searchData(historyList);
+    //     return;
+    //   }
+    // }
     isLoading(false);
   }
 
@@ -191,21 +190,21 @@ class AccountController extends GetxController {
   }
 
   /// 抓取資料判斷
-  void searchData(List<String> whereArgs) async {
-    // DB相關
-    var dataData = await FxDataBaseManager.dataAllDao();
-
-    List<DataAll> poetryData = [];
-    for (String title in whereArgs) {
-      var data = await dataData.findDataAllByTitle(title);
-      poetryData.addAll(data);
-    }
-
-    dataList.assignAll(List.generate(poetryData.length, (index) {
-      return poetryData[index];
-    }));
-    isLoading(false);
-  }
+  // void searchData(List<String> whereArgs) async {
+  //   // DB相關
+  //   var dataData = await FxDataBaseManager.dataAllDao();
+  //
+  //   List<DataAll> poetryData = [];
+  //   for (String title in whereArgs) {
+  //     var data = await dataData.findDataAllByTitle(title);
+  //     poetryData.addAll(data);
+  //   }
+  //
+  //   dataList.assignAll(List.generate(poetryData.length, (index) {
+  //     return poetryData[index];
+  //   }));
+  //   isLoading(false);
+  // }
 
   /// 刪除資料
   void deleteData() async {

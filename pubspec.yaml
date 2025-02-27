@@ -57,6 +57,7 @@ dependencies:
   firebase_crashlytics: ^3.0.15
   floor: ^1.4.1
   marquee: ^2.2.3
+  flutter_local_notifications: ^17.0.0 # 本地推播：BSD-3-Clause
 
 dependency_overrides:
   fading_edge_scrollview: ^4.1.1
