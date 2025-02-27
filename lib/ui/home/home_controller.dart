@@ -130,6 +130,10 @@ class HomeController extends GetxController
     });
   }
 
+  void updateData() {
+    fetchApi();
+  }
+
   /// 抓取資料判斷 - 同地區
   void searchDataRegion(String keyword) async {
     // 如果還沒備份原始資料，就先備份一份
