@@ -139,17 +139,20 @@ class HomePage extends GetView<HomeController> {
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0), // 設置圓角
-                      ),
-                    ),
-                    onPressed: () {
-                      controller.updateData();
+                  child: InkWell(
+                    onTap: () async {
+                      await controller.fetchApi();
                     },
-                    child: const Icon(Icons.refresh, color: Colors.black),
+                    child: Container(
+                      width: ASize.w(16),
+                      height: ASize.h(16),
+                      decoration: BoxDecoration(
+                        color: StyleInfo.settingButtonColor,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child:const Icon(Icons.refresh,
+                          color: StyleInfo.settingTextColor)
+                    ),
                   ),
                 ),
               ),

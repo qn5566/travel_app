@@ -221,6 +221,40 @@ class AccountPage extends GetView<AccountController> {
                 ),
               ),
               Align(
+                alignment: Alignment.bottomLeft,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 80, horizontal: 16),
+                  child: InkWell(
+                    onTap: () async {
+                      controller.startAnimation();
+                      await controller.fetchApi();
+                      controller.stopAnimation();
+                    },
+                    child: Container(
+                      width: ASize.w(16),
+                      height: ASize.h(16),
+                      decoration: BoxDecoration(
+                        color: StyleInfo.settingButtonColor,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: AnimatedBuilder(
+                        animation: controller.animationController,
+                        builder: (context, child) {
+                          return Transform.rotate(
+                            angle: controller.animationController.value *
+                                2.0 *
+                                3.1415927,
+                            child: const Icon(Icons.refresh,
+                                color: StyleInfo.settingTextColor),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding:

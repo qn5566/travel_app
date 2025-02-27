@@ -15,7 +15,7 @@ import '../../routes/app_routes.dart';
 import '../../util/ToastUtil.dart';
 import '../../util/ad_manager_util.dart';
 
-class AccountController extends GetxController {
+class AccountController extends GetxController with SingleGetTickerProviderMixin{
   late TextEditingController textEditingController;
 
   var isLoading = true.obs;
@@ -38,6 +38,7 @@ class AccountController extends GetxController {
   bool isInterstitialAdReady = false;
 
   late TextEditingController messageController;
+  late AnimationController animationController;
 
   @override
   void onInit() async {
@@ -66,10 +67,15 @@ class AccountController extends GetxController {
     //   }
     // }
     isLoading(false);
+
+    animationController = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
   }
 
   /// 獲取Comment data - message board
-  void fetchApi() async {
+  Future<void> fetchApi() async {
     isLoading(true);
     await ApiHelper().fetchCommentDataMessageBoard().then((value) {
       dataListComment.assignAll(value);
@@ -231,10 +237,19 @@ class AccountController extends GetxController {
     return packageInfo.buildNumber;
   }
 
+  void startAnimation()  {
+    animationController.repeat();
+  }
+
+  void stopAnimation()  {
+    animationController.stop();
+  }
+
   /// 關閉
   @override
   void dispose() {
     bannerAd?.dispose();
+    animationController.dispose();
     super.dispose();
   }
 }

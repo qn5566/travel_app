@@ -97,7 +97,7 @@ class HomeController extends GetxController
   }
 
   /// 抓取遠端資料
-  void fetchApi() async {
+  Future<void> fetchApi() async {
     isLoading(true);
     await dataController.fetchRemoteData().then((data) {
       dataList.assignAll(data);
