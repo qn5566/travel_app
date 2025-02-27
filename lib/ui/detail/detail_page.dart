@@ -90,12 +90,12 @@ class DetailPage extends GetView<DetailController> {
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(20.0),
                     child: Container(
-                      color: Colors.black38,
+                      color: Colors.grey.withOpacity(0.5),
                       child: TabBar(
                         isScrollable: true,
                         indicatorColor: Colors.white,
                         labelColor: Colors.white,
-                        unselectedLabelColor: Colors.grey,
+                        unselectedLabelColor: Colors.black,
                         tabAlignment: TabAlignment.start,
                         indicatorWeight: 1.0,
                         tabs: controller.subTitle,

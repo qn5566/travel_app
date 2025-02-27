@@ -77,13 +77,27 @@ class AccountPage extends GetView<AccountController> {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 8, right: 8),
-                                    child: SizedBox(
+                                    child: Container(
                                       width: ASize.w(80),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        // 設置圓角
+                                        border: Border.all(
+                                            color: Colors.grey,
+                                            width: 1.0), // 添加邊框
+                                      ),
                                       child: CupertinoTextField(
                                         textAlign: TextAlign.center,
                                         controller:
                                             controller.textEditingController,
                                         keyboardType: TextInputType.text,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
                                         maxLines: 1,
                                         maxLength: 10,
                                         placeholder: "請輸入暱稱",

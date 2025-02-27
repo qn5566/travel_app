@@ -121,6 +121,7 @@ class HomePage extends GetView<HomeController> {
                       const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0), // 設置圓角
                       ),

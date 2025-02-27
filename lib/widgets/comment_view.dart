@@ -92,7 +92,9 @@ class CommentView extends StatelessWidget {
                 height: 50,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(10.0), // 設置圓角
+                  borderRadius: BorderRadius.circular(10.0),
+                  // 設置圓角
+                  border: Border.all(color: Colors.grey, width: 1.0), // 添加邊框
                 ),
                 child: Row(
                   children: [
@@ -141,6 +143,9 @@ class CommentView extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(
+                height: ASize.h(10),
+              )
             ],
           ),
         ),
