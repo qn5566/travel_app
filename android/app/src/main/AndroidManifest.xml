@@ -38,6 +38,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAHLV8p5cjfo6JvaOplpzFhLhbWLULJXHI" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/baseline_sports_bar_24" />
     </application>
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
