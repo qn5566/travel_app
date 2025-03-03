@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../data/mode/data_all.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/comment_view.dart';
 import '../../widgets/info_view.dart';
@@ -13,9 +14,13 @@ class DetailPage extends GetView<DetailController> {
 
   @override
   Widget build(BuildContext context) {
-    final arguments = Get.arguments;
-    final picture1 = arguments?.picture1 ?? '';
-    final region = arguments?.region ?? '';
+    final arguments = Get.arguments as Map<String, dynamic>;
+    final DataAll item = arguments['item'];
+    final String page = arguments['page'];
+
+    final picture1 = item.picture1 ?? '';
+    final region = item.region ?? '';
+
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Builder(builder: (context) {
@@ -50,7 +55,7 @@ class DetailPage extends GetView<DetailController> {
                           constraints: BoxConstraints(maxWidth: ASize.w(130)),
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: Text(controller.item.name!,
+                            child: Text(controller.item!.name!,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(
@@ -118,13 +123,23 @@ class DetailPage extends GetView<DetailController> {
                                 ),
                               ),
                               onPressed: () {
-                                /// 加入想去名單
-                                controller.saveWantGo(context);
+                                if (page == 'want') {
+                                  /// 刪除想去名單
+                                  controller.deleteWantGo(context);
+                                } else {
+                                  /// 加入想去名單
+                                  controller.saveWantGo(context);
+                                }
                               },
-                              child: const Text(
-                                '加入想去名單',
-                                style: TextStyle(color: Colors.black),
-                              ),
+                              child: page == 'want'
+                                  ? const Text(
+                                      '刪除想去名單',
+                                      style: TextStyle(color: Colors.black),
+                                    )
+                                  : const Text(
+                                      '加入想去名單',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
                             ),
                           ),
                         ],

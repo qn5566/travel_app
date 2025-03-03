@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:travel/ui/history/history_controller.dart';
+import 'package:travel/ui/want/want_controller.dart';
 
 import '../../util/ad_manager_util.dart';
 import '../../util/ui_util.dart';
-import '../../widgets/list_view_history_all.dart';
+import '../../widgets/grid_view_all_history.dart';
 
 /*
 設定頁面
 */
-class HistoryPage extends GetView<HistoryController> {
-  const HistoryPage({super.key});
+class WantPage extends GetView<WantController> {
+  const WantPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     controller.initData();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DefaultTabController(
@@ -55,7 +56,7 @@ class HistoryPage extends GetView<HistoryController> {
                       height: ASize.h(5),
                     ),
                     Expanded(
-                      child: ListViewAllHistory(),
+                      child: GridViewAllHistory(),
                     ),
                   ],
                 ),

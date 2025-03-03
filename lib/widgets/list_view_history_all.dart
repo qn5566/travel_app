@@ -6,7 +6,6 @@ import 'package:travel/widgets/views/video_cover_view.dart';
 
 import '../config/global_config.dart';
 import '../data/mode/data_all.dart';
-import '../ui/account/account_controller.dart';
 import '../util/ui_util.dart';
 import 'money_text_widget.dart';
 
@@ -24,82 +23,87 @@ class ListViewAllHistory extends StatelessWidget {
               ? MediaQuery.removePadding(
                   removeTop: true,
                   context: context,
-                  child: ListView.builder(
-                    itemCount: controller.dataAllList.length,
-                    itemBuilder: (context, index) {
-                      DataAll item = controller.dataAllList[index];
-                      return GestureDetector(
-                        onTap: () {
-                          controller.onTapDataAll(item);
-                        },
-                        child: Container(
-                          color: Colors.white,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AspectRatio(
-                                aspectRatio: 1.7777777,
-                                child: Stack(
-                                  children: [
-                                    VideoCoverView(
-                                      // radius: 10,
-                                      cover: item.picture1 ?? '',
-                                      money: item.region,
-                                    ),
-                                    MoneytextWidget(item.region ?? "尚未資料")
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: ASize.w(1), left: ASize.w(1)),
-                                child: Text(
-                                  item.name!,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontFamily: "PingFangSC",
-                                    fontStyle: FontStyle.normal,
-                                    fontSize: ASize.ft(8),
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: ASize.w(1),
-                                    left: ASize.w(1),
-                                    bottom: ASize.w(4)),
-                                child: Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.place_outlined,
-                                      color: Colors.grey,
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        item.address ?? emptyData,
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: "PingFangSC",
-                                          fontStyle: FontStyle.normal,
-                                          fontSize: ASize.ft(6),
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.fade,
-                                        softWrap: false,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      controller.reload();
                     },
+                    child: ListView.builder(
+                      itemCount: controller.dataAllList.length,
+                      itemBuilder: (context, index) {
+                        DataAll item = controller.dataAllList[index];
+                        return GestureDetector(
+                          onTap: () {
+                            controller.onTapDataAll(item);
+                          },
+                          child: Container(
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                AspectRatio(
+                                  aspectRatio: 1.7777777,
+                                  child: Stack(
+                                    children: [
+                                      VideoCoverView(
+                                        // radius: 10,
+                                        cover: item.picture1 ?? '',
+                                        money: item.region,
+                                      ),
+                                      MoneytextWidget(item.region ?? "尚未資料")
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: ASize.w(1), left: ASize.w(1)),
+                                  child: Text(
+                                    item.name!,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: "PingFangSC",
+                                      fontStyle: FontStyle.normal,
+                                      fontSize: ASize.ft(8),
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: ASize.w(1),
+                                      left: ASize.w(1),
+                                      bottom: ASize.w(4)),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.place_outlined,
+                                        color: Colors.grey,
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          item.address ?? emptyData,
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: "PingFangSC",
+                                            fontStyle: FontStyle.normal,
+                                            fontSize: ASize.ft(6),
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.fade,
+                                          softWrap: false,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 )
               : Stack(

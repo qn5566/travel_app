@@ -214,7 +214,10 @@ class MapController extends GetxController {
       sharedPreferences.setStringList(AppConstants.homeHistory, historyList);
     }
     // 跳頁
-    Get.toNamed(AppRoutes.travelDetails, arguments: item);
+    Get.toNamed(AppRoutes.travelDetails, arguments: {
+      'item': item,
+      'page': 'map',
+    });
   }
 
   /// 監聽滑動地圖的位置

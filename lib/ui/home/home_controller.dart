@@ -211,7 +211,10 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       sharedPreferences.setStringList(AppConstants.homeHistory, historyList);
     }
     // 跳頁
-    Get.toNamed(AppRoutes.travelDetails, arguments: item);
+    Get.toNamed(AppRoutes.travelDetails, arguments: {
+      'item': item,
+      'page': 'home',
+    });
   }
 
   void toSearch() {

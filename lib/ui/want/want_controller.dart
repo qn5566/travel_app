@@ -10,7 +10,7 @@ import '../../data/repo/fxDataBaseManager.dart';
 import '../../routes/app_routes.dart';
 import '../../util/ad_manager_util.dart';
 
-class HistoryController extends GetxController {
+class WantController extends GetxController {
   /// 讀取
   var isLoading = true.obs;
 
@@ -49,13 +49,13 @@ class HistoryController extends GetxController {
 
   /// 初始化資料
   void initData() {
-    // 抓取景點歷史資料
-    if (sharedPreferences.getStringList(AppConstants.homeHistory) != null) {
+    // 抓取景點想要的資料
+    if (sharedPreferences.getStringList(AppConstants.wantGo) != null) {
       dataAllList.clear();
 
       // 儲存資料
       sharedPreferences
-          .getStringList(AppConstants.homeHistory)
+          .getStringList(AppConstants.wantGo)
           ?.reversed
           .forEach((item) async {
         var searchDataAllResult = await searchDataAll(item);
@@ -68,7 +68,7 @@ class HistoryController extends GetxController {
 
   /// 設定廣告
   void adMobBanner() {
-    AdManagerUtil.initializeAd(AdHelper.historyAdUnitId);
+    AdManagerUtil.initializeAd(AdHelper.wantAdUnitId);
     bannerAd = AdManagerUtil.bannerAd;
     isADShowing = AdManagerUtil.isADShowing;
   }
@@ -118,7 +118,7 @@ class HistoryController extends GetxController {
   /// 刪除資料
   void deleteData() async {
     isLoading(true);
-    sharedPreferences.setStringList(AppConstants.homeHistory, <String>[]);
+    sharedPreferences.setStringList(AppConstants.wantGo, <String>[]);
     dataAllList.assignAll(<DataAll>[]);
     isLoading(false);
   }
@@ -130,11 +130,10 @@ class HistoryController extends GetxController {
     // showInterstitialAd(); 關閉全屏廣告
     Get.toNamed(AppRoutes.travelDetails, arguments: {
       'item': item,
-      'page': 'history',
+      'page': 'want',
     });
   }
 
-  /// 重新載入
   void reload() {
     initData();
   }

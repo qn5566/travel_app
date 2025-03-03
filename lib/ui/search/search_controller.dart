@@ -59,6 +59,9 @@ class SearchController extends GetxController {
       sharedPreferences.setStringList('history', historyList);
     }
     //跳頁
-    Get.toNamed(AppRoutes.travelDetails, arguments: item);
+    Get.toNamed(AppRoutes.travelDetails, arguments: {
+      'item': item,
+      'page': 'search',
+    });
   }
 }

@@ -36,35 +36,37 @@ class InfoView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('聯絡電話'),
-                            buildTextBottomLine(controller.item.tel ?? '暫時無資料')
+                            buildTextBottomLine(controller.item!.tel ?? '暫時無資料')
                           ],
                         ),
                       ],
                     ),
                     onTap: () {
                       controller.call(
-                          Uri(scheme: 'tel', path: "+${controller.item.tel}"));
+                          Uri(scheme: 'tel', path: "+${controller.item!.tel}"));
                     },
                   ),
-                  (controller.item.address != '' &&
-                          controller.item.address != null)
+                  (controller.item!.address != '' &&
+                          controller.item!.address != null)
                       ? InkWell(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   buildTitle('地址資訊'),
-                                  buildText(controller.item.address ?? '暫時無資料')
+                                  buildText(controller.item!.address ?? '暫時無資料')
                                 ],
                               ),
                             ],
                           ),
                           onTap: () {
                             Clipboard.setData(ClipboardData(
-                                text: controller.item.address ?? '暫時無資料'));
+                                text: controller.item!.address ?? '暫時無資料'));
                             ToastUtil.info(context, "複製成功!");
                           },
                         )
@@ -76,100 +78,100 @@ class InfoView extends StatelessWidget {
                       InkWell(
                         child: buildTitle('開啟導航'),
                         onTap: () {
-                          // var uri = Uri.parse(controller.item.map!);
+                          // var uri = Uri.parse(controller.item!.map!);
                           controller.call(Uri(
                               scheme: 'https',
                               host: 'www.google.com',
                               path:
-                                  '/maps/search/${(controller.item.address != '' && controller.item.address != null) ? controller.item.address : controller.item.name}'));
+                                  '/maps/search/${(controller.item!.address != '' && controller.item!.address != null) ? controller.item!.address : controller.item!.name}'));
                         },
                       ),
                       InkWell(
                         child: const Icon(Icons.assistant_navigation,
                             color: Colors.blue),
                         onTap: () {
-                          // var uri = Uri.parse(controller.item.map!);
+                          // var uri = Uri.parse(controller.item!.map!);
                           controller.call(Uri(
                               scheme: 'https',
                               host: 'www.google.com',
                               path:
-                                  '/maps/search/${(controller.item.address != '' && controller.item.address != null) ? controller.item.address : controller.item.name}'));
+                                  '/maps/search/${(controller.item!.address != '' && controller.item!.address != null) ? controller.item!.address : controller.item!.name}'));
                         },
                       ),
                     ],
                   ),
-                  (controller.item.opentime != '')
+                  (controller.item!.opentime != '')
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('營業時間'),
-                            buildText(controller.item.opentime!),
+                            buildText(controller.item!.opentime!),
                           ],
                         )
                       : const SizedBox.shrink(),
-                  (controller.item.ticketinfo != '' &&
-                          controller.item.ticketinfo != null)
+                  (controller.item!.ticketinfo != '' &&
+                          controller.item!.ticketinfo != null)
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('門票'),
-                            buildText(controller.item.ticketinfo!),
+                            buildText(controller.item!.ticketinfo!),
                           ],
                         )
                       : const SizedBox.shrink(),
-                  (controller.item.travellinginfo != '' &&
-                          controller.item.travellinginfo != null)
+                  (controller.item!.travellinginfo != '' &&
+                          controller.item!.travellinginfo != null)
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('旅遊資訊'),
-                            buildText(controller.item.travellinginfo!),
+                            buildText(controller.item!.travellinginfo!),
                           ],
                         )
                       : const SizedBox.shrink(),
-                  (controller.item.toldescribe == '' &&
-                          controller.item.description == '')
+                  (controller.item!.toldescribe == '' &&
+                          controller.item!.description == '')
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('詳細資訊'),
-                            buildText(controller.item.toldescribe!),
+                            buildText(controller.item!.toldescribe!),
                           ],
                         )
-                      : (controller.item.description != '' &&
-                              controller.item.description != null)
+                      : (controller.item!.description != '' &&
+                              controller.item!.description != null)
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 buildTitle('詳細資訊'),
-                                buildText(controller.item.description!),
+                                buildText(controller.item!.description!),
                               ],
                             )
                           : const SizedBox.shrink(),
-                  (controller.item.remarks != '' &&
-                          controller.item.remarks != null)
+                  (controller.item!.remarks != '' &&
+                          controller.item!.remarks != null)
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('注意事項'),
-                            buildText(controller.item.remarks!),
+                            buildText(controller.item!.remarks!),
                           ],
                         )
                       : const SizedBox.shrink(),
                   SizedBox(height: ASize.h(10)),
-                  (controller.item.changetime != '')
+                  (controller.item!.changetime != '')
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                               buildTitle('更新時間'),
-                              buildText(controller.item.changetime!),
+                              buildText(controller.item!.changetime ?? ''),
                             ])
                       : const SizedBox.shrink(),
                 ]),

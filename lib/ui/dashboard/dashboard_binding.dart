@@ -6,6 +6,7 @@ import '../../config/rx_config.dart';
 import '../../data/repo/data_repo.dart';
 import '../history/history_controller.dart';
 import '../home/home_controller.dart';
+import '../want/want_controller.dart';
 import 'dashboard_controller.dart';
 
 class DashboardBinding extends Bindings {
@@ -18,5 +19,6 @@ class DashboardBinding extends Bindings {
     Get.lazyPut<AccountController>(() => AccountController());
     Get.lazyPut<DataController>(() => DataController());
     Get.lazyPut<HistoryController>(() => HistoryController());
+    Get.lazyPut<WantController>(() => WantController());
   }
 }

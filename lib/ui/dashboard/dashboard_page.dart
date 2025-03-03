@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:travel/ui/map/map_page.dart';
+import 'package:travel/ui/want/want_page.dart';
 
 import '../../config/style_info.dart';
 import '../account/account_page.dart';
@@ -21,6 +22,7 @@ class DashboardPage extends StatelessWidget {
   static List<Widget> pages = [
     const MapPage(),
     const HomePage(),
+    const WantPage(),
     const HistoryPage(),
     const AccountPage(),
   ];
@@ -56,6 +58,10 @@ class DashboardPage extends StatelessWidget {
                   label: '景點',
                 ),
                 _bottomNavigationBarItem(
+                  icon: Icons.favorite,
+                  label: '想要去',
+                ),
+                _bottomNavigationBarItem(
                   icon: Icons.history,
                   label: '歷史',
                 ),
@@ -68,6 +74,7 @@ class DashboardPage extends StatelessWidget {
           ),
         );
       },
+      assignId: true,
     );
   }
 

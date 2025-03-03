@@ -24,7 +24,8 @@ class DetailController extends GetxController
   bool isShowTitle = false;
 
   // GlobalKey<TitleViewState> titleStateKey = GlobalKey();
-  final item = Get.arguments as DataAll;
+  final arguments = Get.arguments as Map<String, dynamic>;
+  DataAll? item;
 
   /// 子分類
   final List<Tab> subTitle = const <Tab>[
@@ -35,6 +36,7 @@ class DetailController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    item = arguments['item'];
     fetchApi();
     tabInfoController = TabController(length: subTitle.length, vsync: this);
     messageController = TextEditingController();
@@ -45,8 +47,8 @@ class DetailController extends GetxController
   void fetchApi() async {
     isLoading(true);
     // 來去儲存點擊紀錄
-    sendHistory(item.name ?? '');
-    await ApiHelper().fetchCommentData(item.id!).then((value) {
+    sendHistory(item?.name ?? '');
+    await ApiHelper().fetchCommentData(item!.id!).then((value) {
       dataList.assignAll(value);
       isLoading(false);
       update();
@@ -85,8 +87,8 @@ class DetailController extends GetxController
 
       Map<String, dynamic> body = {
         'fun': 'updateComment',
-        'TitleId': item.id,
-        'TitleName': item.name,
+        'TitleId': item?.id,
+        'TitleName': item?.name,
         'Username': username,
         'Comment': data,
         'Like': 5,
@@ -137,7 +139,7 @@ class DetailController extends GetxController
 
   void onTap(CommentModel item) {
     if (kDebugMode) {
-      print(item.like);
+      print(item?.like);
       // Get.toNamed(AppRoutes.travelDetails, arguments: item);
     }
   }
@@ -177,11 +179,12 @@ class DetailController extends GetxController
     // 儲存資料 - 判斷這個item title有沒有資料
     List<String> wantGoList =
         (sharedPreferences.getStringList(AppConstants.wantGo) ?? <String>[]);
-    var match = wantGoList.firstWhere((element) => element.contains(item.name!),
+    var match = wantGoList.firstWhere(
+        (element) => element.contains(item!.name!),
         orElse: () => '');
     if (match == '') {
       // 確定沒有儲存
-      wantGoList.add(item.name!);
+      wantGoList.add(item!.name!);
       sharedPreferences.setStringList(AppConstants.wantGo, wantGoList);
     } else {
       ToastUtil.info(context, "已經加入過了");
@@ -189,5 +192,30 @@ class DetailController extends GetxController
 
     sharedPreferences.setStringList(AppConstants.wantGo, wantGoList);
     isLoading(false);
+  }
+
+  /// 刪除想去名單
+  void deleteWantGo(BuildContext context) async {
+    isLoading(true);
+
+    // 儲存資料 - 判斷這個item title有沒有資料
+    List<String> wantGoList =
+        (sharedPreferences.getStringList(AppConstants.wantGo) ?? <String>[]);
+    var match = wantGoList.firstWhere(
+        (element) => element.contains(item!.name!),
+        orElse: () => '');
+    if (match != '') {
+      // 確定有儲存
+      wantGoList.remove(item?.name!);
+      sharedPreferences.setStringList(AppConstants.wantGo, wantGoList);
+    } else {
+      ToastUtil.info(context, "沒有加入過");
+    }
+
+    sharedPreferences.setStringList(AppConstants.wantGo, wantGoList);
+    isLoading(false);
+
+    /// 退出
+    Get.back();
   }
 }
