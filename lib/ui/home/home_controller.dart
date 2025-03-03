@@ -46,8 +46,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   var isADShowing = false.obs;
 
   /// 轉圈動畫
-  late AnimationController animationController;
-  late Animation<double> animation;
+  AnimationController? animationController;
+  Animation<double>? animation;
 
   @override
   void onInit() async {
@@ -89,12 +89,12 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       duration: const Duration(seconds: 1),
       vsync: this,
     );
-    animation = Tween<double>(begin: 0, end: 1).animate(animationController);
+    animation = Tween<double>(begin: 0, end: 1).animate(animationController!);
   }
 
   @override
   void onClose() {
-    animationController.dispose();
+    animationController?.dispose();
     super.onClose();
   }
 
@@ -218,6 +218,6 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   /// 轉圈動畫
   void rotateIcon() {
-    animationController.forward(from: 0);
+    animationController?.forward(from: 0);
   }
 }

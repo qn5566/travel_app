@@ -8,7 +8,8 @@ import '../ui/home/home_controller.dart';
 import '../util/ui_util.dart';
 
 class GridViewHome extends StatelessWidget {
-  GridViewHome({Key? key, required this.site}) : super(key: key);
+  GridViewHome({Key? key, required this.site, VoidCallback? callback})
+      : super(key: key);
   final String site;
   final HomeController controller = Get.find<HomeController>();
 
@@ -33,57 +34,62 @@ class GridViewHome extends StatelessWidget {
                   ? MediaQuery.removePadding(
                       removeTop: true,
                       context: context,
-                      child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, // 3 列
-                          childAspectRatio: 0.75, // 調整子項目比例
-                        ),
-                        itemCount: controller.dataList.length,
-                        itemBuilder: (context, index) {
-                          DataAll item = controller.dataList[index];
-                          return GestureDetector(
-                            onTap: () {
-                              controller.onTap(item);
-                            },
-                            child: Container(
-                              color: Colors.transparent,
-                              child: Stack(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: VideoCoverView(
-                                      cover: item.picture1 ?? '',
-                                      money: item.region,
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          controller.fetchApi();
+                        },
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3, // 3 列
+                            childAspectRatio: 0.75, // 調整子項目比例
+                          ),
+                          itemCount: controller.dataList.length,
+                          itemBuilder: (context, index) {
+                            DataAll item = controller.dataList[index];
+                            return GestureDetector(
+                              onTap: () {
+                                controller.onTap(item);
+                              },
+                              child: Container(
+                                color: Colors.transparent,
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: VideoCoverView(
+                                        cover: item.picture1 ?? '',
+                                        money: item.region,
+                                      ),
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 4.0, vertical: 2.0),
-                                      child: Container(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        child: Text(
-                                          item.name!,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w300,
-                                            fontFamily: "PingFangSC",
-                                            fontStyle: FontStyle.normal,
-                                            fontSize: ASize.ft(6),
+                                    Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4.0, vertical: 2.0),
+                                        child: Container(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          child: Text(
+                                            item.name!,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w300,
+                                              fontFamily: "PingFangSC",
+                                              fontStyle: FontStyle.normal,
+                                              fontSize: ASize.ft(6),
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     )
                   : Stack(
