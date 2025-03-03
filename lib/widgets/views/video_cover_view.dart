@@ -23,17 +23,15 @@ class VideoCoverView extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Positioned.fill(
-            child: NetworkCacheImage(
-              url: cover ?? '',
-              width: double.infinity,
-              height: double.infinity,
-              radius: radius,
-              fit: BoxFit.cover,
-              placeholderWidget: Lottie.asset('assets/cover.json'),
-              errorWidget: const Icon(Icons.error),
-              placeholder: const Icon(Icons.error),
-            ),
+          NetworkCacheImage(
+            url: cover ?? '',
+            width: double.infinity,
+            height: double.infinity,
+            radius: radius,
+            fit: BoxFit.cover,
+            placeholderWidget: Lottie.asset('assets/cover.json'),
+            errorWidget: const Icon(Icons.error),
+            placeholder: const Icon(Icons.error),
           ),
         ],
       ),
