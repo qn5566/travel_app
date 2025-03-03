@@ -16,8 +16,7 @@ import '../../data/repo/fxDataBaseManager.dart';
 import '../../routes/app_routes.dart';
 import '../../util/ad_manager_util.dart';
 
-class HomeController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+class HomeController extends GetxController with GetTickerProviderStateMixin {
   // var scaffoldKey = GlobalKey<ScaffoldState>();
   final String title = '旅遊地圖';
 
@@ -45,6 +44,10 @@ class HomeController extends GetxController
   // 廣告宣告
   BannerAd? bannerAd;
   var isADShowing = false.obs;
+
+  /// 轉圈動畫
+  late AnimationController animationController;
+  late Animation<double> animation;
 
   @override
   void onInit() async {
@@ -81,6 +84,18 @@ class HomeController extends GetxController
     fetchNewComm();
     fetchHistoryRank();
     adMobBanner();
+
+    animationController = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    animation = Tween<double>(begin: 0, end: 1).animate(animationController);
+  }
+
+  @override
+  void onClose() {
+    animationController.dispose();
+    super.onClose();
   }
 
   void updateUsername(String userName) {
@@ -103,6 +118,12 @@ class HomeController extends GetxController
       dataList.assignAll(data);
       fetchDB();
     });
+  }
+
+  /// 隨機資料
+  void randomData() {
+    dataList.shuffle();
+    update();
   }
 
   /// 獲取最新的Comment data
@@ -193,5 +214,10 @@ class HomeController extends GetxController
 
   void toSearch() {
     Get.toNamed(AppRoutes.searchPage);
+  }
+
+  /// 轉圈動畫
+  void rotateIcon() {
+    animationController.forward(from: 0);
   }
 }

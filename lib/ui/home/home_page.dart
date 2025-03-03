@@ -141,7 +141,9 @@ class HomePage extends GetView<HomeController> {
                       const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   child: InkWell(
                     onTap: () async {
-                      await controller.fetchApi();
+                      // await controller.fetchApi();
+                      controller.rotateIcon();
+                      controller.randomData();
                     },
                     child: Container(
                       width: ASize.w(16),
@@ -150,8 +152,22 @@ class HomePage extends GetView<HomeController> {
                         color: StyleInfo.settingButtonColor,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      child:const Icon(Icons.refresh,
-                          color: StyleInfo.settingTextColor)
+                      child: Obx(() {
+                        if (controller.animation != null) {
+                          return RotationTransition(
+                            turns: controller.animation!,
+                            child: const Icon(
+                              Icons.refresh,
+                              color: StyleInfo.settingTextColor,
+                            ),
+                          );
+                        } else {
+                          return const Icon(
+                            Icons.refresh,
+                            color: StyleInfo.settingTextColor,
+                          );
+                        }
+                      }),
                     ),
                   ),
                 ),

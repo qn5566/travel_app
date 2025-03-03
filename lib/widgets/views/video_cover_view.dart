@@ -21,17 +21,21 @@ class VideoCoverView extends StatelessWidget {
         color: Colors.transparent,
         borderRadius: BorderRadius.all(Radius.circular(ASize.w(10))),
       ),
-      child: Positioned.fill(
-        child: NetworkCacheImage(
-          url: cover ?? '',
-          width: double.infinity,
-          height: double.infinity,
-          radius: radius,
-          fit: BoxFit.cover,
-          placeholderWidget: Lottie.asset('assets/cover.json'),
-          errorWidget: const Icon(Icons.error),
-          placeholder: const Icon(Icons.error),
-        ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: NetworkCacheImage(
+              url: cover ?? '',
+              width: double.infinity,
+              height: double.infinity,
+              radius: radius,
+              fit: BoxFit.cover,
+              placeholderWidget: Lottie.asset('assets/cover.json'),
+              errorWidget: const Icon(Icons.error),
+              placeholder: const Icon(Icons.error),
+            ),
+          ),
+        ],
       ),
     );
   }
