@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:travel/ui/want/want_controller.dart';
+import 'package:travel/widgets/money_text_widget_no_padding.dart';
 import 'package:travel/widgets/views/video_cover_view.dart';
 
 import '../data/mode/data_all.dart';
@@ -44,9 +45,16 @@ class GridViewAllHistory extends StatelessWidget {
                               children: [
                                 Align(
                                   alignment: Alignment.center,
-                                  child: VideoCoverView(
-                                    cover: item.picture1 ?? '',
-                                    money: item.region,
+                                  child: Stack(
+                                    children: [
+                                      VideoCoverView(
+                                        // radius: 10,
+                                        cover: item.picture1 ?? '',
+                                        money: item.region,
+                                      ),
+                                      MoneyTextWidgetNoPadding(
+                                          item.region ?? "尚未資料")
+                                    ],
                                   ),
                                 ),
                                 Align(

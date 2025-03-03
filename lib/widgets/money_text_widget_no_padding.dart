@@ -3,26 +3,26 @@ import 'package:flutter/material.dart';
 import '../config/style_info.dart';
 import '../util/ui_util.dart';
 
-class MoneytextWidget extends StatefulWidget {
+class MoneyTextWidgetNoPadding extends StatefulWidget {
   String moneyText;
 
-  MoneytextWidget(this.moneyText, {super.key});
+  MoneyTextWidgetNoPadding(this.moneyText, {super.key});
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return MoneytextWidgetState();
+    return MoneyTextWidgetNoPaddingState();
   }
 }
 
-class MoneytextWidgetState extends State<MoneytextWidget> {
+class MoneyTextWidgetNoPaddingState extends State<MoneyTextWidgetNoPadding> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return (widget.moneyText.isNotEmpty && widget.moneyText != '0')
         ? Positioned(
-            left: ASize.w(5),
-            top: ASize.w(5),
+            left: 1,
+            top: ASize.h(1),
             height: ASize.w(12),
             child: Container(
               decoration: BoxDecoration(

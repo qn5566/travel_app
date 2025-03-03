@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../util/ui_util.dart';
 import '../network_cache_image.dart';
 
 /// 「封面圖」
@@ -17,9 +16,9 @@ class VideoCoverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.transparent,
-        borderRadius: BorderRadius.all(Radius.circular(ASize.w(10))),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Stack(
         children: [
