@@ -50,9 +50,12 @@ class GridViewHome extends StatelessWidget {
                               color: Colors.transparent,
                               child: Stack(
                                 children: [
-                                  VideoCoverView(
-                                    cover: item.picture1 ?? '',
-                                    money: item.region,
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: VideoCoverView(
+                                      cover: item.picture1 ?? '',
+                                      money: item.region,
+                                    ),
                                   ),
                                   Align(
                                     alignment: Alignment.bottomCenter,
