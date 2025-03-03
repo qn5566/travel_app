@@ -54,6 +54,7 @@ class AppConstants {
 
   static const String homeUpdateShareKey = 'update';
   static const String homeHistory = 'history';
+  static const String wantGo = 'wantGo';
 }
 
 /// MARK -  一些固定的图片资源路径

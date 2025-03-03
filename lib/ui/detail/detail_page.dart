@@ -91,16 +91,43 @@ class DetailPage extends GetView<DetailController> {
                     preferredSize: const Size.fromHeight(20.0),
                     child: Container(
                       color: Colors.grey.withOpacity(0.5),
-                      child: TabBar(
-                        isScrollable: true,
-                        indicatorColor: Colors.white,
-                        labelColor: Colors.white,
-                        unselectedLabelColor: Colors.black,
-                        tabAlignment: TabAlignment.start,
-                        indicatorWeight: 1.0,
-                        tabs: controller.subTitle,
-                        controller: controller.tabInfoController,
-                        padding: EdgeInsets.zero,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: TabBar(
+                              isScrollable: true,
+                              indicatorColor: Colors.white,
+                              labelColor: Colors.white,
+                              unselectedLabelColor: Colors.black,
+                              tabAlignment: TabAlignment.start,
+                              indicatorWeight: 1.0,
+                              tabs: controller.subTitle,
+                              controller: controller.tabInfoController,
+                              padding: EdgeInsets.zero,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: ASize.w(5)),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(10.0), // 設置圓角
+                                ),
+                              ),
+                              onPressed: () {
+                                /// 加入想去名單
+                                controller.saveWantGo(context);
+                              },
+                              child: const Text(
+                                '加入想去名單',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),

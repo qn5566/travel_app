@@ -61,9 +61,9 @@ class DetailController extends GetxController
   void checkSendData(BuildContext context, String data,
       {required ValueChanged<dynamic> callback}) {
     String username = '';
-    if (sharedPreferences.getString("username") != null &&
-        sharedPreferences.getString("username") != '') {
-      username = sharedPreferences.getString("username") ?? '未命名';
+    if (sharedPreferences.getString(AppConstants.userName) != null &&
+        sharedPreferences.getString(AppConstants.userName) != '') {
+      username = sharedPreferences.getString(AppConstants.userName) ?? '未命名';
     } else {
       ToastUtil.info(context, "請先設定暱稱");
       return;
@@ -161,6 +161,33 @@ class DetailController extends GetxController
       }
     });
 
+    isLoading(false);
+  }
+
+  /// 儲存想去名單
+  void saveWantGo(BuildContext context) async {
+    isLoading(true);
+
+    if (sharedPreferences.getString(AppConstants.userName) == null &&
+        sharedPreferences.getString(AppConstants.userName) == '') {
+      ToastUtil.info(context, "請先設定暱稱");
+      return;
+    }
+
+    // 儲存資料 - 判斷這個item title有沒有資料
+    List<String> wantGoList =
+        (sharedPreferences.getStringList(AppConstants.wantGo) ?? <String>[]);
+    var match = wantGoList.firstWhere((element) => element.contains(item.name!),
+        orElse: () => '');
+    if (match == '') {
+      // 確定沒有儲存
+      wantGoList.add(item.name!);
+      sharedPreferences.setStringList(AppConstants.wantGo, wantGoList);
+    } else {
+      ToastUtil.info(context, "已經加入過了");
+    }
+
+    sharedPreferences.setStringList(AppConstants.wantGo, wantGoList);
     isLoading(false);
   }
 }

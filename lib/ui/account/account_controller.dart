@@ -93,9 +93,9 @@ class AccountController extends GetxController
   void checkSendData(BuildContext context, String data,
       {required ValueChanged<dynamic> callback}) {
     String username = '';
-    if (sharedPreferences.getString("username") != null &&
-        sharedPreferences.getString("username") != '') {
-      username = sharedPreferences.getString("username") ?? '未命名';
+    if (sharedPreferences.getString(AppConstants.userName) != null &&
+        sharedPreferences.getString(AppConstants.userName) != '') {
+      username = sharedPreferences.getString(AppConstants.userName) ?? '未命名';
     } else {
       ToastUtil.info(context, "請先設定暱稱");
       return;
