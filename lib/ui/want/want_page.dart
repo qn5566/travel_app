@@ -26,12 +26,15 @@ class WantPage extends GetView<WantController> {
             body: Stack(
               children: [
                 Positioned.fill(
-                  child: Image.asset(
-                    'images/setting/background_setting_2.webp',
-                    fit: BoxFit.fitHeight,
-                    height: double.infinity,
-                    width: double.infinity,
-                    alignment: Alignment.center,
+                  child: Opacity(
+                    opacity: 0.5, // 設置透明度，0.0為完全透明，1.0為完全不透明
+                    child: Image.asset(
+                      'images/pics/land_1.webp',
+                      fit: BoxFit.fitHeight,
+                      height: double.infinity,
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                    ),
                   ),
                 ),
                 Column(
