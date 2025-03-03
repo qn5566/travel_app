@@ -48,6 +48,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   /// 轉圈動畫
   AnimationController? animationController;
   Animation<double>? animation;
+  var animationInit = false.obs;
 
   @override
   void onInit() async {
@@ -90,6 +91,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       vsync: this,
     );
     animation = Tween<double>(begin: 0, end: 1).animate(animationController!);
+    animationInit(true);
   }
 
   @override
@@ -106,7 +108,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   /// 抓取資料判斷
   void fetchDB() async {
     isLoading(true);
-    searchData(userData.travelTitle[0]);
+    searchData(userData.travelTitle[tabTitleController.index]);
     firstLoading(false);
     isLoading(false);
   }

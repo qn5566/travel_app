@@ -153,7 +153,7 @@ class HomePage extends GetView<HomeController> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Obx(() {
-                        if (controller.animation != null) {
+                        if (controller.animationInit.value) {
                           return RotationTransition(
                             turns: controller.animation!,
                             child: const Icon(
