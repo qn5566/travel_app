@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
@@ -140,6 +141,7 @@ class MapController extends GetxController {
       return CustomMarker(
         markerId: MarkerId(e.name!),
         position: LatLng(e.py ?? 0.0, e.px ?? 0.0),
+        anchor: const Offset(0.5, 0.5),
         infoWindow: InfoWindow(title: e.name, onTap: () => onMarkerTapped(e)),
         dataAll: e,
         onTap: () => onMarkerTapped(e), // 添加這一行
@@ -248,6 +250,7 @@ class MapController extends GetxController {
       return CustomMarker(
         markerId: MarkerId(e.name!),
         position: LatLng(e.py ?? 0.0, e.px ?? 0.0),
+        anchor: const Offset(0.5, 0.5),
         infoWindow: InfoWindow(title: e.name, onTap: () => onMarkerTapped(e)),
         dataAll: e,
         onTap: () => onMarkerTapped(e), // 添加這一行

@@ -46,7 +46,7 @@ dependencies:
   toast: ^0.3.0
   firebase_messaging: ^14.2.2
   webview_flutter: ^4.0.2
-  google_maps_flutter: ^2.2.4
+  google_maps_flutter: ^2.10.1
   http: ^0.13.4
   location: ^4.4.0
   geolocator: ^7.7.0
@@ -61,6 +61,7 @@ dependencies:
 
 dependency_overrides:
   fading_edge_scrollview: ^4.1.1
+  google_maps_flutter_ios: 2.13.1
 
 dev_dependencies:
   flutter_test:
