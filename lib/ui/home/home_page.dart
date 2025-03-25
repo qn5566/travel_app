@@ -78,7 +78,7 @@ class HomePage extends GetView<HomeController> {
                             child: Marquee(
                               text: controller.dataListCommentModel
                                   .map((comment) =>
-                                      "${comment.titleName!}-${comment.comment ?? ''}@${comment.username ?? ''}")
+                                      " ${comment.titleName!}-${comment.comment ?? ''}@${comment.username ?? ''} ")
                                   .join('   '),
                               style: const TextStyle(
                                 color: Colors.white,

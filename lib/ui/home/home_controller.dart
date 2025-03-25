@@ -141,6 +141,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     });
   }
 
+  /// 獲取歷史排行榜
   void fetchHistoryRank() async {
     /// 獲取最新Comment data
     await ApiHelper().fetchHistoryRank().then((value) {
