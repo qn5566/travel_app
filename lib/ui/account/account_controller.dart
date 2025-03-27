@@ -56,17 +56,6 @@ class AccountController extends GetxController
 
     userData = Get.find();
 
-    // if (sharedPreferences.getStringList(AppConstants.homeHistory) != null) {
-    //   // 儲存資料
-    //   String temp = '';
-    //   historyList =
-    //       (sharedPreferences.getStringList(AppConstants.homeHistory) ??
-    //           <String>[]);
-    //   if (historyList.isNotEmpty) {
-    //     searchData(historyList);
-    //     return;
-    //   }
-    // }
     isLoading(false);
 
     animationController = AnimationController(
@@ -198,23 +187,6 @@ class AccountController extends GetxController
   void changeUsername() {
     sharedPreferences.setString(AppConstants.userName, '');
   }
-
-  /// 抓取資料判斷
-  // void searchData(List<String> whereArgs) async {
-  //   // DB相關
-  //   var dataData = await FxDataBaseManager.dataAllDao();
-  //
-  //   List<DataAll> poetryData = [];
-  //   for (String title in whereArgs) {
-  //     var data = await dataData.findDataAllByTitle(title);
-  //     poetryData.addAll(data);
-  //   }
-  //
-  //   dataList.assignAll(List.generate(poetryData.length, (index) {
-  //     return poetryData[index];
-  //   }));
-  //   isLoading(false);
-  // }
 
   /// 刪除資料
   void deleteData() async {
