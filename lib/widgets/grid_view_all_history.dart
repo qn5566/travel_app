@@ -7,6 +7,7 @@ import 'package:travel/widgets/views/video_cover_view.dart';
 
 import '../data/mode/data_all.dart';
 import '../util/ui_util.dart';
+import 'comment_error.dart';
 
 class GridViewAllHistory extends StatelessWidget {
   final WantController controller = Get.find<WantController>();
@@ -87,21 +88,12 @@ class GridViewAllHistory extends StatelessWidget {
                     ),
                   ),
                 )
-              : Stack(
+              : const Stack(
                   children: [
                     Positioned.fill(
                       child: Padding(
-                        padding: const EdgeInsets.all(50.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'images/icon/no_data_white.png',
-                              fit: BoxFit.none,
-                            ),
-                            const Text('無資料'),
-                          ],
-                        ),
+                        padding: EdgeInsets.all(50.0),
+                        child: CommentError(),
                       ),
                     ),
                   ],

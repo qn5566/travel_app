@@ -154,6 +154,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     });
   }
 
+  /// 下拉刷新
   void updateData() {
     fetchApi();
   }
@@ -180,6 +181,9 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   /// 抓取資料判斷
   void searchData(String whereArgs) async {
     dataList.assignAll(await dataController.searchData(whereArgs));
+
+    /// 亂數一下
+    randomData();
   }
 
   /// 取得版本

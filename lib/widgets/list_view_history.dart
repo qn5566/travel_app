@@ -7,6 +7,7 @@ import '../config/global_config.dart';
 import '../data/mode/data_all.dart';
 import '../ui/account/account_controller.dart';
 import '../util/ui_util.dart';
+import 'comment_error.dart';
 import 'money_text_widget.dart';
 
 class ListViewHistory extends StatelessWidget {
@@ -105,21 +106,12 @@ class ListViewHistory extends StatelessWidget {
                     },
                   ),
                 )
-              : Stack(
+              : const Stack(
                   children: [
                     Positioned.fill(
                       child: Padding(
-                        padding: const EdgeInsets.all(50.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'images/icon/no_data_white.png',
-                              fit: BoxFit.none,
-                            ),
-                            const Text('無資料'),
-                          ],
-                        ),
+                        padding: EdgeInsets.all(50.0),
+                        child: CommentError(),
                       ),
                     ),
                   ],

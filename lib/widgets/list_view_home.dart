@@ -7,6 +7,7 @@ import '../config/global_config.dart';
 import '../data/mode/data_all.dart';
 import '../ui/home/home_controller.dart';
 import '../util/ui_util.dart';
+import 'comment_error.dart';
 import 'money_text_widget.dart';
 
 class ListViewHome extends StatelessWidget {
@@ -113,24 +114,12 @@ class ListViewHome extends StatelessWidget {
                         },
                       ),
                     )
-                  : Stack(
+                  : const Stack(
                       children: [
                         Positioned.fill(
                           child: Padding(
-                            padding: const EdgeInsets.all(50.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'images/icon/no_data.png',
-                                  fit: BoxFit.none,
-                                ),
-                                const Text(
-                                  '無資料',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
+                            padding: EdgeInsets.all(50.0),
+                            child: CommentError(),
                           ),
                         ),
                       ],

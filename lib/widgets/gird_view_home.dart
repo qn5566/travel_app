@@ -6,6 +6,7 @@ import 'package:travel/widgets/views/video_cover_view.dart';
 import '../data/mode/data_all.dart';
 import '../ui/home/home_controller.dart';
 import '../util/ui_util.dart';
+import 'comment_error.dart';
 
 class GridViewHome extends StatelessWidget {
   GridViewHome({Key? key, required this.site, VoidCallback? callback})
@@ -36,7 +37,7 @@ class GridViewHome extends StatelessWidget {
                       context: context,
                       child: RefreshIndicator(
                         onRefresh: () async {
-                          controller.fetchApi();
+                          controller.updateData();
                         },
                         child: GridView.builder(
                           gridDelegate:
@@ -104,10 +105,7 @@ class GridViewHome extends StatelessWidget {
                                   'images/icon/no_data.png',
                                   fit: BoxFit.none,
                                 ),
-                                const Text(
-                                  '無資料',
-                                  style: TextStyle(color: Colors.white),
-                                ),
+                                const CommentError(),
                               ],
                             ),
                           ),

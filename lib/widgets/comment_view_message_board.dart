@@ -10,6 +10,7 @@ import 'dashed_divider.dart';
 class CommentViewMessageBoard extends StatelessWidget {
   CommentViewMessageBoard({Key? key}) : super(key: key);
   final AccountController controller = Get.find<AccountController>();
+  final ScrollController _scrollController = ScrollController();
   String sendData = '';
 
   static final TextStyle _textName = TextStyle(
@@ -29,6 +30,12 @@ class CommentViewMessageBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
+
     return Stack(
       children: [
         SingleChildScrollView(
@@ -49,6 +56,7 @@ class CommentViewMessageBoard extends StatelessWidget {
                   Obx(
                     () => Expanded(
                       child: ListView.builder(
+                        controller: _scrollController,
                         physics: const ClampingScrollPhysics(),
                         padding: const EdgeInsets.all(0),
                         itemCount: controller.dataListComment.length,
