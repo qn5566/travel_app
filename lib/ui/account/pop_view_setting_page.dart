@@ -154,8 +154,6 @@ class PopViewSettingPage extends StatelessWidget {
             const Text('MeetStudio 工作社', style: TextStyle(color: Colors.black)),
             Text('版本:${controller.getAppVersion()}',
                 style: const TextStyle(color: Colors.black)),
-            Text('BuildNumber:${controller.getAppBuildNumber()}',
-                style: const TextStyle(color: Colors.black)),
             SizedBox(height: ASize.h(2)),
             const Text(
               '資料來源',
