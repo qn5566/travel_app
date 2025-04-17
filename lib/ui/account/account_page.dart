@@ -33,9 +33,11 @@ class AccountPage extends GetView<AccountController> {
       resizeToAvoidBottomInset: false,
       body: SizedBox.expand(
         child: Stack(children: [
-          IgnorePointer(
+          Positioned.fill(
             child: Image.asset(
               'images/setting/background_setting_2.webp',
+              height: double.infinity,
+              width: double.infinity,
               fit: BoxFit.cover,
             ),
           ),
@@ -79,7 +81,7 @@ class AccountPage extends GetView<AccountController> {
                                           controller.textEditingController,
                                       keyboardType: TextInputType.text,
                                       decoration: BoxDecoration(
-                                        color: CupertinoColors.systemGrey6,
+                                        color: const Color.fromARGB(255, 242, 242, 247),
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                         boxShadow: [
@@ -195,6 +197,7 @@ class AccountPage extends GetView<AccountController> {
               padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 16),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -209,7 +212,8 @@ class AccountPage extends GetView<AccountController> {
                     },
                   );
                 },
-                child: const Text('更多資訊'),
+                child: const Text('更多資訊',
+                    style: TextStyle(color: Colors.purple)),
               ),
             ),
           ),
