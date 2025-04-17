@@ -77,26 +77,26 @@ class AccountPage extends GetView<AccountController> {
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 8, right: 8),
-                                    child: Container(
+                                    child: SizedBox(
                                       width: ASize.w(80),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        // 設置圓角
-                                        border: Border.all(
-                                            color: Colors.grey,
-                                            width: 1.0), // 添加邊框
-                                      ),
                                       child: CupertinoTextField(
                                         textAlign: TextAlign.center,
                                         controller:
                                             controller.textEditingController,
                                         keyboardType: TextInputType.text,
                                         decoration: BoxDecoration(
-                                          color: Colors.white,
+                                          color: CupertinoColors.systemGrey6,
+                                          // 使用系統預設的背景色
                                           borderRadius:
                                               BorderRadius.circular(10.0),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: CupertinoColors.systemGrey4
+                                                  .withOpacity(0.5), // 系統陰影
+                                              blurRadius: 5.0,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
                                         ),
                                         maxLines: 1,
                                         maxLength: 10,
@@ -127,7 +127,7 @@ class AccountPage extends GetView<AccountController> {
                                         style: TextStyle(
                                             color: (key.isNotEmpty)
                                                 ? StyleInfo.settingTextColor
-                                                : StyleInfo.gray_7C7C8D,
+                                                : StyleInfo.black_1D1D28,
                                             fontWeight: FontWeight.w700,
                                             fontFamily: "PingFang-SC",
                                             fontStyle: FontStyle.normal,
