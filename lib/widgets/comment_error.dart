@@ -10,7 +10,7 @@ class CommentError extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Image.asset(
-          'images/icon/no_data_white.webp',
+          'images/icon/no_data_icon.webp',
           fit: BoxFit.fill,
           width: 64,
           height: 64,

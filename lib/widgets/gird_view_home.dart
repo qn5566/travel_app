@@ -93,25 +93,7 @@ class GridViewHome extends StatelessWidget {
                         ),
                       ),
                     )
-                  : Stack(
-                      children: [
-                        Positioned.fill(
-                          child: Padding(
-                            padding: const EdgeInsets.all(50.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                  'images/icon/no_data.png',
-                                  fit: BoxFit.none,
-                                ),
-                                const CommentError(),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  : const CommentError(),
     );
   }
 }
