@@ -38,10 +38,43 @@ class MapPage extends GetView<MapController> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Center(child: Lottie.asset('assets/car.json')),
-                        const Text(
-                          '第一次下載會比較久請稍等..',
-                          style: TextStyle(color: Colors.white),
+                        Text(
+                          controller.downloadStatus.value,
+                          style: const TextStyle(color: Colors.white),
                         ),
+                        Text(
+                          "${(controller.progress.value * 100).toStringAsFixed(2)}%",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        LinearProgressIndicator(
+                          value: controller.progress.value,
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: StyleInfo.redColor,
+                            // 文字顏色為白色
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            // 設定按鈕的 padding
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8), // 設定按鈕圓角
+                            ),
+                          ),
+                          onPressed: () {
+                            if (controller.showRefresh.value) {
+                              controller.showRefresh.value = false;
+                              controller.fetchApi();
+                            } else {}
+                          },
+                          child: const Text('重新下載'),
+                        )
                       ],
                     )
                   ])

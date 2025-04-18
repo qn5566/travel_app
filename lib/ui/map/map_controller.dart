@@ -49,6 +49,19 @@ class MapController extends GetxController {
   var isLoading = true.obs;
 
   var firstLoading = false.obs;
+
+  /// 對話筐狀態
+  var alertDialogShow = true.obs;
+
+  /// 對話筐狀態
+  var showRefresh = false.obs;
+
+  /// 下載狀態
+  var downloadStatus = '第一次下載會比較久請稍等..'.obs;
+
+  /// 下載進度
+  var progress = 0.0.obs;
+
   var dataList = <DataAll>[].obs;
 
   // 廣告宣告
@@ -97,7 +110,27 @@ class MapController extends GetxController {
     /// 取得自己的位置
     await getMyLocation();
 
-    // DB資料判斷
+    toDownload();
+  }
+
+  @override
+  void dispose() {
+    mapController = Completer();
+    super.dispose();
+  }
+
+  /// 下載進度條
+  Future<void> startDownload() async {
+    for (var i = 0; i <= 100; i++) {
+      await Future.delayed(const Duration(milliseconds: 300));
+      progress.value = i / 100;
+    }
+    downloadStatus.value = '解壓縮中';
+  }
+
+  /// 執行資料下載
+  void toDownload() async {
+    /// DB資料判斷
     String updateTime =
         sharedPreferences.getString(AppConstants.homeUpdateShareKey) ?? '';
     if (updateTime != '') {
@@ -106,7 +139,7 @@ class MapController extends GetxController {
       // 不需要太常更新1個禮拜一次即可
       DateTime lastWeek = now.subtract(const Duration(days: 7));
 
-      if (dateTime.day >= lastWeek.day) {
+      if (dateTime.isAfter(lastWeek)) {
         fetchDB();
       } else {
         fetchApi();
@@ -133,27 +166,36 @@ class MapController extends GetxController {
     py0 = locationData.longitude ?? 121.56;
     px0 = locationData.latitude ?? 25.03;
 
-    final newMarkers = dataList.where((e) {
-      final distance =
-          Geolocator.distanceBetween(e.py ?? 0.0, e.px ?? 0.0, px0!, py0!);
-      return distance <= distanceValue;
-    }).map((e) {
-      return CustomMarker(
-        markerId: MarkerId(e.name!),
-        position: LatLng(e.py ?? 0.0, e.px ?? 0.0),
-        anchor: const Offset(0.5, 0.5),
-        infoWindow: InfoWindow(title: e.name, onTap: () => onMarkerTapped(e)),
-        dataAll: e,
-        onTap: () => onMarkerTapped(e), // 添加這一行
-      );
-    });
-    markers.addAll(newMarkers);
-    firstLoading(false);
-    isLoading(false);
+    try {
+      final newMarkers = dataList.where((e) {
+        final distance =
+            Geolocator.distanceBetween(e.py ?? 0.0, e.px ?? 0.0, px0!, py0!);
+        return distance <= distanceValue;
+      }).map((e) {
+        return CustomMarker(
+          markerId: MarkerId(e.name!),
+          position: LatLng(e.py ?? 0.0, e.px ?? 0.0),
+          anchor: const Offset(0.5, 0.5),
+          infoWindow: InfoWindow(title: e.name, onTap: () => onMarkerTapped(e)),
+          dataAll: e,
+          onTap: () => onMarkerTapped(e), // 添加這一行
+        );
+      });
+      markers.addAll(newMarkers);
+      firstLoading(false);
+      isLoading(false);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching data: $e');
+      }
+
+      isLoading(false);
+    }
   }
 
   /// 抓取遠端資料
   void fetchApi() async {
+    startDownload();
     await dataController.fetchRemoteData().then((data) {
       fetchDB();
     });
