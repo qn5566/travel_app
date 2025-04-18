@@ -116,6 +116,9 @@ class StyleInfo {
 
   static const Color searchTextTagTwo = Color(0xFF8878B4);
 
+  /// const Color(0xFFE60012)
+  static const Color redColor = Color(0xFFE60012);
+  
   /// 首页，图片标准圆角
   static final double imageRadius = ASize.w(12);
 
