@@ -207,6 +207,7 @@ class AccountPage extends GetView<AccountController> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
+                        backgroundColor: Colors.white, // 設定底色為白色
                         content: PopViewSettingPage(controller: controller),
                       );
                     },
