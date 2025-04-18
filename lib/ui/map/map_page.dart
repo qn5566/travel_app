@@ -194,7 +194,7 @@ class MapPage extends GetView<MapController> {
                     Container(
                       color: const Color(0xFF0E3311).withOpacity(0.5),
                     ),
-                    Center(child: Lottie.asset('assets/loading.json')),
+                    Center(child: Lottie.asset('assets/map_loading.json')),
                   ])
                 : const SizedBox(
                     height: 0,
