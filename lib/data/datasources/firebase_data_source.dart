@@ -50,18 +50,30 @@ class FirebaseDataSource {
 
   /// Firebase 初始設定
   Future<void> initializeDefault() async {
-    FirebaseApp app;
-    if (Platform.isAndroid) {
-      app = await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      ).whenComplete(() => logPrint('Firebase.initializeApp() completed'));
-    } else {
-      app = await Firebase.initializeApp()
-          .whenComplete(() => logPrint('Firebase.initializeApp() completed'));
-    }
+    try {
+      // 判斷是否已經初始化 "[DEFAULT]" App
+      final bool alreadyInitialized =
+      Firebase.apps.any((app) => app.name == '[DEFAULT]');
 
-    if (kDebugMode) {
-      print('Initialized default app $app');
+      if (!alreadyInitialized) {
+        if (Platform.isAndroid) {
+          await Firebase.initializeApp(
+            options: DefaultFirebaseOptions.currentPlatform,
+          );
+        } else {
+          await Firebase.initializeApp();
+        }
+        logPrint('Firebase.initializeApp() completed');
+      } else {
+        logPrint('Firebase "[DEFAULT]" app 已存在，略過初始化');
+      }
+
+      if (kDebugMode) {
+        print('Firebase Apps: ${Firebase.apps}');
+      }
+    } catch (e) {
+      logPrint('Firebase 初始化错误: $e');
+      rethrow;
     }
   }
 

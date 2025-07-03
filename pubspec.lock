@@ -447,26 +447,26 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_local_notifications
-      sha256: "674173fd3c9eda9d4c8528da2ce0ea69f161577495a9cc835a2a4ecd7eadeb35"
+      sha256: ef41ae901e7529e52934feba19ed82827b11baa67336829564aeab3129460610
       url: "https://pub.dev"
     source: hosted
-    version: "17.2.4"
+    version: "18.0.1"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
       name: flutter_local_notifications_linux
-      sha256: c49bd06165cad9beeb79090b18cd1eb0296f4bf4b23b84426e37dd7c027fc3af
+      sha256: "8f685642876742c941b29c32030f6f4f6dacd0e4eaecb3efbb187d6a3812ca01"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "5.0.0"
   flutter_local_notifications_platform_interface:
     dependency: transitive
     description:
       name: flutter_local_notifications_platform_interface
-      sha256: "85f8d07fe708c1bdcf45037f2c0109753b26ae077e9d9e899d55971711a4ea66"
+      sha256: "6c5b83c86bf819cdb177a9247a3722067dd8cc6313827ce7c77a4b238a26fd52"
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.0"
+    version: "8.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -609,10 +609,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_mobile_ads
-      sha256: "010b7a7a81b5c8f760eb2e5add8eaa7e429b4982dc8c8e465b709611f52887be"
+      sha256: "0d4a3744b5e8ed1b8be6a1b452d309f811688855a497c6113fc4400f922db603"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.0"
+    version: "5.3.1"
   graphs:
     dependency: transitive
     description:
@@ -729,26 +729,26 @@ packages:
     dependency: "direct main"
     description:
       name: location
-      sha256: "9051959f6f2ccadd887b28b66e9cbbcc25b6838e37cf9e894c421ccc0ebf80b5"
+      sha256: ee57923720163324416ce0306b701db6d845d2c1a3bf44d25b607cbddbaa3973
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.0"
+    version: "7.0.1"
   location_platform_interface:
     dependency: transitive
     description:
       name: location_platform_interface
-      sha256: "62eeaf1658e92e4459b727f55a3c328eccbac8ba043fa6d262ac5286ad48384c"
+      sha256: "1e535ccc8b4a9612de4e4319871136b45d2b5d1fb0c2a8bf99687242bf7ca5f7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "5.0.0"
   location_web:
     dependency: transitive
     description:
       name: location_web
-      sha256: "6c08c408a040534c0269c4ff9fe17eebb5a36dea16512fbaf116b9c8bc21545b"
+      sha256: e6435cfd175b0f6e94d6fdc43c104d13cec7e27b21a8cee00bd9516a3d6a4c81
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.1"
+    version: "5.0.4"
   logging:
     dependency: transitive
     description:
@@ -1330,14 +1330,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
-  visibility_detector:
-    dependency: transitive
-    description:
-      name: visibility_detector
-      sha256: "15c54a459ec2c17b4705450483f3d5a2858e733aee893dcee9d75fd04814940d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.3"
   vm_service:
     dependency: transitive
     description:
@@ -1390,10 +1382,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_android
-      sha256: "3d535126f7244871542b2f0b0fcf94629c9a14883250461f9abe1a6644c1c379"
+      sha256: "512c26ccc5b8a571fd5d13ec994b7509f142ff6faf85835e243dde3538fdc713"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.0"
+    version: "4.3.2"
   webview_flutter_platform_interface:
     dependency: transitive
     description:
@@ -1406,10 +1398,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_wkwebview
-      sha256: b7e92f129482460951d96ef9a46b49db34bd2e1621685de26e9eaafd9674e7eb
+      sha256: bf0745adeaca48a3105473440cffade47720fe2d56514de4e86f0d363439c4a7
       url: "https://pub.dev"
     source: hosted
-    version: "3.16.3"
+    version: "3.18.6"
   win32:
     dependency: transitive
     description:

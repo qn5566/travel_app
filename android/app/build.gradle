@@ -31,6 +31,11 @@ if (flutterTargetSdkVersion == null) {
     throw GradleException("Flutter targetSdkVersion not found. Define location with flutter.targetSdkVersion in the local.properties file.")
 }
 
+def flutterNdkSdkVersion = localProperties.getProperty('flutter.ndkSdk')
+if (flutterTargetSdkVersion == null) {
+    throw GradleException("Flutter ndkSdk not found. Define location with flutter.ndkSdk in the local.properties file.")
+}
+
 def keystorePropertiesFile = rootProject.file("key.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
@@ -44,11 +49,14 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     compileSdk (flutterCompileSdkVersion as int)
-    ndkVersion flutter.ndkVersion
+    ndkVersion flutterNdkSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+
+        // ✅ 加這一行，啟用 desugaring
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -70,6 +78,7 @@ android {
         ndk {
             debugSymbolLevel 'SYMBOL_TABLE'
         }
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -85,6 +94,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    namespace 'com.meetstudio.travel'
 }
 
 flutter {
@@ -93,4 +103,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 }
