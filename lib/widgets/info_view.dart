@@ -26,6 +26,21 @@ class InfoView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  (controller.item!.website != '' &&
+                          controller.item!.website != null)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              child: buildTextBottomLine('官方網站'),
+                              onTap: () {
+                                controller
+                                    .call(Uri.parse(controller.item!.website!));
+                              },
+                            ),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
                   InkWell(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,

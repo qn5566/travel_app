@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -72,3 +74,13 @@ String firstLoading = 'images/icon/loading_data.gif';
 const String emptyData = '尚未資料';
 
 const String baseMainUrl = 'https://himydream.me/app/main.php';
+
+String getRandomErrorImagePath() {
+  final List<String> paths = List.generate(
+    6,
+    (index) =>
+        'images/placeholder/error_${(index + 1).toString().padLeft(2, '0')}.webp',
+  );
+  final random = Random();
+  return paths[random.nextInt(paths.length)];
+}

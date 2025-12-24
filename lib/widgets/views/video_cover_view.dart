@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../config/global_config.dart';
 import '../network_cache_image.dart';
 
 /// 「封面圖」
@@ -31,7 +32,13 @@ class VideoCoverView extends StatelessWidget {
               fit: BoxFit.cover,
               placeholderWidget: Lottie.asset('assets/cover.json'),
               errorWidget: const Icon(Icons.error),
-              placeholder: const Icon(Icons.error),
+              placeholder: Image.asset(
+                getRandomErrorImagePath(),
+                fit: BoxFit.cover,
+                height: double.infinity,
+                width: double.infinity,
+                alignment: Alignment.center,
+              ),
             ),
           ),
         ],
