@@ -93,16 +93,16 @@ PODS:
     - Flutter
   - Google-Maps-iOS-Utils (5.0.0):
     - GoogleMaps (~> 8.0)
-  - Google-Mobile-Ads-SDK (9.14.0):
-    - GoogleAppMeasurement (< 11.0, >= 7.0)
+  - Google-Mobile-Ads-SDK (11.13.0):
     - GoogleUserMessagingPlatform (>= 1.1)
   - google_maps_flutter_ios (0.0.1):
     - Flutter
     - Google-Maps-iOS-Utils (< 7.0, >= 5.0)
     - GoogleMaps (< 10.0, >= 8.4)
-  - google_mobile_ads (1.0.0):
+  - google_mobile_ads (5.3.1):
     - Flutter
-    - Google-Mobile-Ads-SDK (~> 9.13)
+    - Google-Mobile-Ads-SDK (~> 11.13.0)
+    - webview_flutter_wkwebview
   - GoogleAppMeasurement (10.25.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.25.0)
     - GoogleUtilities/AppDelegateSwizzler (~> 7.11)
@@ -132,7 +132,7 @@ PODS:
   - GoogleMaps/Base (8.4.0)
   - GoogleMaps/Maps (8.4.0):
     - GoogleMaps/Base
-  - GoogleUserMessagingPlatform (2.7.0)
+  - GoogleUserMessagingPlatform (3.1.0)
   - GoogleUtilities/AppDelegateSwizzler (7.13.3):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -279,18 +279,18 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfigInterop: 6efda51fb5e2f15b16585197e26eaa09574e8a4d
   FirebaseSessions: dbd14adac65ce996228652c1fc3a3f576bdf3ecc
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_local_notifications: ad39620c743ea4c15127860f4b5641649a988100
+  flutter_local_notifications: 395056b3175ba4f08480a7c5de30cd36d69827e4
   geolocator_apple: 8846e3175d6357ec3d503cca7a490e724097e878
   Google-Maps-iOS-Utils: 66d6de12be1ce6d3742a54661e7a79cb317a9321
-  Google-Mobile-Ads-SDK: 4fe6304b771f8467d29978cb790ec1e56e646946
+  Google-Mobile-Ads-SDK: 14f57f2dc33532a24db288897e26494640810407
   google_maps_flutter_ios: 0291eb2aa252298a769b04d075e4a9d747ff7264
-  google_mobile_ads: 6dad54f43f4923e858b53af33c390db1a91880bd
+  google_mobile_ads: 16ad301354fa6a7ea55770c6254bd4339bf8558b
   GoogleAppMeasurement: 9abf64b682732fed36da827aa2a68f0221fd2356
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
   GoogleMaps: 8939898920281c649150e0af74aa291c60f2e77d
-  GoogleUserMessagingPlatform: a8b56893477f67212fbc8411c139e61d463349f5
+  GoogleUserMessagingPlatform: befe603da6501006420c206222acd449bba45a9c
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
-  location: 270786085f436c3740dcfa807d11b8b5a70f4425
+  location: 155caecf9da4f280ab5fe4a55f94ceccfab838f8
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
@@ -299,8 +299,8 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
-  webview_flutter_wkwebview: 44d4dee7d7056d5ad185d25b38404436d56c547c
+  webview_flutter_wkwebview: 1821ceac936eba6f7984d89a9f3bcb4dea99ebb2
 
-PODFILE CHECKSUM: 775997f741c536251164e3eacf6e34abf2eb7a17
+PODFILE CHECKSUM: ab2d0a6ca52efb3ffa22df29abe453b0acda365a
 
 COCOAPODS: 1.16.2
