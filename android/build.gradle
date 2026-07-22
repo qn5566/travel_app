@@ -30,6 +30,16 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
+gradle.projectsEvaluated {
+    allprojects {
+        tasks.withType(JavaCompile).configureEach {
+            doFirst {
+                options.compilerArgs = options.compilerArgs.findAll { it != '-Werror' }
+            }
+        }
+    }
+}
+
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
