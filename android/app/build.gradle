@@ -40,13 +40,18 @@ if (flutterNdkSdkVersion == null) {
     throw GradleException("Flutter ndkSdk not found. Define location with flutter.ndkSdk in the local.properties file.")
 }
 
+def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
+if (flutterMinSdkVersion == null) {
+    flutterMinSdkVersion = '1.0'
+}
+
 def keystorePropertiesFile = rootProject.file("key.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 
 android {
-    compileSdk (flutterCompileSdkVersion as int)
+    compileSdk flutterCompileSdkVersion.toInteger()
     ndkVersion flutterNdkSdkVersion
 
     compileOptions {
@@ -69,7 +74,7 @@ android {
         applicationId "com.meetstudio.travel"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion localProperties.getProperty('flutter.minSdkVersion')
+        minSdkVersion flutterMinSdkVersion
         targetSdkVersion flutterTargetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
