@@ -1,7 +1,14 @@
 import 'package:get/get.dart';
 
+import 'global_config.dart';
+
 class RxConfig extends GetxController {
   RxConfig() {
+    final savedVersion =
+        sharedPreferences.getInt(AppConstants.remoteHomeDataVersionKey);
+    if (savedVersion != null && savedVersion > 0) {
+      dataVersion.value = savedVersion;
+    }
     initializeDefaults();
   }
 
@@ -47,6 +54,10 @@ class RxConfig extends GetxController {
 
   // 資料API
   RxList<String> dataAPI = <String>[].obs;
+
+  /// Required local SQL/data snapshot version from info.json. This is loaded
+  /// separately for iOS and Android by SplashController.
+  final RxInt dataVersion = AppConstants.homeDataVersion.obs;
 
   // 設定頁面的訊息
   RxString option = "".obs;

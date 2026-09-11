@@ -12,6 +12,7 @@ import 'package:travel/config/AdHelper.dart';
 import 'package:travel/util/ad_manager_util.dart';
 
 import '../../config/global_config.dart';
+import '../../config/rx_config.dart';
 import '../../data/dao/dataAllDao.dart';
 import '../../data/mode/data_all.dart';
 import '../../data/repo/data_repo.dart';
@@ -76,6 +77,8 @@ class MapController extends GetxController {
 
   /// DB設定
   final DataController dataController = Get.find();
+  final RxConfig userData = Get.find();
+  Worker? _dataVersionWorker;
 
   /// 選單設定
   var selectedItem = '全部'.obs;
@@ -105,6 +108,13 @@ class MapController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _dataVersionWorker = ever<int>(userData.dataVersion, (_) {
+      final storedVersion =
+          sharedPreferences.getInt(AppConstants.homeDataVersionKey) ?? 0;
+      if (userData.dataVersion.value > storedVersion && !firstLoading.value) {
+        fetchApi();
+      }
+    });
     adMobBanner();
     toDownload();
     _initializeLocation();
@@ -112,6 +122,7 @@ class MapController extends GetxController {
 
   @override
   void dispose() {
+    _dataVersionWorker?.dispose();
     mapController = Completer();
     super.dispose();
   }
@@ -126,9 +137,20 @@ class MapController extends GetxController {
     /// DB資料判斷
     final storedDataVersion =
         sharedPreferences.getInt(AppConstants.homeDataVersionKey) ?? 0;
-    if (storedDataVersion < AppConstants.homeDataVersion) {
+    if (storedDataVersion < userData.dataVersion.value) {
       // The v2 ZIP parser is not compatible with rows created by the old
       // endpoint. Always rebuild the local snapshot once after an upgrade.
+      firstLoading(true);
+      await fetchApi();
+      return;
+    }
+
+    // A database migration can legitimately leave the table empty even when
+    // the old update timestamp is still present. Never treat an empty table
+    // as a valid cached snapshot.
+    final dataDao = await FxDataBaseManager.dataAllDao();
+    final recordCount = await dataDao.checkTableIsEmpty() ?? 0;
+    if (recordCount == 0) {
       firstLoading(true);
       await fetchApi();
       return;

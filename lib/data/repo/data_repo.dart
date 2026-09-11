@@ -52,7 +52,7 @@ class DataController {
         );
         await sharedPreferences.setInt(
           AppConstants.homeDataVersionKey,
-          AppConstants.homeDataVersion,
+          _requiredDataVersion(),
         );
       } else {
         throw const FormatException('景點資料為空，未更新本機資料');
@@ -66,6 +66,14 @@ class DataController {
       rethrow;
     }
     return fetchData();
+  }
+
+  int _requiredDataVersion() {
+    final remoteVersion =
+        sharedPreferences.getInt(AppConstants.remoteHomeDataVersionKey) ?? 0;
+    return remoteVersion > AppConstants.homeDataVersion
+        ? remoteVersion
+        : AppConstants.homeDataVersion;
   }
 
   /// 抓取資料判斷

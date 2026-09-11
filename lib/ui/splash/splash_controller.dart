@@ -43,6 +43,21 @@ class SplashController extends GetxController
         userData.dataAPI.assignAll(normalizedDataApi);
       }
 
+      // The data source can require a different SQL refresh version per
+      // platform. Keep the server value locally so controllers can compare it
+      // even when the next launch is offline.
+      final rawSqlVersion = Platform.isIOS
+          ? (value['ios_sql_version'] ?? value['ios_data_version'])
+          : (value['android_sql_version'] ?? value['android_data_version']);
+      final sqlVersion = rawSqlVersion is int
+          ? rawSqlVersion
+          : int.tryParse(rawSqlVersion?.toString() ?? '');
+      if (sqlVersion != null && sqlVersion > 0) {
+        userData.dataVersion.value = sqlVersion;
+        sharedPreferences.setInt(
+            AppConstants.remoteHomeDataVersionKey, sqlVersion);
+      }
+
       // 帶入個別title的資料
       final titles = (value['title_travel'] as List?)?.cast<String>() ?? [];
       if (titles.isNotEmpty) userData.travelTitle.assignAll(titles);

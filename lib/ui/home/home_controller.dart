@@ -40,6 +40,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   List<DataAll> backupDataList = [];
 
   late RxConfig userData;
+  Worker? _dataVersionWorker;
 
   // 廣告宣告
   BannerAd? bannerAd;
@@ -58,6 +59,15 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     }
 
     userData = Get.find();
+    _dataVersionWorker = ever<int>(userData.dataVersion, (_) {
+      final storedVersion =
+          sharedPreferences.getInt(AppConstants.homeDataVersionKey) ?? 0;
+      if (userData.dataVersion.value > storedVersion &&
+          !firstLoading.value) {
+        firstLoading(true);
+        fetchApi();
+      }
+    });
     tabTitleController =
         TabController(length: userData.travelTitle.length, vsync: this);
     tabTitleController.addListener(() {
@@ -80,7 +90,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
     final storedDataVersion =
         sharedPreferences.getInt(AppConstants.homeDataVersionKey) ?? 0;
-    final needsDataRefresh = storedDataVersion < AppConstants.homeDataVersion;
+    final needsDataRefresh = storedDataVersion < userData.dataVersion.value;
     if (!needsDataRefresh && (await dataData.checkTableIsEmpty() ?? 0) > 0) {
       fetchDB();
     } else {
@@ -102,6 +112,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   @override
   void onClose() {
+    _dataVersionWorker?.dispose();
     animationController?.dispose();
     tabTitleController.dispose();
     textEditingController.dispose();
