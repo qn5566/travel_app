@@ -49,7 +49,8 @@ class WantPage extends GetView<WantController> {
                               width: controller.bannerAd!.size.width.toDouble(),
                               height:
                                   controller.bannerAd!.size.height.toDouble(),
-                              child: AdManagerUtil().bannerAdWidget(),
+                              child: AdManagerUtil()
+                                  .bannerAdWidget(controller.bannerAd!),
                             ),
                           )
                         : SizedBox(

@@ -43,7 +43,7 @@ class WantController extends GetxController {
   /// 關閉
   @override
   void dispose() {
-    bannerAd?.dispose();
+    AdManagerUtil.releaseAd(AdHelper.wantAdUnitId);
     super.dispose();
   }
 
@@ -69,8 +69,8 @@ class WantController extends GetxController {
   /// 設定廣告
   void adMobBanner() {
     AdManagerUtil.initializeAd(AdHelper.wantAdUnitId);
-    bannerAd = AdManagerUtil.bannerAd;
-    isADShowing = AdManagerUtil.isADShowing;
+    bannerAd = AdManagerUtil.bannerAd(AdHelper.wantAdUnitId);
+    isADShowing = AdManagerUtil.isADShowing(AdHelper.wantAdUnitId);
   }
 
   /// 全屏廣告

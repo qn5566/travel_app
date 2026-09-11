@@ -16,12 +16,13 @@ import '../../util/ToastUtil.dart';
 import '../../util/ad_manager_util.dart';
 
 class AccountController extends GetxController
-    with SingleGetTickerProviderMixin {
+    with GetSingleTickerProviderStateMixin {
   late TextEditingController textEditingController;
 
   var isLoading = true.obs;
 
   var username = "".obs;
+  var draftUsername = "".obs;
   var dataList = <DataAll>[].obs;
   var dataListComment = <CommentModel>[].obs;
 
@@ -130,15 +131,15 @@ class AccountController extends GetxController
       if (kDebugMode) {
         print('Error:$e');
       }
-      callback('ok');
+      callback('error');
     });
   }
 
   /// 設定廣告
   void adMobBanner() {
     AdManagerUtil.initializeAd(AdHelper.accountAdUnitId);
-    bannerAd = AdManagerUtil.bannerAd;
-    isADShowing = AdManagerUtil.isADShowing;
+    bannerAd = AdManagerUtil.bannerAd(AdHelper.accountAdUnitId);
+    isADShowing = AdManagerUtil.isADShowing(AdHelper.accountAdUnitId);
   }
 
   /// 全屏廣告
@@ -227,7 +228,9 @@ class AccountController extends GetxController
   /// 關閉
   @override
   void dispose() {
-    bannerAd?.dispose();
+    textEditingController.dispose();
+    messageController.dispose();
+    AdManagerUtil.releaseAd(AdHelper.accountAdUnitId);
     animationController.dispose();
     super.dispose();
   }

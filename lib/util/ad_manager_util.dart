@@ -4,17 +4,19 @@ import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdManagerUtil {
-  static BannerAd? _bannerAd;
-  static var isADShowing = false.obs;
+  static final Map<String, BannerAd> _bannerAds = {};
+  static final Map<String, RxBool> _adVisibility = {};
 
   static void initializeAd(String adUnitId) {
-    _bannerAd ??= BannerAd(
+    if (_bannerAds.containsKey(adUnitId)) return;
+    final visibility = (_adVisibility[adUnitId] ??= false.obs);
+    final ad = BannerAd(
       adUnitId: adUnitId,
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
         onAdLoaded: (ad) {
-          isADShowing(true);
+          visibility.value = true;
         },
         onAdFailedToLoad: (ad, err) {
           if (kDebugMode) {
@@ -23,18 +25,28 @@ class AdManagerUtil {
           ad.dispose();
         },
       ),
-    )..load();
+    );
+    _bannerAds[adUnitId] = ad;
+    ad.load();
   }
 
-  static BannerAd? get bannerAd => _bannerAd;
+  static BannerAd? bannerAd(String adUnitId) => _bannerAds[adUnitId];
 
-  Widget bannerAdWidget() {
+  static RxBool isADShowing(String adUnitId) =>
+      _adVisibility[adUnitId] ??= false.obs;
+
+  static void releaseAd(String adUnitId) {
+    _bannerAds.remove(adUnitId)?.dispose();
+    _adVisibility[adUnitId]?.value = false;
+  }
+
+  Widget bannerAdWidget(BannerAd ad) {
     return StatefulBuilder(
       builder: (context, setState) => Container(
-        width: _bannerAd?.size.width.toDouble(),
+        width: ad.size.width.toDouble(),
         height: 100.0,
         alignment: Alignment.center,
-        child: _bannerAd != null ? AdWidget(ad: _bannerAd!) : Container(),
+        child: AdWidget(ad: ad),
       ),
     );
   }

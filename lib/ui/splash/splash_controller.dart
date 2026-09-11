@@ -15,25 +15,41 @@ class SplashController extends GetxController
   String appUrl = '';
   bool shouldNavigateToDashboard = true;
   final RxConfig userData = Get.find();
+  bool _started = false;
 
-  void checkVersion(BuildContext context) async {
-    await ApiHelper().getInfoData().then((value) {
+  @override
+  void onReady() {
+    super.onReady();
+    if (_started) return;
+    _started = true;
+    userData.initializeDefaults();
+    _navigateToDashboard();
+    _loadRemoteConfig();
+  }
+
+  Future<void> _loadRemoteConfig() async {
+    try {
+      final value =
+          await ApiHelper().getInfoData().timeout(const Duration(seconds: 5));
       // 資料串接API
-      userData.dataAPI.value = (value['data_api'] as List).cast<String>();
+      final dataApi = (value['data_api'] as List?)?.cast<String>() ?? [];
+      if (dataApi.isNotEmpty) userData.dataAPI.assignAll(dataApi);
 
       // 帶入個別title的資料
-      userData.travelTitle.value =
-          (value['title_travel'] as List).cast<String>();
+      final titles = (value['title_travel'] as List?)?.cast<String>() ?? [];
+      if (titles.isNotEmpty) userData.travelTitle.assignAll(titles);
 
       // 帶入個別keyWord的資料
-      userData.keyWordTravel.value =
-          (value['key_word_travel'] as List).cast<String>();
+      final keywords =
+          (value['key_word_travel'] as List?)?.cast<String>() ?? [];
+      if (keywords.length >= 2) userData.keyWordTravel.assignAll(keywords);
 
       // 設定頁面的訊息
-      userData.option.value = value['option'];
+      userData.option.value = value['option'] as String? ?? '';
 
       // 設定頁面的小訣竅
-      userData.infoMenu.value = (value['info_menu'] as List).cast<String>();
+      final infoMenu = (value['info_menu'] as List?)?.cast<String>() ?? [];
+      if (infoMenu.isNotEmpty) userData.infoMenu.assignAll(infoMenu);
 
       final flutterVersion = packageInfo.buildNumber; // 您的Flutter版本号
       final iosVersion = value['ios_version'] as String;
@@ -44,32 +60,36 @@ class SplashController extends GetxController
         // 在Android上執行的程式碼
         final info = value['info'] as String;
         appUrl = value['android_url'] as String;
-        _showVersionDialog(context, info);
         shouldNavigateToDashboard = false;
+        _showVersionDialog(Get.context, info);
         return;
       } else if (Platform.isIOS &&
           compareVersion(flutterVersion, iosVersion) < 0) {
         // 在iOS上執行的程式碼
         final info = value['info'] as String;
         appUrl = value['ios_url'] as String;
-        _showVersionDialog(context, info);
         shouldNavigateToDashboard = false;
+        _showVersionDialog(Get.context, info);
         return;
       }
-    }).catchError((e) {
+    } catch (e) {
       if (kDebugMode) {
         print('Error getting version information: $e');
       }
-      return;
-    });
-
-    if (shouldNavigateToDashboard) {
-      await Future.delayed(const Duration(milliseconds: 1000));
-      Get.toNamed(AppRoutes.dashboard);
     }
   }
 
-  void _showVersionDialog(BuildContext context, String info) {
+  Future<void> _navigateToDashboard() async {
+    await Future.delayed(const Duration(milliseconds: 250));
+    if (shouldNavigateToDashboard &&
+        !isClosed &&
+        Get.currentRoute == AppRoutes.splashPage) {
+      Get.offNamed(AppRoutes.dashboard);
+    }
+  }
+
+  void _showVersionDialog(BuildContext? context, String info) {
+    if (context == null || isClosed) return;
     showDialog(
       context: context,
       builder: (_) {
@@ -83,7 +103,7 @@ class SplashController extends GetxController
                   '取消',
                   style: TextStyle(color: Colors.grey),
                 ),
-                onPressed: () => Get.toNamed(AppRoutes.dashboard),
+                onPressed: () => Get.offNamed(AppRoutes.dashboard),
               ),
               TextButton(
                   child: const Text('更新', style: TextStyle(color: Colors.red)),
@@ -98,9 +118,10 @@ class SplashController extends GetxController
   }
 
   /// 執行跳轉
-  void _launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+  Future<void> _launchUrl(String url) async {
+    final uri = Uri.tryParse(url);
+    if (uri != null && await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       throw 'Could not launch $url';
     }

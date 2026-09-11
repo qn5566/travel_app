@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -14,14 +16,20 @@ import 'themes/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await UserUtil.init();
   MobileAds.instance.initialize();
   // // 啟用 Firebase
   // await Firebase.initializeApp();
 
-  // init firebase
-  await firebaseRepo.init();
-  // 請求 Notification permission
-  await firebaseRepo.requestNotificationPermission();
+  // Firebase should not prevent the app from opening when the device is offline.
+  var firebaseReady = false;
+  try {
+    await firebaseRepo.init();
+    firebaseReady = true;
+    unawaited(firebaseRepo.requestNotificationPermission().catchError((_) {}));
+  } catch (error) {
+    if (kDebugMode) debugPrint('Firebase initialization skipped: $error');
+  }
 
   if (kDebugMode) {
     MobileAds.instance.initialize().then((InitializationStatus status) {
@@ -33,10 +41,10 @@ void main() async {
     MobileAds.instance.initialize();
   }
 
-  // 啟用 Crashlytics
-  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  if (firebaseReady) {
+    FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  }
   runApp(const MyApp());
 }
 
@@ -46,7 +54,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
-    UserUtil.init(context);
     return GetMaterialApp(
       initialBinding: DashboardBinding(),
       initialRoute: AppRoutes.splashPage,

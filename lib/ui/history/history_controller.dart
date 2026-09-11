@@ -43,7 +43,7 @@ class HistoryController extends GetxController {
   /// 關閉
   @override
   void dispose() {
-    bannerAd?.dispose();
+    AdManagerUtil.releaseAd(AdHelper.historyAdUnitId);
     super.dispose();
   }
 
@@ -69,8 +69,8 @@ class HistoryController extends GetxController {
   /// 設定廣告
   void adMobBanner() {
     AdManagerUtil.initializeAd(AdHelper.historyAdUnitId);
-    bannerAd = AdManagerUtil.bannerAd;
-    isADShowing = AdManagerUtil.isADShowing;
+    bannerAd = AdManagerUtil.bannerAd(AdHelper.historyAdUnitId);
+    isADShowing = AdManagerUtil.isADShowing(AdHelper.historyAdUnitId);
   }
 
   /// 全屏廣告

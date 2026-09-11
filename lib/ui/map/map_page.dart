@@ -174,7 +174,8 @@ class MapPage extends GetView<MapController> {
                           child: SizedBox(
                             width: controller.bannerAd!.size.width.toDouble(),
                             height: controller.bannerAd!.size.height.toDouble(),
-                            child: AdManagerUtil().bannerAdWidget(),
+                            child: AdManagerUtil()
+                                .bannerAdWidget(controller.bannerAd!),
                           ),
                         ),
                       )

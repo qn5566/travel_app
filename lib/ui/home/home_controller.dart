@@ -67,6 +67,9 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       }
 
       backupDataList.clear();
+      if (!tabTitleController.indexIsChanging) {
+        searchData(userData.travelTitle[tabTitleController.index]);
+      }
     });
     textEditingController = TextEditingController();
     // 輸入匡宣告
@@ -75,7 +78,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     /// DB相關
     DataAllDao dataData = await FxDataBaseManager.dataAllDao();
 
-    if ((await dataData.checkTableIsEmpty())! > 0) {
+    if ((await dataData.checkTableIsEmpty() ?? 0) > 0) {
       fetchDB();
     } else {
       firstLoading(true);
@@ -97,6 +100,9 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   @override
   void onClose() {
     animationController?.dispose();
+    tabTitleController.dispose();
+    textEditingController.dispose();
+    messageController.dispose();
     super.onClose();
   }
 
@@ -116,10 +122,15 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   /// 抓取遠端資料
   Future<void> fetchApi() async {
     isLoading(true);
-    await dataController.fetchRemoteData().then((data) {
+    try {
+      final data = await dataController.fetchRemoteData();
       dataList.assignAll(data);
       fetchDB();
-    });
+    } catch (e) {
+      firstLoading(false);
+      isLoading(false);
+      if (kDebugMode) print('Error fetching remote data: $e');
+    }
   }
 
   /// 隨機資料
@@ -194,8 +205,8 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   /// 設定廣告
   void adMobBanner() {
     AdManagerUtil.initializeAd(AdHelper.bannerAdUnitId);
-    bannerAd = AdManagerUtil.bannerAd;
-    isADShowing = AdManagerUtil.isADShowing;
+    bannerAd = AdManagerUtil.bannerAd(AdHelper.bannerAdUnitId);
+    isADShowing = AdManagerUtil.isADShowing(AdHelper.bannerAdUnitId);
   }
 
   /// 進詳細
@@ -220,10 +231,6 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
       'item': item,
       'page': 'home',
     });
-  }
-
-  void toSearch() {
-    Get.toNamed(AppRoutes.searchPage);
   }
 
   /// 轉圈動畫

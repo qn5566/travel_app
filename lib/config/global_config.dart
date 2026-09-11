@@ -35,7 +35,7 @@ late PackageInfo info;
 
 class UserUtil {
   /// Initializing the library.
-  static Future<void> init(BuildContext context) async {
+  static Future<void> init([BuildContext? context]) async {
     prefs = await SharedPreferences.getInstance();
     info = await PackageInfo.fromPlatform();
   }

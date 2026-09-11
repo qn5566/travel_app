@@ -103,14 +103,11 @@ class MapController extends GetxController {
   }
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
     adMobBanner();
-
-    /// 取得自己的位置
-    await getMyLocation();
-
     toDownload();
+    _initializeLocation();
   }
 
   @override
@@ -119,13 +116,9 @@ class MapController extends GetxController {
     super.dispose();
   }
 
-  /// 下載進度條
-  Future<void> startDownload() async {
-    for (var i = 0; i <= 100; i++) {
-      await Future.delayed(const Duration(milliseconds: 300));
-      progress.value = i / 100;
-    }
-    downloadStatus.value = '解壓縮中';
+  Future<void> _initializeLocation() async {
+    await getMyLocation();
+    if (dataList.isNotEmpty) updateNearbyMarkers();
   }
 
   /// 執行資料下載
@@ -134,12 +127,12 @@ class MapController extends GetxController {
     String updateTime =
         sharedPreferences.getString(AppConstants.homeUpdateShareKey) ?? '';
     if (updateTime != '') {
-      DateTime dateTime = DateTime.parse(updateTime);
+      final dateTime = DateTime.tryParse(updateTime);
       DateTime now = DateTime.now();
       // 不需要太常更新1個禮拜一次即可
       DateTime lastWeek = now.subtract(const Duration(days: 7));
 
-      if (dateTime.isAfter(lastWeek)) {
+      if (dateTime != null && dateTime.isAfter(lastWeek)) {
         fetchDB();
       } else {
         fetchApi();
@@ -148,8 +141,8 @@ class MapController extends GetxController {
       /// DB相關
       DataAllDao dataData = await FxDataBaseManager.dataAllDao();
 
-      var count = await dataData.checkTableIsEmpty();
-      if (count! > 0) {
+      final count = await dataData.checkTableIsEmpty() ?? 0;
+      if (count > 0) {
         isLoading(true);
         fetchDB();
       } else {
@@ -167,9 +160,10 @@ class MapController extends GetxController {
     px0 = locationData.latitude ?? 25.03;
 
     try {
+      markers.clear();
       final newMarkers = dataList.where((e) {
         final distance =
-            Geolocator.distanceBetween(e.py ?? 0.0, e.px ?? 0.0, px0!, py0!);
+            Geolocator.distanceBetween(e.px ?? 0.0, e.py ?? 0.0, px0, py0);
         return distance <= distanceValue;
       }).map((e) {
         return CustomMarker(
@@ -194,11 +188,22 @@ class MapController extends GetxController {
   }
 
   /// 抓取遠端資料
-  void fetchApi() async {
-    startDownload();
-    await dataController.fetchRemoteData().then((data) {
+  Future<void> fetchApi() async {
+    firstLoading(true);
+    showRefresh(false);
+    progress.value = 0.1;
+    downloadStatus.value = '正在下載景點資料…';
+    try {
+      await dataController.fetchRemoteData();
+      progress.value = 0.9;
+      downloadStatus.value = '正在建立離線資料…';
       fetchDB();
-    });
+      progress.value = 1;
+    } catch (e) {
+      downloadStatus.value = '下載失敗，請檢查網路後重試';
+      showRefresh(true);
+      if (kDebugMode) print('Error fetching remote data: $e');
+    }
   }
 
   Future<void> getMyLocation() async {
@@ -227,8 +232,8 @@ class MapController extends GetxController {
 
     cameraInitPosition = CameraPosition(
         target: LatLng(
-          locationData?.latitude! ?? 0.0,
-          locationData?.longitude! ?? 0.0,
+          locationData.latitude ?? 25.03,
+          locationData.longitude ?? 121.56,
         ),
         zoom: 15);
   }
@@ -236,8 +241,8 @@ class MapController extends GetxController {
   /// 設定廣告
   void adMobBanner() {
     AdManagerUtil.initializeAd(AdHelper.mapAdUnitId);
-    bannerAd = AdManagerUtil.bannerAd;
-    isADShowing = AdManagerUtil.isADShowing;
+    bannerAd = AdManagerUtil.bannerAd(AdHelper.mapAdUnitId);
+    isADShowing = AdManagerUtil.isADShowing(AdHelper.mapAdUnitId);
   }
 
   /// 進詳細
@@ -278,7 +283,7 @@ class MapController extends GetxController {
   void updateNearbyMarkers() async {
     final newMarkers = dataList.where((e) {
       final distance =
-          Geolocator.distanceBetween(e.py ?? 0.0, e.px ?? 0.0, px0!, py0!);
+          Geolocator.distanceBetween(e.px ?? 0.0, e.py ?? 0.0, px0, py0);
       if (selectedItem.value == '景點') {
         return distance <= distanceValue &&
             (selectedItem.value == '全部' ||

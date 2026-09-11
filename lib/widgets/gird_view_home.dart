@@ -16,7 +16,6 @@ class GridViewHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.searchData(site);
     return Obx(
       () => controller.firstLoading.value
           ? Column(

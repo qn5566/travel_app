@@ -18,6 +18,9 @@ abstract class DataAllDao {
   @Insert(onConflict: OnConflictStrategy.replace)
   Future<void> insertUpdateDataAll(DataAll dataAll);
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<void> insertUpdateDataAllBatch(List<DataAll> dataAll);
+
   @delete
   Future<void> deleteDataAll(DataAll dataAll);
 

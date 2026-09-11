@@ -27,8 +27,6 @@ class AccountPage extends GetView<AccountController> {
 
   @override
   Widget build(BuildContext context) {
-    String key = '';
-    String sendData = '';
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SizedBox.expand(
@@ -53,7 +51,8 @@ class AccountPage extends GetView<AccountController> {
                         child: SizedBox(
                           width: controller.bannerAd!.size.width.toDouble(),
                           height: controller.bannerAd!.size.height.toDouble(),
-                          child: AdManagerUtil().bannerAdWidget(),
+                          child: AdManagerUtil()
+                              .bannerAdWidget(controller.bannerAd!),
                         ),
                       )
                     : SizedBox(height: ASize.h(0))),
@@ -81,7 +80,8 @@ class AccountPage extends GetView<AccountController> {
                                           controller.textEditingController,
                                       keyboardType: TextInputType.text,
                                       decoration: BoxDecoration(
-                                        color: const Color.fromARGB(255, 242, 242, 247),
+                                        color: const Color.fromARGB(
+                                            255, 242, 242, 247),
                                         borderRadius:
                                             BorderRadius.circular(10.0),
                                         boxShadow: [
@@ -101,7 +101,7 @@ class AccountPage extends GetView<AccountController> {
                                         if (kDebugMode) {
                                           print(value);
                                         }
-                                        key = value;
+                                        controller.draftUsername.value = value;
                                       },
                                     ),
                                   ),
@@ -120,7 +120,8 @@ class AccountPage extends GetView<AccountController> {
                                 child: Center(
                                   child: Text("確認",
                                       style: TextStyle(
-                                          color: (key.isNotEmpty)
+                                          color: (controller.draftUsername.value
+                                                  .isNotEmpty)
                                               ? StyleInfo.settingTextColor
                                               : StyleInfo.black_1D1D28,
                                           fontWeight: FontWeight.w700,
@@ -130,11 +131,13 @@ class AccountPage extends GetView<AccountController> {
                                 ),
                               ),
                               onTap: () {
-                                if (key.isNotEmpty) {
+                                if (controller.draftUsername.value.isNotEmpty) {
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
-                                  controller.updateUsername(key);
-                                  controller.username.value = key;
+                                  controller.updateUsername(
+                                      controller.draftUsername.value);
+                                  controller.username.value =
+                                      controller.draftUsername.value;
                                 }
                               },
                             )
@@ -181,7 +184,7 @@ class AccountPage extends GetView<AccountController> {
                                     .requestFocus(FocusNode());
                                 controller.changeUsername();
                                 controller.username.value = '';
-                                key = '';
+                                controller.draftUsername.value = '';
                               },
                             ),
                           ],
@@ -213,8 +216,8 @@ class AccountPage extends GetView<AccountController> {
                     },
                   );
                 },
-                child: const Text('更多資訊',
-                    style: TextStyle(color: Colors.purple)),
+                child:
+                    const Text('更多資訊', style: TextStyle(color: Colors.purple)),
               ),
             ),
           ),
@@ -279,10 +282,7 @@ class AccountPage extends GetView<AccountController> {
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           onChanged: (value) {
-                            sendData = value;
-                            if (kDebugMode) {
-                              print('sendData:$sendData');
-                            }
+                            // The controller owns the text field state.
                           },
                         ),
                       ),
@@ -290,12 +290,12 @@ class AccountPage extends GetView<AccountController> {
                     FloatingActionButton.small(
                       onPressed: () {
                         FocusScope.of(context).unfocus();
-                        controller.checkSendData(context, sendData,
+                        controller.checkSendData(
+                            context, controller.messageController.text,
                             callback: (value) {
                           if (value == 'ok') {
                             controller.fetchApi();
-                            controller.messageController.text = '';
-                            sendData = '';
+                            controller.messageController.clear();
                           }
                         });
                       },

@@ -7,11 +7,23 @@ import '../data/mode/comment_model.dart';
 import '../util/ui_util.dart';
 import 'dashed_divider.dart';
 
-class CommentViewMessageBoard extends StatelessWidget {
-  CommentViewMessageBoard({Key? key}) : super(key: key);
+class CommentViewMessageBoard extends StatefulWidget {
+  const CommentViewMessageBoard({super.key});
+
+  @override
+  State<CommentViewMessageBoard> createState() =>
+      _CommentViewMessageBoardState();
+}
+
+class _CommentViewMessageBoardState extends State<CommentViewMessageBoard> {
   final AccountController controller = Get.find<AccountController>();
   final ScrollController _scrollController = ScrollController();
-  String sendData = '';
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   static final TextStyle _textName = TextStyle(
       fontSize: ASize.ft(8.0),

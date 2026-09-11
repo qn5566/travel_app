@@ -113,7 +113,7 @@ class DetailController extends GetxController
       if (kDebugMode) {
         print('Error:$e');
       }
-      callback('ok');
+      callback('error');
     });
   }
 
@@ -170,7 +170,7 @@ class DetailController extends GetxController
   void saveWantGo(BuildContext context) async {
     isLoading(true);
 
-    if (sharedPreferences.getString(AppConstants.userName) == null &&
+    if (sharedPreferences.getString(AppConstants.userName) == null ||
         sharedPreferences.getString(AppConstants.userName) == '') {
       ToastUtil.info(context, "請先設定暱稱");
       return;
