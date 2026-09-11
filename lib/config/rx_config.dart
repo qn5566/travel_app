@@ -37,7 +37,7 @@ class RxConfig extends GetxController {
   ];
   static const defaultKeywords = <String>['公園', '夜市'];
   static const defaultDataApi = <String>[
-    'https://media.taiwan.net.tw/XMLReleaseALL_public/scenic_spot_C_f.json',
+    'https://media.taiwan.net.tw/XMLReleaseALL_public/v2.0/Zh_tw/Attraction-json.zip',
   ];
   // tab Title
   RxList<String> travelTitle = <String>[].obs;

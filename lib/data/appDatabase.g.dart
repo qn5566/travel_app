@@ -80,7 +80,7 @@ class _$AppDatabase extends AppDatabase {
     Callback? callback,
   ]) async {
     final databaseOptions = sqflite.OpenDatabaseOptions(
-      version: 1,
+      version: 3,
       onConfigure: (database) async {
         await database.execute('PRAGMA foreign_keys = ON');
         await callback?.onConfigure?.call(database);
@@ -96,7 +96,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `DataAll` (`id` TEXT, `name` TEXT, `zone` TEXT, `toldescribe` TEXT, `description` TEXT, `tel` TEXT, `address` TEXT, `zipcode` TEXT, `region` TEXT, `town` TEXT, `travellinginfo` TEXT, `opentime` TEXT, `picture1` TEXT, `picdescribe1` TEXT, `picture2` TEXT, `picdescribe2` TEXT, `picture3` TEXT, `picdescribe3` TEXT, `map` TEXT, `gov` TEXT, `px` REAL, `py` REAL, `orgclass` TEXT, `class1` TEXT, `class2` TEXT, `class3` TEXT, `level` TEXT, `website` TEXT, `parkinginfo` TEXT, `parkinginfoPx` REAL, `parkinginfoPy` REAL, `ticketinfo` TEXT, `remarks` TEXT, `keyword` TEXT, `changetime` TEXT, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `DataAll` (`id` TEXT, `name` TEXT, `zone` TEXT, `toldescribe` TEXT, `description` TEXT, `tel` TEXT, `address` TEXT, `zipcode` TEXT, `region` TEXT, `town` TEXT, `travellinginfo` TEXT, `opentime` TEXT, `picture1` TEXT, `picdescribe1` TEXT, `picture2` TEXT, `picdescribe2` TEXT, `picture3` TEXT, `picdescribe3` TEXT, `map` TEXT, `gov` TEXT, `px` REAL, `py` REAL, `orgclass` TEXT, `class1` TEXT, `class2` TEXT, `class3` TEXT, `level` TEXT, `website` TEXT, `parkinginfo` TEXT, `parkinginfoPx` REAL, `parkinginfoPy` REAL, `ticketinfo` TEXT, `remarks` TEXT, `keyword` TEXT, `changetime` TEXT, `rawJson` TEXT, PRIMARY KEY (`id`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -153,7 +153,8 @@ class _$DataAllDao extends DataAllDao {
                   'ticketinfo': item.ticketinfo,
                   'remarks': item.remarks,
                   'keyword': item.keyword,
-                  'changetime': item.changetime
+                  'changetime': item.changetime,
+                  'rawJson': item.rawJson
                 }),
         _dataAllDeletionAdapter = DeletionAdapter(
             database,
@@ -194,7 +195,8 @@ class _$DataAllDao extends DataAllDao {
                   'ticketinfo': item.ticketinfo,
                   'remarks': item.remarks,
                   'keyword': item.keyword,
-                  'changetime': item.changetime
+                  'changetime': item.changetime,
+                  'rawJson': item.rawJson
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -251,7 +253,13 @@ class _$DataAllDao extends DataAllDao {
             ticketinfo: row['ticketinfo'] as String?,
             remarks: row['remarks'] as String?,
             keyword: row['keyword'] as String?,
-            changetime: row['changetime'] as String?));
+            changetime: row['changetime'] as String?,
+            rawJson: row['rawJson'] as String?));
+  }
+
+  @override
+  Future<void> clearAllData() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM DataAll');
   }
 
   @override
@@ -292,7 +300,8 @@ class _$DataAllDao extends DataAllDao {
             ticketinfo: row['ticketinfo'] as String?,
             remarks: row['remarks'] as String?,
             keyword: row['keyword'] as String?,
-            changetime: row['changetime'] as String?),
+            changetime: row['changetime'] as String?,
+            rawJson: row['rawJson'] as String?),
         arguments: [region]);
   }
 
@@ -334,7 +343,8 @@ class _$DataAllDao extends DataAllDao {
             ticketinfo: row['ticketinfo'] as String?,
             remarks: row['remarks'] as String?,
             keyword: row['keyword'] as String?,
-            changetime: row['changetime'] as String?),
+            changetime: row['changetime'] as String?,
+            rawJson: row['rawJson'] as String?),
         arguments: [name]);
   }
 

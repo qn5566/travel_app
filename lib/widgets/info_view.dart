@@ -13,6 +13,9 @@ class InfoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final item = controller.item;
+    if (item == null) return const SizedBox.shrink();
+
     return Stack(
       children: [
         Container(
@@ -115,13 +118,13 @@ class InfoView extends StatelessWidget {
                       ),
                     ],
                   ),
-                  (controller.item!.opentime != '')
+                  (controller.item?.opentime?.isNotEmpty == true)
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             buildTitle('營業時間'),
-                            buildText(controller.item!.opentime!),
+                            buildText(controller.item?.opentime ?? ''),
                           ],
                         )
                       : const SizedBox.shrink(),

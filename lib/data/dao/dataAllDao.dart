@@ -12,6 +12,9 @@ abstract class DataAllDao {
   @Query('SELECT * FROM $tableName')
   Future<List<DataAll>> getAllDataAll();
 
+  @Query('DELETE FROM $tableName')
+  Future<void> clearAllData();
+
   @insert
   Future<void> insertDataAll(DataAll dataAll);
 

@@ -55,6 +55,10 @@ class AppConstants {
   static const String userName = 'username';
 
   static const String homeUpdateShareKey = 'update';
+  /// Version of the local attraction snapshot. Increment this whenever the
+  /// remote schema/source changes and existing rows must be downloaded again.
+  static const String homeDataVersionKey = 'home_data_version';
+  static const int homeDataVersion = 3;
   static const String homeHistory = 'history';
   static const String wantGo = 'wantGo';
   static const String alreadyGo = 'alreadyGo';

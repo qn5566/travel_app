@@ -21,21 +21,41 @@ class DataController {
   }
 
   /// 抓取遠端資料並存入DB
-  Future<List<DataAll>> fetchRemoteData() {
-    return _syncFuture ??= _fetchRemoteData().whenComplete(() {
+  Future<List<DataAll>> fetchRemoteData({
+    void Function(double progress)? onProgress,
+  }) {
+    return _syncFuture ??= _fetchRemoteData(onProgress: onProgress).whenComplete(() {
       _syncFuture = null;
     });
   }
 
-  Future<List<DataAll>> _fetchRemoteData() async {
+  Future<List<DataAll>> _fetchRemoteData({
+    void Function(double progress)? onProgress,
+  }) async {
     dataData = await FxDataBaseManager.dataAllDao();
     try {
-      final value = await ApiHelper().fetchAllData();
-      sharedPreferences.setString(AppConstants.homeUpdateShareKey,
-          value.xMLHead?.updatetime ?? DateTime.now().toString());
+      final value = await ApiHelper().fetchAllData(onProgress: onProgress);
+      onProgress?.call(0.9);
       final infoData = value.xMLHead?.infos?.info ?? <DataAll>[];
       if (infoData.isNotEmpty) {
+        // The ZIP is a complete snapshot; remove records from an older schema
+        // before inserting it so stale coordinates cannot remain in the map.
+        await dataData.clearAllData();
         await dataData.insertUpdateDataAllBatch(infoData);
+        onProgress?.call(0.98);
+        // Mark the snapshot as current only after the complete batch has been
+        // written successfully. A failed/partial download must be retried on
+        // the next launch.
+        await sharedPreferences.setString(
+          AppConstants.homeUpdateShareKey,
+          value.xMLHead?.updatetime ?? DateTime.now().toString(),
+        );
+        await sharedPreferences.setInt(
+          AppConstants.homeDataVersionKey,
+          AppConstants.homeDataVersion,
+        );
+      } else {
+        throw const FormatException('景點資料為空，未更新本機資料');
       }
     } catch (e) {
       if (kDebugMode) {

@@ -78,7 +78,10 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     /// DB相關
     DataAllDao dataData = await FxDataBaseManager.dataAllDao();
 
-    if ((await dataData.checkTableIsEmpty() ?? 0) > 0) {
+    final storedDataVersion =
+        sharedPreferences.getInt(AppConstants.homeDataVersionKey) ?? 0;
+    final needsDataRefresh = storedDataVersion < AppConstants.homeDataVersion;
+    if (!needsDataRefresh && (await dataData.checkTableIsEmpty() ?? 0) > 0) {
       fetchDB();
     } else {
       firstLoading(true);

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:floor/floor.dart';
 
 class DataHome {
@@ -9,6 +11,40 @@ class DataHome {
     xMLHead = json['XML_Head'] != null
         ? new XMLHead.fromJson(json['XML_Head'])
         : null;
+  }
+
+  factory DataHome.fromAttractionJson(
+    Map<String, dynamic> json, {
+    Map<String, Map<String, dynamic>> serviceTimes = const {},
+    Map<String, Map<String, dynamic>> fees = const {},
+  }) {
+    final rawAttractions = json['Attractions'];
+    final attractions = rawAttractions is List
+        ? rawAttractions.whereType<Map>().map((item) {
+            final attraction = Map<String, dynamic>.from(item);
+            final id = attraction['AttractionID']?.toString();
+            final completeAttraction = Map<String, dynamic>.from(attraction);
+            if (id != null && serviceTimes[id] != null) {
+              completeAttraction['_ServiceTimeData'] = serviceTimes[id];
+            }
+            if (id != null && fees[id] != null) {
+              completeAttraction['_FeeData'] = fees[id];
+            }
+            return DataAll.fromAttractionJson(
+              attraction,
+              serviceTimeOverride: id == null ? null : serviceTimes[id],
+              feeOverride: id == null ? null : fees[id],
+              rawJson: jsonEncode(completeAttraction),
+            );
+          }).toList()
+        : <DataAll>[];
+    return DataHome(
+      xMLHead: XMLHead(
+        updatetime: json['UpdateTime']?.toString(),
+        language: json['Language']?.toString(),
+        infos: Infos(info: attractions),
+      ),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -29,10 +65,10 @@ class XMLHead {
 
   XMLHead(
       {this.listname,
-        this.language,
-        this.orgname,
-        this.updatetime,
-        this.infos});
+      this.language,
+      this.orgname,
+      this.updatetime,
+      this.infos});
 
   XMLHead.fromJson(Map<String, dynamic> json) {
     listname = json['Listname'];
@@ -118,42 +154,46 @@ class DataAll {
   String? keyword;
   String? changetime;
 
+  /// Complete source record from the v2 ZIP, including nested fields.
+  String? rawJson;
+
   DataAll(
       {this.id,
-        this.name,
-        this.zone,
-        this.toldescribe,
-        this.description,
-        this.tel,
-        this.address,
-        this.zipcode,
-        this.region,
-        this.town,
-        this.travellinginfo,
-        this.opentime,
-        this.picture1,
-        this.picdescribe1,
-        this.picture2,
-        this.picdescribe2,
-        this.picture3,
-        this.picdescribe3,
-        this.map,
-        this.gov,
-        this.px,
-        this.py,
-        this.orgclass,
-        this.class1,
-        this.class2,
-        this.class3,
-        this.level,
-        this.website,
-        this.parkinginfo,
-        this.parkinginfoPx,
-        this.parkinginfoPy,
-        this.ticketinfo,
-        this.remarks,
-        this.keyword,
-        this.changetime});
+      this.name,
+      this.zone,
+      this.toldescribe,
+      this.description,
+      this.tel,
+      this.address,
+      this.zipcode,
+      this.region,
+      this.town,
+      this.travellinginfo,
+      this.opentime,
+      this.picture1,
+      this.picdescribe1,
+      this.picture2,
+      this.picdescribe2,
+      this.picture3,
+      this.picdescribe3,
+      this.map,
+      this.gov,
+      this.px,
+      this.py,
+      this.orgclass,
+      this.class1,
+      this.class2,
+      this.class3,
+      this.level,
+      this.website,
+      this.parkinginfo,
+      this.parkinginfoPx,
+      this.parkinginfoPy,
+      this.ticketinfo,
+      this.remarks,
+      this.keyword,
+      this.changetime,
+      this.rawJson});
 
   DataAll.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
@@ -191,6 +231,102 @@ class DataAll {
     remarks = json['Remarks'];
     keyword = json['Keyword'];
     changetime = json['Changetime'];
+    rawJson = json['RawJson'];
+  }
+
+  factory DataAll.fromAttractionJson(
+    Map<String, dynamic> json, {
+    Map<String, dynamic>? serviceTimeOverride,
+    Map<String, dynamic>? feeOverride,
+    String? rawJson,
+  }) {
+    Map<String, dynamic> mapValue(Object? value) =>
+        value is Map ? Map<String, dynamic>.from(value) : <String, dynamic>{};
+    List<Map<String, dynamic>> mapList(Object? value) => value is List
+        ? value.whereType<Map>().map(Map<String, dynamic>.from).toList()
+        : <Map<String, dynamic>>[];
+    String? stringValue(Object? value) =>
+        value == null ? null : value.toString().trim();
+    final address = mapValue(json['PostalAddress']);
+    final phones = mapList(json['Telephones']);
+    final images = mapList(json['Images']);
+    final classes = json['AttractionClasses'] is List
+        ? (json['AttractionClasses'] as List).map((e) => e.toString()).toList()
+        : <String>[];
+    final tags = json['Tags'] is List
+        ? (json['Tags'] as List).map((e) => e.toString()).toList()
+        : <String>[];
+    String? imageUrl(int index) =>
+        images.length > index ? stringValue(images[index]['URL']) : null;
+    String? imageDescription(int index) => images.length > index
+        ? stringValue(images[index]['Description'])
+        : null;
+    String? serviceTimeText() {
+      final times = serviceTimeOverride?['ServiceTimes'];
+      if (times is! List) return null;
+      final values = times.whereType<Map>().map((time) {
+        final name = stringValue(time['Name']);
+        final start = stringValue(time['StartTime']);
+        final end = stringValue(time['EndTime']);
+        final range = start != null && end != null ? '$start-$end' : null;
+        return [name, range].whereType<String>().join(' ');
+      }).where((value) => value.isNotEmpty);
+      return values.isEmpty ? null : values.join('\n');
+    }
+
+    String? feeText() {
+      final fees = feeOverride?['Fees'];
+      if (fees is! List) return null;
+      final values = fees.whereType<Map>().map((fee) {
+        final name = stringValue(fee['Name']);
+        final price = fee['Price'];
+        final priceText = price == null ? null : '費用：$price';
+        return [name, priceText].whereType<String>().join(' ');
+      }).where((value) => value.isNotEmpty);
+      return values.isEmpty ? null : values.join('\n');
+    }
+
+    final baseServiceTime = stringValue(json['ServiceTimeInfo']);
+    final baseFee = stringValue(json['FeeInfo']);
+
+    return DataAll(
+      id: stringValue(json['AttractionID']),
+      name: stringValue(json['AttractionName']),
+      description: stringValue(json['Description']),
+      toldescribe: stringValue(json['Description']),
+      // Existing map code uses px as longitude and py as latitude.
+      px: (json['PositionLon'] as num?)?.toDouble(),
+      py: (json['PositionLat'] as num?)?.toDouble(),
+      region: stringValue(address['City']),
+      town: stringValue(address['Town']),
+      zipcode: stringValue(address['ZipCode']),
+      address: stringValue(address['StreetAddress']),
+      tel: phones.isNotEmpty ? stringValue(phones.first['Tel']) : null,
+      picture1: imageUrl(0),
+      picdescribe1: imageDescription(0),
+      picture2: imageUrl(1),
+      picdescribe2: imageDescription(1),
+      picture3: imageUrl(2),
+      picdescribe3: imageDescription(2),
+      travellinginfo: stringValue(json['TrafficInfo']),
+      opentime: baseServiceTime?.isNotEmpty == true
+          ? baseServiceTime
+          : serviceTimeText(),
+      website: stringValue(json['WebsiteURL']),
+      map: (json['MapURLs'] is List && (json['MapURLs'] as List).isNotEmpty)
+          ? stringValue((json['MapURLs'] as List).first)
+          : null,
+      parkinginfo: stringValue(json['ParkingInfo']),
+      ticketinfo: baseFee?.isNotEmpty == true ? baseFee : feeText(),
+      orgclass: classes.isEmpty ? null : classes.join(','),
+      class1: classes.length > 0 ? classes[0] : null,
+      class2: classes.length > 1 ? classes[1] : null,
+      class3: classes.length > 2 ? classes[2] : null,
+      keyword: tags.isEmpty ? null : tags.join(','),
+      remarks: stringValue(json['Remarks']),
+      changetime: stringValue(json['UpdateTime']),
+      rawJson: rawJson ?? jsonEncode(json),
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -230,6 +366,7 @@ class DataAll {
     data['Remarks'] = this.remarks;
     data['Keyword'] = this.keyword;
     data['Changetime'] = this.changetime;
+    data['RawJson'] = this.rawJson;
     return data;
   }
 }

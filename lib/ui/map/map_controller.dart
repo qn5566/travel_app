@@ -124,6 +124,16 @@ class MapController extends GetxController {
   /// 執行資料下載
   void toDownload() async {
     /// DB資料判斷
+    final storedDataVersion =
+        sharedPreferences.getInt(AppConstants.homeDataVersionKey) ?? 0;
+    if (storedDataVersion < AppConstants.homeDataVersion) {
+      // The v2 ZIP parser is not compatible with rows created by the old
+      // endpoint. Always rebuild the local snapshot once after an upgrade.
+      firstLoading(true);
+      await fetchApi();
+      return;
+    }
+
     String updateTime =
         sharedPreferences.getString(AppConstants.homeUpdateShareKey) ?? '';
     if (updateTime != '') {
@@ -153,29 +163,12 @@ class MapController extends GetxController {
   }
 
   /// 抓取資料判斷
-  void fetchDB() async {
-    dataList.assignAll(await dataController.fetchData());
-
-    py0 = locationData.longitude ?? 121.56;
-    px0 = locationData.latitude ?? 25.03;
-
+  Future<void> fetchDB() async {
     try {
-      markers.clear();
-      final newMarkers = dataList.where((e) {
-        final distance =
-            Geolocator.distanceBetween(e.px ?? 0.0, e.py ?? 0.0, px0, py0);
-        return distance <= distanceValue;
-      }).map((e) {
-        return CustomMarker(
-          markerId: MarkerId(e.name!),
-          position: LatLng(e.py ?? 0.0, e.px ?? 0.0),
-          anchor: const Offset(0.5, 0.5),
-          infoWindow: InfoWindow(title: e.name, onTap: () => onMarkerTapped(e)),
-          dataAll: e,
-          onTap: () => onMarkerTapped(e), // 添加這一行
-        );
-      });
-      markers.addAll(newMarkers);
+      dataList.assignAll(await dataController.fetchData());
+      py0 = locationData.longitude ?? 121.56;
+      px0 = locationData.latitude ?? 25.03;
+      updateNearbyMarkers();
       firstLoading(false);
       isLoading(false);
     } catch (e) {
@@ -183,6 +176,7 @@ class MapController extends GetxController {
         print('Error fetching data: $e');
       }
 
+      markers.clear();
       isLoading(false);
     }
   }
@@ -193,16 +187,28 @@ class MapController extends GetxController {
     showRefresh(false);
     progress.value = 0.1;
     downloadStatus.value = '正在下載景點資料…';
+    // Keep the UI moving even when another controller already owns the shared
+    // download future (in that case no progress callback is available here).
+    final progressTicker = Timer.periodic(const Duration(milliseconds: 250), (_) {
+      if (progress.value < 0.8) {
+        progress.value = (progress.value + 0.01).clamp(0.1, 0.8).toDouble();
+      }
+    });
     try {
-      await dataController.fetchRemoteData();
-      progress.value = 0.9;
+      await dataController.fetchRemoteData(onProgress: (value) {
+        // Keep the progress bar below 90% while the ZIP is being downloaded
+        // and parsed. The remaining 10% is reserved for SQLite creation.
+        progress.value = value.clamp(0.1, 0.9).toDouble();
+      });
       downloadStatus.value = '正在建立離線資料…';
-      fetchDB();
+      await fetchDB();
       progress.value = 1;
     } catch (e) {
       downloadStatus.value = '下載失敗，請檢查網路後重試';
       showRefresh(true);
       if (kDebugMode) print('Error fetching remote data: $e');
+    } finally {
+      progressTicker.cancel();
     }
   }
 
@@ -281,30 +287,71 @@ class MapController extends GetxController {
 
   /// 更新附近的Marker
   void updateNearbyMarkers() async {
-    final newMarkers = dataList.where((e) {
-      final distance =
-          Geolocator.distanceBetween(e.px ?? 0.0, e.py ?? 0.0, px0, py0);
-      if (selectedItem.value == '景點') {
-        return distance <= distanceValue &&
-            (selectedItem.value == '全部' ||
-                !e.name!.contains('公園') && !e.name!.contains('夜市'));
-      } else {
-        return distance <= distanceValue &&
-            (selectedItem.value == '全部' ||
-                e.name!.contains(selectedItem.value));
-      }
-    }).map((e) {
-      return CustomMarker(
-        markerId: MarkerId(e.name!),
-        position: LatLng(e.py ?? 0.0, e.px ?? 0.0),
-        anchor: const Offset(0.5, 0.5),
-        infoWindow: InfoWindow(title: e.name, onTap: () => onMarkerTapped(e)),
-        dataAll: e,
-        onTap: () => onMarkerTapped(e), // 添加這一行
+    final newMarkers = <CustomMarker>[];
+    for (final e in dataList) {
+      final coordinate = _coordinateFor(e);
+      if (coordinate == null) continue;
+
+      final distance = Geolocator.distanceBetween(
+        coordinate.latitude,
+        coordinate.longitude,
+        px0,
+        py0,
       );
-    });
+      if (distance > distanceValue) continue;
+
+      final name = e.name?.trim();
+      if (name == null || name.isEmpty) continue;
+      final selectedCategory = selectedItem.value;
+      final isCategoryMatch = selectedCategory == '全部'
+          ? true
+          : selectedCategory == '景點'
+              ? !name.contains('公園') && !name.contains('夜市')
+              : name.contains(selectedCategory);
+      if (!isCategoryMatch) continue;
+
+      newMarkers.add(CustomMarker(
+        // AttractionID is unique; names are not guaranteed to be unique.
+        markerId: MarkerId(e.id ?? name),
+        position: LatLng(coordinate.latitude, coordinate.longitude),
+        anchor: const Offset(0.5, 0.5),
+        infoWindow: InfoWindow(title: name, onTap: () => onMarkerTapped(e)),
+        dataAll: e,
+        onTap: () => onMarkerTapped(e),
+      ));
+    }
     markers.clear();
     markers.addAll(newMarkers);
+    if (kDebugMode) {
+      print(
+          'Map markers: total=${dataList.length}, visible=${newMarkers.length}, center=($px0,$py0), radius=${distanceValue}m');
+    }
+  }
+
+  /// Returns latitude/longitude in the order required by Google Maps.
+  ///
+  /// Records downloaded by an older build stored Px/Py in reverse order.
+  /// Keep accepting those cached records so an app upgrade does not leave a
+  /// blank map until the next full download.
+  _MapCoordinate? _coordinateFor(DataAll item) {
+    final first = item.py;
+    final second = item.px;
+    if (first == null || second == null ||
+        !first.isFinite || !second.isFinite) {
+      return null;
+    }
+
+    var latitude = first;
+    var longitude = second;
+    if (first.abs() > 90 && second.abs() <= 90) {
+      latitude = second;
+      longitude = first;
+    }
+    if (latitude < -90 || latitude > 90 ||
+        longitude < -180 || longitude > 180) {
+      return null;
+    }
+    return _MapCoordinate(latitude, longitude);
   }
 
   /// 選單選中
@@ -312,4 +359,11 @@ class MapController extends GetxController {
     selectedItem.value = value;
     updateNearbyMarkers();
   }
+}
+
+class _MapCoordinate {
+  const _MapCoordinate(this.latitude, this.longitude);
+
+  final double latitude;
+  final double longitude;
 }

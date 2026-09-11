@@ -33,7 +33,15 @@ class SplashController extends GetxController
           await ApiHelper().getInfoData().timeout(const Duration(seconds: 5));
       // 資料串接API
       final dataApi = (value['data_api'] as List?)?.cast<String>() ?? [];
-      if (dataApi.isNotEmpty) userData.dataAPI.assignAll(dataApi);
+      final normalizedDataApi = dataApi
+          .map((url) => url.contains('/scenic_spot_C_f.json')
+              ? RxConfig.defaultDataApi.first
+              : url)
+          .toSet()
+          .toList();
+      if (normalizedDataApi.isNotEmpty) {
+        userData.dataAPI.assignAll(normalizedDataApi);
+      }
 
       // 帶入個別title的資料
       final titles = (value['title_travel'] as List?)?.cast<String>() ?? [];
