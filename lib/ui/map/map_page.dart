@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:travel/config/style_info.dart';
 import 'package:travel/util/ad_manager_util.dart';
 import 'package:travel/util/ui_util.dart';
+import 'package:travel/widgets/tech_download_progress.dart';
 
 import 'map_controller.dart';
 
@@ -30,53 +31,15 @@ class MapPage extends GetView<MapController> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    // 毛玻璃效果 - 半透明
-                    Container(
-                      color: const Color(0xFF0E3311).withOpacity(0.5),
+                    TechDownloadProgress(
+                      progress: controller.progress.value,
+                      status: controller.downloadStatus.value,
+                      showRetry: controller.showRefresh.value,
+                      onRetry: () {
+                        controller.showRefresh.value = false;
+                        controller.fetchApi();
+                      },
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Center(child: Lottie.asset('assets/car.json')),
-                        Text(
-                          controller.downloadStatus.value,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        Text(
-                          "${(controller.progress.value * 100).toStringAsFixed(2)}%",
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        LinearProgressIndicator(
-                          value: controller.progress.value,
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: StyleInfo.redColor,
-                            // 文字顏色為白色
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            // 設定按鈕的 padding
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8), // 設定按鈕圓角
-                            ),
-                          ),
-                          onPressed: () {
-                            if (controller.showRefresh.value) {
-                              controller.showRefresh.value = false;
-                              controller.fetchApi();
-                            } else {}
-                          },
-                          child: const Text('重新下載'),
-                        )
-                      ],
-                    )
                   ])
                 : controller.isLoading.value
                     ? const SizedBox(
