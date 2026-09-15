@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:travel/ui/map/map_page.dart';
 import 'package:travel/ui/want/want_page.dart';
 
-import '../../config/style_info.dart';
 import '../account/account_page.dart';
 import '../history/history_page.dart';
 import '../home/home_page.dart';
+import '../../widgets/tech_tab_bar.dart';
 import 'dashboard_controller.dart';
 
 /*
@@ -37,37 +36,18 @@ class DashboardPage extends StatelessWidget {
             return await _showExitConfirmationDialog(context) ?? false;
           },
           child: Scaffold(
-            body: pages[controller.tabIndex],
-            bottomNavigationBar: BottomNavigationBar(
-              unselectedItemColor: Colors.white,
-              selectedItemColor: const Color(0xFFffd9d9),
-              onTap: controller.changeTabIndex,
-              currentIndex: controller.tabIndex,
-              showSelectedLabels: true,
-              showUnselectedLabels: true,
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: StyleInfo.mainColor,
-              elevation: 0,
-              items: [
-                _bottomNavigationBarItem(
-                  icon: Icons.near_me_rounded,
-                  label: '附近',
+            body: Stack(
+              children: [
+                IndexedStack(
+                  index: controller.tabIndex,
+                  children: pages,
                 ),
-                _bottomNavigationBarItem(
-                  icon: Icons.landscape,
-                  label: '景點',
-                ),
-                _bottomNavigationBarItem(
-                  icon: Icons.favorite,
-                  label: '想要去',
-                ),
-                _bottomNavigationBarItem(
-                  icon: Icons.history,
-                  label: '歷史',
-                ),
-                _bottomNavigationBarItem(
-                  icon: CupertinoIcons.chat_bubble,
-                  label: '留言板',
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: TechTabBar(
+                    currentIndex: controller.tabIndex,
+                    onTap: controller.changeTabIndex,
+                  ),
                 ),
               ],
             ),
@@ -75,13 +55,6 @@ class DashboardPage extends StatelessWidget {
         );
       },
       assignId: true,
-    );
-  }
-
-  _bottomNavigationBarItem({required IconData icon, required String label}) {
-    return BottomNavigationBarItem(
-      icon: Icon(icon),
-      label: label,
     );
   }
 
