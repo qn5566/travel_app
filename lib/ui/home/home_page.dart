@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ import '../../data/mode/history_model.dart';
 import '../../routes/app_routes.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/gird_view_home.dart';
+import '../../widgets/tech_detail_widgets.dart';
 import '../../widgets/tech_travel_background.dart';
 import 'home_controller.dart';
 
@@ -28,7 +31,6 @@ class HomePage extends GetView<HomeController> {
     fontFamily: "PingFangSC",
     fontStyle: FontStyle.normal,
     fontSize: ASize.ft(12),
-    // backgroundColor: const Color(0xFF0E3311).withOpacity(0.5),
   );
 
   static TextStyle leftText = TextStyle(
@@ -37,7 +39,6 @@ class HomePage extends GetView<HomeController> {
     fontFamily: "PingFangSC",
     fontStyle: FontStyle.normal,
     fontSize: ASize.ft(8),
-    // backgroundColor: const Color(0xFF0E3311).withOpacity(0.5),
   );
 
   @override
@@ -50,7 +51,6 @@ class HomePage extends GetView<HomeController> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        // key: controller.scaffoldKey,
         body: Container(
           color: Colors.white,
           child: Stack(
@@ -81,7 +81,7 @@ class HomePage extends GetView<HomeController> {
                         if (controller.dataListCommentModel.isNotEmpty) {
                           return Container(
                             height: MediaQuery.of(context).size.height * 0.03,
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withValues(alpha: 0.35),
                             child: Marquee(
                               text: controller.dataListCommentModel
                                   .map((comment) =>
@@ -90,6 +90,12 @@ class HomePage extends GetView<HomeController> {
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black54,
+                                    blurRadius: 2,
+                                  ),
+                                ],
                               ),
                               scrollAxis: Axis.horizontal,
                               blankSpace: 20.0,
@@ -125,19 +131,10 @@ class HomePage extends GetView<HomeController> {
                 alignment: Alignment.bottomRight,
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0), // 設置圓角
-                      ),
-                    ),
-                    onPressed: () {
-                      showRankingDialog(context);
-                    },
-                    child: const Text('熱門景點',
-                        style: TextStyle(color: Colors.blue)),
+                      const EdgeInsets.only(bottom: 90, right: 16, top: 16),
+                  child: GradientPillButton(
+                    text: '熱門景點',
+                    onTap: () => showRankingDialog(context),
                   ),
                 ),
               ),
@@ -145,36 +142,57 @@ class HomePage extends GetView<HomeController> {
                 alignment: Alignment.bottomLeft,
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                      const EdgeInsets.only(bottom: 90, left: 16, top: 16),
                   child: InkWell(
                     onTap: () async {
-                      // await controller.fetchApi();
                       controller.rotateIcon();
                       controller.randomData();
                     },
-                    child: Container(
-                      width: ASize.w(16),
-                      height: ASize.h(16),
-                      decoration: BoxDecoration(
-                        color: StyleInfo.settingButtonColor,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Obx(() {
-                        if (controller.animationInit.value) {
-                          return RotationTransition(
-                            turns: controller.animation!,
-                            child: const Icon(
-                              Icons.refresh,
-                              color: StyleInfo.settingTextColor,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                        child: Container(
+                          width: ASize.w(16),
+                          height: ASize.h(16),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                Color(0xD9162940),
+                                Color(0xD90C1327),
+                              ],
                             ),
-                          );
-                        } else {
-                          return const Icon(
-                            Icons.refresh,
-                            color: StyleInfo.settingTextColor,
-                          );
-                        }
-                      }),
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(color: const Color(0x6655E6FF)),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0x44000000),
+                                blurRadius: 10,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Obx(() {
+                            const iconColor = Color(0xFF8CF3FF);
+                            if (controller.animationInit.value) {
+                              return RotationTransition(
+                                turns: controller.animation!,
+                                child: Icon(
+                                  Icons.refresh,
+                                  color: iconColor,
+                                ),
+                              );
+                            } else {
+                              return Icon(
+                                Icons.refresh,
+                                color: iconColor,
+                              );
+                            }
+                          }),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -194,28 +212,28 @@ class HomePage extends GetView<HomeController> {
           height: ASize.w(18),
           child: TabBar(
             padding: EdgeInsets.zero,
-            // 關閉內邊距
             tabs: controller.userData.travelTitle
                 .map((e) => Container(
-                      constraints: const BoxConstraints(minWidth: 0), // 避免內建間距
+                      constraints: const BoxConstraints(minWidth: 0),
                       child: Tab(text: e),
                     ))
                 .toList(),
             controller: controller.tabTitleController,
             tabAlignment: TabAlignment.start,
             isScrollable: true,
-            indicatorColor: Colors.white,
-            indicatorWeight: 2,
+            indicatorColor: const Color(0xFF55E6FF),
+            indicatorWeight: 2.5,
             labelColor: Colors.white,
+            unselectedLabelColor: Colors.white54,
             unselectedLabelStyle: TextStyle(
               fontSize: ASize.ft(6),
               fontWeight: FontWeight.w500,
               fontStyle: FontStyle.normal,
-              color: Colors.black,
+              color: Colors.white54,
             ),
             labelStyle: TextStyle(
               fontSize: ASize.ft(8),
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
             ),
           ),
@@ -223,9 +241,9 @@ class HomePage extends GetView<HomeController> {
         Expanded(
           child: TabBarView(
             controller: controller.tabTitleController,
-            physics: const NeverScrollableScrollPhysics(), // 禁用滑動
+            physics: const NeverScrollableScrollPhysics(),
             children: controller.userData.travelTitle.map((e) {
-              return GridViewHome(site: e); // 使用 GridViewHome
+              return GridViewHome(site: e);
             }).toList(),
           ),
         )
@@ -272,18 +290,23 @@ class HomePage extends GetView<HomeController> {
                           style: TextStyle(
                               color: (controller.keywords.value.isNotEmpty)
                                   ? Colors.redAccent
-                                  : Colors.black,
+                                  : Colors.white54,
                               fontWeight: FontWeight.w700,
                               fontFamily: "PingFang-SC",
                               fontStyle: FontStyle.normal,
-                              fontSize: ASize.ft(7))),
+                              fontSize: ASize.ft(7),
+                              shadows: const [
+                                Shadow(
+                                  color: Colors.black54,
+                                  blurRadius: 2,
+                                ),
+                              ])),
                     ),
                   ),
                 ),
                 onTap: () {
                   controller.messageController.text = "";
                   controller.keywords.value = "";
-                  // 搜索
                   controller.searchDataRegion(controller.keywords.value);
                 },
               )),
@@ -317,7 +340,7 @@ class HomePage extends GetView<HomeController> {
                       placeholderStyle: TextStyle(
                           fontSize: ASize.ft(6),
                           fontWeight: FontWeight.normal,
-                          color: Colors.black),
+                          color: Colors.black54),
                       decoration:
                           const BoxDecoration(color: Colors.transparent),
                       onChanged: (value) {
@@ -327,10 +350,8 @@ class HomePage extends GetView<HomeController> {
                         }
                       },
                       onSubmitted: (value) {
-                        // 在這裡執行搜尋的操作
                         if (controller.keywords.value.isNotEmpty) {
                           FocusScope.of(context).requestFocus(FocusNode());
-                          // 搜索
                           controller
                               .searchDataRegion(controller.keywords.value);
                         }
@@ -414,18 +435,23 @@ class HomePage extends GetView<HomeController> {
                           style: TextStyle(
                               color: (controller.keywords.value.isNotEmpty)
                                   ? Colors.white
-                                  : StyleInfo.gray_7C7C8D,
+                                  : Colors.white54,
                               fontWeight: FontWeight.w700,
                               fontFamily: "PingFang-SC",
                               fontStyle: FontStyle.normal,
-                              fontSize: ASize.ft(7))),
+                              fontSize: ASize.ft(7),
+                              shadows: const [
+                                Shadow(
+                                  color: Colors.black54,
+                                  blurRadius: 2,
+                                ),
+                              ])),
                     ),
                   ),
                 ),
                 onTap: () {
                   if (controller.keywords.value.isNotEmpty) {
                     FocusScope.of(context).requestFocus(FocusNode());
-                    // 搜索
                     controller.searchDataRegion(controller.keywords.value);
                   }
                 },
@@ -441,52 +467,101 @@ class HomePage extends GetView<HomeController> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('點擊次數最高的景點', textAlign: TextAlign.center),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.emoji_events_rounded,
+                  color: Color(0xFFFFD700), size: 24),
+              SizedBox(width: 8),
+              Text('熱門景點排行',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ],
+          ),
           content: SizedBox(
-            height: ASize.h(150), // Adjust the height as needed
+            height: ASize.h(150),
             width: double.maxFinite,
             child: Obx(() {
-              return ListView.builder(
+              if (controller.dataListHistory.isEmpty) {
+                return const Center(
+                  child: Text('暫無排行資料',
+                      style: TextStyle(color: Colors.grey, fontSize: 14)),
+                );
+              }
+              return ListView.separated(
                 shrinkWrap: true,
                 itemCount: controller.dataListHistory.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 6),
                 itemBuilder: (context, index) {
                   HistoryModel history = controller.dataListHistory[index];
-                  return ListTile(
-                    title: Text(
-                      '${history.title}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  final rankColors = [
+                    const Color(0xFFFFD700),
+                    const Color(0xFFC0C0C0),
+                    const Color(0xFFCD7F32),
+                  ];
+                  final avatarColor =
+                      index < 3 ? rankColors[index] : const Color(0xFF49368C);
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF5F5F5),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    subtitle: Text(
-                      '點擊次數: ${history.value}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey,
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                    ),
-                    leading: CircleAvatar(
-                      child: Text(
-                        '${index + 1}',
+                      title: Text(
+                        '${history.title}',
                         style: const TextStyle(
-                          fontSize: 14,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      subtitle: Text(
+                        '點擊次數: ${history.value}',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                      leading: CircleAvatar(
+                        backgroundColor: avatarColor,
+                        child: Text(
+                          '${index + 1}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        DataAll data = DataAll(
+                          name: history.title,
+                        );
+                        Get.toNamed(AppRoutes.webViewPage, arguments: data);
+                      },
                     ),
-                    onTap: () {
-                      /// 直接跳轉搜尋頁面
-                      DataAll data = DataAll(
-                        name: history.title,
-                      );
-                      Get.toNamed(AppRoutes.webViewPage, arguments: data);
-                    },
                   );
                 },
               );
             }),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child:
+                  const Text('關閉', style: TextStyle(color: Color(0xFF49368C))),
+            ),
+          ],
         );
       },
     );

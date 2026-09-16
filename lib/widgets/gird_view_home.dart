@@ -66,20 +66,44 @@ class GridViewHome extends StatelessWidget {
                                       alignment: Alignment.bottomCenter,
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            horizontal: 4.0, vertical: 2.0),
-                                        child: Container(
-                                          color: Colors.grey.withOpacity(0.5),
-                                          child: Text(
-                                            item.name!,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w300,
-                                              fontFamily: "PingFangSC",
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: ASize.ft(6),
+                                            horizontal: 2.0, vertical: 2.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          child: Container(
+                                            width: double.infinity,
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 4, vertical: 3),
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                                colors: [
+                                                  Colors.transparent,
+                                                  Colors.black
+                                                      .withValues(alpha: 0.7),
+                                                ],
+                                              ),
                                             ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
+                                            child: Text(
+                                              item.name!,
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: "PingFangSC",
+                                                fontStyle: FontStyle.normal,
+                                                fontSize: ASize.ft(6),
+                                                shadows: const [
+                                                  Shadow(
+                                                    color: Colors.black87,
+                                                    blurRadius: 2,
+                                                  ),
+                                                ],
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.center,
+                                            ),
                                           ),
                                         ),
                                       ),
