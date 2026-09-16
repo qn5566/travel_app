@@ -6,6 +6,7 @@ import '../../data/mode/data_all.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/comment_view.dart';
 import '../../widgets/info_view.dart';
+import '../../widgets/tech_detail_widgets.dart';
 import '../../widgets/views/video_cover_view.dart';
 import 'detail_controller.dart';
 
@@ -33,113 +34,133 @@ class DetailPage extends GetView<DetailController> {
                   floating: false,
                   pinned: true,
                   snap: false,
-                  title: Container(
-                    color: Colors.black38,
+                  automaticallyImplyLeading: false,
+                  title: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: ASize.w(2)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Get.back();
-                          },
-                          behavior: HitTestBehavior.opaque,
+                        GlassIconButton(
+                          icon: Icons.arrow_back_ios,
+                          iconSize: 16,
+                          onTap: () => Get.back(),
+                        ),
+                        Expanded(
                           child: Padding(
-                            padding: EdgeInsets.only(left: ASize.w(5)),
-                            child: const Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text(
+                              controller.item!.name!,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: "PingFangSC",
+                                fontStyle: FontStyle.normal,
+                                fontSize: ASize.ft(9),
+                                shadows: const [
+                                  Shadow(
+                                    color: Colors.black54,
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                        Container(
-                          constraints: BoxConstraints(maxWidth: ASize.w(130)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Text(controller.item!.name!,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: "PingFangSC",
-                                  fontStyle: FontStyle.normal,
-                                  fontSize: ASize.ft(10),
-                                )),
-                          ),
+                        GlassIconButton(
+                          icon: Icons.search,
+                          iconSize: 17,
+                          onTap: () => controller.goToWebView(),
                         ),
-                        GestureDetector(
-                            onTap: () {
-                              controller.goToWebView();
-                            },
-                            child: const Icon(Icons.search, color: Colors.white)
-                            // const Text("更多"),
-                            )
                       ],
                     ),
                   ),
                   flexibleSpace: FlexibleSpaceBar(
-                    background: AspectRatio(
-                      aspectRatio: 1.2,
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                            child: VideoCoverView(
-                              cover: picture1,
-                              money: region,
+                    background: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: VideoCoverView(
+                            cover: picture1,
+                            money: region,
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.black.withValues(alpha: 0.25),
+                                  Colors.transparent,
+                                  Colors.black.withValues(alpha: 0.45),
+                                  Colors.black.withValues(alpha: 0.85),
+                                ],
+                                stops: const [0, 0.35, 0.65, 1],
+                              ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(20.0),
+                    preferredSize: const Size.fromHeight(48.0),
                     child: Container(
-                      color: Colors.grey.withOpacity(0.5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF0EFEE),
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.12),
+                            blurRadius: 8,
+                            offset: const Offset(0, -2),
+                          ),
+                        ],
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
                             child: TabBar(
                               isScrollable: true,
-                              indicatorColor: Colors.white,
-                              labelColor: Colors.white,
-                              unselectedLabelColor: Colors.black,
+                              indicatorColor: const Color(0xFF49368C),
+                              labelColor: const Color(0xFF49368C),
+                              unselectedLabelColor: const Color(0xFFB0B0B0),
                               tabAlignment: TabAlignment.start,
-                              indicatorWeight: 1.0,
+                              indicatorWeight: 2.5,
+                              labelStyle: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: ASize.ft(8),
+                                fontFamily: "PingFangSC",
+                              ),
+                              unselectedLabelStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: ASize.ft(8),
+                                fontFamily: "PingFangSC",
+                              ),
                               tabs: controller.subTitle,
                               controller: controller.tabInfoController,
-                              padding: EdgeInsets.zero,
+                              padding: const EdgeInsets.only(left: 8),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(right: ASize.w(5)),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(10.0), // 設置圓角
-                                ),
-                              ),
-                              onPressed: () {
+                            padding: EdgeInsets.only(right: ASize.w(4)),
+                            child: GradientPillButton(
+                              text: page == 'want' ? '刪除想去名單' : '加入想去名單',
+                              isDelete: page == 'want',
+                              onTap: () {
                                 if (page == 'want') {
-                                  /// 刪除想去名單
                                   controller.deleteWantGo(context);
                                 } else {
-                                  /// 加入想去名單
                                   controller.saveWantGo(context);
                                 }
                               },
-                              child: page == 'want'
-                                  ? const Text(
-                                      '刪除想去名單',
-                                      style: TextStyle(color: Colors.black),
-                                    )
-                                  : const Text(
-                                      '加入想去名單',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
                             ),
                           ),
                         ],
@@ -149,7 +170,7 @@ class DetailPage extends GetView<DetailController> {
                 ),
                 SliverFillRemaining(
                   child: Container(
-                    color: Colors.black,
+                    color: const Color(0xFFF0EFEE),
                     child: TabBarView(
                       controller: controller.tabInfoController,
                       children: [
