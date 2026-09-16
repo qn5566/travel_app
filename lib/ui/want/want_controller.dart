@@ -43,7 +43,10 @@ class WantController extends GetxController {
   /// 關閉
   @override
   void dispose() {
-    AdManagerUtil.releaseAd(AdHelper.wantAdUnitId);
+    AdManagerUtil.releaseAd(
+      AdHelper.wantAdUnitId,
+      placementId: 'want-banner',
+    );
     super.dispose();
   }
 
@@ -68,9 +71,19 @@ class WantController extends GetxController {
 
   /// 設定廣告
   void adMobBanner() {
-    AdManagerUtil.initializeAd(AdHelper.wantAdUnitId);
-    bannerAd = AdManagerUtil.bannerAd(AdHelper.wantAdUnitId);
-    isADShowing = AdManagerUtil.isADShowing(AdHelper.wantAdUnitId);
+    const placementId = 'want-banner';
+    AdManagerUtil.initializeAd(
+      AdHelper.wantAdUnitId,
+      placementId: placementId,
+    );
+    bannerAd = AdManagerUtil.bannerAd(
+      AdHelper.wantAdUnitId,
+      placementId: placementId,
+    );
+    isADShowing = AdManagerUtil.isADShowing(
+      AdHelper.wantAdUnitId,
+      placementId: placementId,
+    );
   }
 
   /// 全屏廣告

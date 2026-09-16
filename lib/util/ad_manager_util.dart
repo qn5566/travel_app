@@ -7,9 +7,10 @@ class AdManagerUtil {
   static final Map<String, BannerAd> _bannerAds = {};
   static final Map<String, RxBool> _adVisibility = {};
 
-  static void initializeAd(String adUnitId) {
-    if (_bannerAds.containsKey(adUnitId)) return;
-    final visibility = (_adVisibility[adUnitId] ??= false.obs);
+  static void initializeAd(String adUnitId, {String? placementId}) {
+    final key = placementId ?? adUnitId;
+    if (_bannerAds.containsKey(key)) return;
+    final visibility = (_adVisibility[key] ??= false.obs);
     final ad = BannerAd(
       adUnitId: adUnitId,
       request: const AdRequest(),
@@ -26,18 +27,20 @@ class AdManagerUtil {
         },
       ),
     );
-    _bannerAds[adUnitId] = ad;
+    _bannerAds[key] = ad;
     ad.load();
   }
 
-  static BannerAd? bannerAd(String adUnitId) => _bannerAds[adUnitId];
+  static BannerAd? bannerAd(String adUnitId, {String? placementId}) =>
+      _bannerAds[placementId ?? adUnitId];
 
-  static RxBool isADShowing(String adUnitId) =>
-      _adVisibility[adUnitId] ??= false.obs;
+  static RxBool isADShowing(String adUnitId, {String? placementId}) =>
+      _adVisibility[placementId ?? adUnitId] ??= false.obs;
 
-  static void releaseAd(String adUnitId) {
-    _bannerAds.remove(adUnitId)?.dispose();
-    _adVisibility[adUnitId]?.value = false;
+  static void releaseAd(String adUnitId, {String? placementId}) {
+    final key = placementId ?? adUnitId;
+    _bannerAds.remove(key)?.dispose();
+    _adVisibility[key]?.value = false;
   }
 
   Widget bannerAdWidget(BannerAd ad) {

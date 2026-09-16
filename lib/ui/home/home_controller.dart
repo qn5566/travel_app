@@ -218,9 +218,19 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   /// 設定廣告
   void adMobBanner() {
-    AdManagerUtil.initializeAd(AdHelper.bannerAdUnitId);
-    bannerAd = AdManagerUtil.bannerAd(AdHelper.bannerAdUnitId);
-    isADShowing = AdManagerUtil.isADShowing(AdHelper.bannerAdUnitId);
+    const placementId = 'home-banner';
+    AdManagerUtil.initializeAd(
+      AdHelper.bannerAdUnitId,
+      placementId: placementId,
+    );
+    bannerAd = AdManagerUtil.bannerAd(
+      AdHelper.bannerAdUnitId,
+      placementId: placementId,
+    );
+    isADShowing = AdManagerUtil.isADShowing(
+      AdHelper.bannerAdUnitId,
+      placementId: placementId,
+    );
   }
 
   /// 進詳細

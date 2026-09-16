@@ -137,9 +137,19 @@ class AccountController extends GetxController
 
   /// 設定廣告
   void adMobBanner() {
-    AdManagerUtil.initializeAd(AdHelper.accountAdUnitId);
-    bannerAd = AdManagerUtil.bannerAd(AdHelper.accountAdUnitId);
-    isADShowing = AdManagerUtil.isADShowing(AdHelper.accountAdUnitId);
+    const placementId = 'account-banner';
+    AdManagerUtil.initializeAd(
+      AdHelper.accountAdUnitId,
+      placementId: placementId,
+    );
+    bannerAd = AdManagerUtil.bannerAd(
+      AdHelper.accountAdUnitId,
+      placementId: placementId,
+    );
+    isADShowing = AdManagerUtil.isADShowing(
+      AdHelper.accountAdUnitId,
+      placementId: placementId,
+    );
   }
 
   /// 全屏廣告
@@ -230,7 +240,10 @@ class AccountController extends GetxController
   void dispose() {
     textEditingController.dispose();
     messageController.dispose();
-    AdManagerUtil.releaseAd(AdHelper.accountAdUnitId);
+    AdManagerUtil.releaseAd(
+      AdHelper.accountAdUnitId,
+      placementId: 'account-banner',
+    );
     animationController.dispose();
     super.dispose();
   }

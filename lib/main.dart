@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +18,6 @@ import 'themes/app_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserUtil.init();
-  MobileAds.instance.initialize();
-  // // 啟用 Firebase
-  // await Firebase.initializeApp();
 
   // Firebase should not prevent the app from opening when the device is offline.
   var firebaseReady = false;
@@ -31,18 +29,17 @@ void main() async {
     if (kDebugMode) debugPrint('Firebase initialization skipped: $error');
   }
 
+  // Initialize ads once, then configure test devices in debug mode.
+  await MobileAds.instance.initialize();
   if (kDebugMode) {
-    MobileAds.instance.initialize().then((InitializationStatus status) {
-      MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
-        testDeviceIds: ['83b54b8a4ff6935e8a65d2c940c5c88f'],
-      ));
-    });
-  } else {
-    MobileAds.instance.initialize();
+    MobileAds.instance.updateRequestConfiguration(RequestConfiguration(
+      testDeviceIds: ['83b54b8a4ff6935e8a65d2c940c5c88f'],
+    ));
   }
 
   if (firebaseReady) {
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   }
   runApp(const MyApp());

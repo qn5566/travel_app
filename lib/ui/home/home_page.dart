@@ -13,6 +13,7 @@ import '../../data/mode/history_model.dart';
 import '../../routes/app_routes.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/gird_view_home.dart';
+import '../../widgets/tech_travel_background.dart';
 import 'home_controller.dart';
 
 /*
@@ -54,15 +55,21 @@ class HomePage extends GetView<HomeController> {
           color: Colors.white,
           child: Stack(
             children: [
-              Positioned.fill(
-                child: Image.asset(
-                  'images/home/home_bg.webp',
-                  fit: BoxFit.cover,
+              const Positioned.fill(child: TechTravelBackground()),
+              const Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0x66040D1D),
+                        Color(0xAA101342),
+                        Color(0xCC050B1A),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              // 毛玻璃效果 - 半透明
-              Container(
-                color: StyleInfo.assistColor.withOpacity(0.5),
               ),
               Positioned.fill(
                 child: Container(

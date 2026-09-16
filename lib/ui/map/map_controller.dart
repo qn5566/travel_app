@@ -75,10 +75,14 @@ class MapController extends GetxController {
   /// 所設定可顯示Marker的距離
   final distanceValue = 10000; // 距離小於等於 10 公里
 
+  /// Limits native Google Maps marker work during initial rendering.
+  static const maxVisibleMarkers = 120;
+
   /// DB設定
   final DataController dataController = Get.find();
   final RxConfig userData = Get.find();
   Worker? _dataVersionWorker;
+  Timer? _markerUpdateTimer;
 
   /// 選單設定
   var selectedItem = '全部'.obs;
@@ -88,8 +92,13 @@ class MapController extends GetxController {
 
     isMapPrepare(false);
 
+    /// 載入廣告（延遲到地圖建立後，避免同時初始化太多 PlatformView）
+    adMobBanner();
+
     /// 傳送自定義事件
-    analytics.logEvent(name: '查看地圖', parameters: {'status': 'success'});
+    try {
+      analytics.logEvent(name: '查看地圖', parameters: {'status': 'success'});
+    } catch (_) {}
   }
 
   void onMarkerTapped(DataAll item) {
@@ -115,7 +124,6 @@ class MapController extends GetxController {
         fetchApi();
       }
     });
-    adMobBanner();
     toDownload();
     _initializeLocation();
   }
@@ -123,6 +131,7 @@ class MapController extends GetxController {
   @override
   void dispose() {
     _dataVersionWorker?.dispose();
+    _markerUpdateTimer?.cancel();
     mapController = Completer();
     super.dispose();
   }
@@ -268,9 +277,19 @@ class MapController extends GetxController {
 
   /// 設定廣告
   void adMobBanner() {
-    AdManagerUtil.initializeAd(AdHelper.mapAdUnitId);
-    bannerAd = AdManagerUtil.bannerAd(AdHelper.mapAdUnitId);
-    isADShowing = AdManagerUtil.isADShowing(AdHelper.mapAdUnitId);
+    const placementId = 'map-banner';
+    AdManagerUtil.initializeAd(
+      AdHelper.mapAdUnitId,
+      placementId: placementId,
+    );
+    bannerAd = AdManagerUtil.bannerAd(
+      AdHelper.mapAdUnitId,
+      placementId: placementId,
+    );
+    isADShowing = AdManagerUtil.isADShowing(
+      AdHelper.mapAdUnitId,
+      placementId: placementId,
+    );
   }
 
   /// 進詳細
@@ -305,11 +324,19 @@ class MapController extends GetxController {
     // ... await location.getLocation();
     py0 = latLng.longitude;
     px0 = latLng.latitude;
+
+    // Debounce marker updates so panning/zooming doesn't trigger the
+    // expensive O(n) scan on every frame.
+    _markerUpdateTimer?.cancel();
+    _markerUpdateTimer = Timer(const Duration(milliseconds: 500), () {
+      updateNearbyMarkers();
+    });
   }
 
   /// 更新附近的Marker
   void updateNearbyMarkers() async {
     final newMarkers = <CustomMarker>[];
+    var matchedMarkerCount = 0;
     for (final e in dataList) {
       final coordinate = _coordinateFor(e);
       if (coordinate == null) continue;
@@ -332,6 +359,8 @@ class MapController extends GetxController {
               : name.contains(selectedCategory);
       if (!isCategoryMatch) continue;
 
+      matchedMarkerCount++;
+      if (newMarkers.length >= maxVisibleMarkers) continue;
       newMarkers.add(CustomMarker(
         // AttractionID is unique; names are not guaranteed to be unique.
         markerId: MarkerId(e.id ?? name),
@@ -342,11 +371,13 @@ class MapController extends GetxController {
         onTap: () => onMarkerTapped(e),
       ));
     }
-    markers.clear();
-    markers.addAll(newMarkers);
+    markers.assignAll(newMarkers);
     if (kDebugMode) {
       print(
-          'Map markers: total=${dataList.length}, visible=${newMarkers.length}, center=($px0,$py0), radius=${distanceValue}m');
+        'Map markers: total=${dataList.length}, matched=$matchedMarkerCount, '
+        'rendered=${newMarkers.length}/$maxVisibleMarkers, '
+        'center=($px0,$py0), radius=${distanceValue}m',
+      );
     }
   }
 

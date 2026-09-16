@@ -43,7 +43,10 @@ class HistoryController extends GetxController {
   /// 關閉
   @override
   void dispose() {
-    AdManagerUtil.releaseAd(AdHelper.historyAdUnitId);
+    AdManagerUtil.releaseAd(
+      AdHelper.historyAdUnitId,
+      placementId: 'history-banner',
+    );
     super.dispose();
   }
 
@@ -68,9 +71,19 @@ class HistoryController extends GetxController {
 
   /// 設定廣告
   void adMobBanner() {
-    AdManagerUtil.initializeAd(AdHelper.historyAdUnitId);
-    bannerAd = AdManagerUtil.bannerAd(AdHelper.historyAdUnitId);
-    isADShowing = AdManagerUtil.isADShowing(AdHelper.historyAdUnitId);
+    const placementId = 'history-banner';
+    AdManagerUtil.initializeAd(
+      AdHelper.historyAdUnitId,
+      placementId: placementId,
+    );
+    bannerAd = AdManagerUtil.bannerAd(
+      AdHelper.historyAdUnitId,
+      placementId: placementId,
+    );
+    isADShowing = AdManagerUtil.isADShowing(
+      AdHelper.historyAdUnitId,
+      placementId: placementId,
+    );
   }
 
   /// 全屏廣告
