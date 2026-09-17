@@ -77,13 +77,21 @@ class DataUpdateDialog extends StatelessWidget {
           ),
         ],
       ),
-      child: switch (current) {
-        DataUpdatePhase.asking => _buildAsking(),
-        DataUpdatePhase.downloading => _buildProgress(current, accent),
-        DataUpdatePhase.done => _buildProgress(current, accent),
-        DataUpdatePhase.failed => _buildFailed(accent),
-      },
+      child: _buildPhaseBody(current, accent),
     );
+  }
+
+  /// Dart 2.18 不支援 switch expression，改用方法內 switch statement。
+  Widget _buildPhaseBody(DataUpdatePhase current, Color accent) {
+    switch (current) {
+      case DataUpdatePhase.asking:
+        return _buildAsking();
+      case DataUpdatePhase.downloading:
+      case DataUpdatePhase.done:
+        return _buildProgress(current, accent);
+      case DataUpdatePhase.failed:
+        return _buildFailed(accent);
+    }
   }
 
   // ---------------- 詢問階段 ----------------

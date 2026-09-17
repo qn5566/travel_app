@@ -157,6 +157,31 @@ class DataAll {
   /// Complete source record from the v2 ZIP, including nested fields.
   String? rawJson;
 
+  /// 全部圖片 URL（新版 ZIP 資料從 rawJson 的 Images 陣列解析）。
+  /// 舊資料或 rawJson 解析失敗時回退到 picture1~3。
+  List<String> get imageUrls {
+    if (rawJson != null && rawJson!.isNotEmpty) {
+      try {
+        final value = jsonDecode(rawJson!);
+        final images = value is Map<String, dynamic> ? value['Images'] : null;
+        if (images is List) {
+          final urls = images
+              .whereType<Map>()
+              .map((e) => e['URL']?.toString().trim() ?? '')
+              .where((url) => url.isNotEmpty)
+              .toList();
+          if (urls.isNotEmpty) return urls;
+        }
+      } catch (_) {
+        // rawJson 解析失敗，走 picture1~3 fallback。
+      }
+    }
+    return [picture1, picture2, picture3]
+        .whereType<String>()
+        .where((url) => url.isNotEmpty)
+        .toList();
+  }
+
   DataAll(
       {this.id,
       this.name,

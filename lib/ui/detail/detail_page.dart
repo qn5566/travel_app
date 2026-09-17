@@ -7,7 +7,7 @@ import '../../util/ui_util.dart';
 import '../../widgets/comment_view.dart';
 import '../../widgets/info_view.dart';
 import '../../widgets/tech_detail_widgets.dart';
-import '../../widgets/views/video_cover_view.dart';
+import '../../widgets/views/image_slider_view.dart';
 import 'detail_controller.dart';
 
 class DetailPage extends GetView<DetailController> {
@@ -19,7 +19,7 @@ class DetailPage extends GetView<DetailController> {
     final DataAll item = arguments['item'];
     final String page = arguments['page'];
 
-    final picture1 = item.picture1 ?? '';
+    final imageUrls = item.imageUrls;
     final region = item.region ?? '';
 
     return MaterialApp(
@@ -81,24 +81,28 @@ class DetailPage extends GetView<DetailController> {
                     background: Stack(
                       children: [
                         Positioned.fill(
-                          child: VideoCoverView(
-                            cover: picture1,
+                          child: ImageSliderView(
+                            urls: imageUrls,
                             money: region,
                           ),
                         ),
+                        // 漸層遮罩：有 gradient 的 Container 會吃掉觸控事件，
+                        // 必須用 IgnorePointer 讓滑動手勢穿透到下面的 PageView
                         Positioned.fill(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Colors.black.withValues(alpha: 0.25),
-                                  Colors.transparent,
-                                  Colors.black.withValues(alpha: 0.45),
-                                  Colors.black.withValues(alpha: 0.85),
-                                ],
-                                stops: const [0, 0.35, 0.65, 1],
+                          child: IgnorePointer(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.black.withValues(alpha: 0.25),
+                                    Colors.transparent,
+                                    Colors.black.withValues(alpha: 0.45),
+                                    Colors.black.withValues(alpha: 0.85),
+                                  ],
+                                  stops: const [0, 0.35, 0.65, 1],
+                                ),
                               ),
                             ),
                           ),
