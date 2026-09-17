@@ -10,13 +10,11 @@ import 'package:marquee/marquee.dart';
 
 import '../../config/global_config.dart';
 import '../../config/style_info.dart';
-import '../../data/mode/data_all.dart';
-import '../../data/mode/history_model.dart';
-import '../../routes/app_routes.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/gird_view_home.dart';
 import '../../widgets/tech_detail_widgets.dart';
 import '../../widgets/tech_travel_background.dart';
+import '../../widgets/views/RankingListItem.dart';
 import 'home_controller.dart';
 
 /*
@@ -141,8 +139,7 @@ class HomePage extends GetView<HomeController> {
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 90, left: 16, top: 16),
+                  padding: const EdgeInsets.only(bottom: 90, left: 16, top: 16),
                   child: InkWell(
                     onTap: () async {
                       controller.rotateIcon();
@@ -461,7 +458,7 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  /// 顯示排行榜
+  /// 顯示排行榜對話框
   void showRankingDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -473,83 +470,45 @@ class HomePage extends GetView<HomeController> {
           title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.emoji_events_rounded,
-                  color: Color(0xFFFFD700), size: 24),
+              Icon(Icons.emoji_events_rounded, color: Color(0xFFFFD700), size: 24),
               SizedBox(width: 8),
-              Text('熱門景點排行',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
+              Text(
+                '熱門景點排行',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
-          content: SizedBox(
-            height: ASize.h(150),
+          // 使用 Container 讓高度能根據內容自適應，並設定最大高度防止溢出
+          content: Container(
             width: double.maxFinite,
+            constraints: BoxConstraints(
+              maxHeight: ASize.h(400),
+            ),
             child: Obx(() {
               if (controller.dataListHistory.isEmpty) {
-                return const Center(
-                  child: Text('暫無排行資料',
-                      style: TextStyle(color: Colors.grey, fontSize: 14)),
+                return const Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Text(
+                    '暫無排行資料',
+                    style: TextStyle(color: Colors.grey, fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ),
                 );
               }
+
               return ListView.separated(
                 shrinkWrap: true,
                 itemCount: controller.dataListHistory.length,
                 separatorBuilder: (_, __) => const SizedBox(height: 6),
                 itemBuilder: (context, index) {
-                  HistoryModel history = controller.dataListHistory[index];
-                  final rankColors = [
-                    const Color(0xFFFFD700),
-                    const Color(0xFFC0C0C0),
-                    const Color(0xFFCD7F32),
-                  ];
-                  final avatarColor =
-                      index < 3 ? rankColors[index] : const Color(0xFF49368C);
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF5F5F5),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 2),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      title: Text(
-                        '${history.title}',
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: Text(
-                        '點擊次數: ${history.value}',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                      leading: CircleAvatar(
-                        backgroundColor: avatarColor,
-                        child: Text(
-                          '${index + 1}',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        DataAll data = DataAll(
-                          name: history.title,
-                        );
-                        Get.toNamed(AppRoutes.webViewPage, arguments: data);
-                      },
-                    ),
+                  final history = controller.dataListHistory[index];
+                  return RankingListItem(
+                    history: history,
+                    rankIndex: index,
                   );
                 },
               );
@@ -558,8 +517,14 @@ class HomePage extends GetView<HomeController> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child:
-                  const Text('關閉', style: TextStyle(color: Color(0xFF49368C))),
+              child: const Text(
+                '關閉',
+                style: TextStyle(
+                  color: Colors.white, // 👉 修改這裡：改為純白色以適應深色背景
+                  fontWeight: FontWeight.bold, // 加上粗體讓按鈕更清晰
+                  fontSize: 16, // 稍微把字體放大一點點
+                ),
+              ),
             ),
           ],
         );
