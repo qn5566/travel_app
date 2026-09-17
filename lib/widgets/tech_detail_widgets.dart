@@ -59,11 +59,13 @@ class GradientPillButton extends StatelessWidget {
     super.key,
     required this.text,
     this.isDelete = false,
+    this.icon,
     required this.onTap,
   });
 
   final String text;
   final bool isDelete;
+  final IconData? icon;
   final VoidCallback onTap;
 
   @override
@@ -96,7 +98,10 @@ class GradientPillButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              isDelete ? Icons.delete_outline_rounded : Icons.favorite_rounded,
+              icon ??
+                  (isDelete
+                      ? Icons.delete_outline_rounded
+                      : Icons.favorite_rounded),
               color: Colors.white,
               size: 15,
             ),

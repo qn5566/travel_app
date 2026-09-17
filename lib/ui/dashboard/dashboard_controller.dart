@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../config/global_config.dart';
 import '../../data/repo/data_repo.dart';
 import '../../widgets/data_update_dialog.dart';
+import '../account/account_controller.dart';
 import '../history/history_controller.dart';
 import '../home/home_controller.dart';
 import '../map/map_controller.dart';
@@ -131,6 +132,9 @@ class DashboardController extends GetxController {
     }
     if (index == 3 && Get.isRegistered<HistoryController>()) {
       Get.find<HistoryController>().reload();
+    }
+    if (index == 4 && Get.isRegistered<AccountController>()) {
+      Get.find<AccountController>().fetchApi();
     }
   }
 }

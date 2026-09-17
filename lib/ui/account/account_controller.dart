@@ -69,7 +69,10 @@ class AccountController extends GetxController
   Future<void> fetchApi() async {
     isLoading(true);
     await ApiHelper().fetchCommentDataMessageBoard().then((value) {
-      dataListComment.assignAll(value);
+      final sorted = value
+        ..sort((a, b) =>
+            (b.timeStamp ?? '').compareTo(a.timeStamp ?? ''));
+      dataListComment.assignAll(sorted);
       isLoading(false);
       update();
     }).catchError((e) {

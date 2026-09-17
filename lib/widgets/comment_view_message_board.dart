@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:travel/ui/account/account_controller.dart';
 
-import '../config/style_info.dart';
 import '../data/mode/comment_model.dart';
 import '../util/ui_util.dart';
 import 'dashed_divider.dart';
@@ -28,23 +27,23 @@ class _CommentViewMessageBoardState extends State<CommentViewMessageBoard> {
   static final TextStyle _textName = TextStyle(
       fontSize: ASize.ft(8.0),
       fontWeight: FontWeight.bold,
-      color: StyleInfo.infoTextUserNameColor);
+      color: const Color(0xFF8CF3FF));
 
   static final TextStyle _textComment = TextStyle(
       fontSize: ASize.ft(6.0),
       fontWeight: FontWeight.normal,
-      color: StyleInfo.infoTextColor);
+      color: Colors.white);
 
   static final TextStyle _textInfo = TextStyle(
       fontSize: ASize.ft(6.0),
       fontWeight: FontWeight.w200,
-      color: StyleInfo.infoTextColor);
+      color: Colors.white54);
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        _scrollController.jumpTo(_scrollController.position.minScrollExtent);
       }
     });
 
@@ -52,17 +51,18 @@ class _CommentViewMessageBoardState extends State<CommentViewMessageBoard> {
       children: [
         SingleChildScrollView(
           child: SizedBox(
-            height: ASize.h(200),
+            height: ASize.h(220),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
+                  const SizedBox(height: 8,),
                   Text(
                     '留言板',
                     style: TextStyle(
                       fontSize: ASize.ft(10.0),
                       fontWeight: FontWeight.bold,
-                      color: StyleInfo.infoTextColor,
+                      color: Colors.white,
                     ),
                   ),
                   Obx(
@@ -115,7 +115,7 @@ class _CommentViewMessageBoardState extends State<CommentViewMessageBoard> {
                                       padding:
                                           EdgeInsets.symmetric(vertical: 1),
                                       child: DashedDivider(
-                                        color: StyleInfo.infoTextColor,
+                                        color: const Color(0x4455E6FF),
                                         height: 1,
                                       ),
                                     ),
