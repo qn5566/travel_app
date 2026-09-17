@@ -264,7 +264,9 @@ class AccountPage extends GetView<AccountController> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        contentPadding: EdgeInsets.zero,
                         content: PopViewSettingPage(controller: controller),
                       );
                     },
