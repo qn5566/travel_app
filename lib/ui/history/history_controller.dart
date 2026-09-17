@@ -22,8 +22,8 @@ class HistoryController extends GetxController {
   InterstitialAd? interstitialAd;
   bool isInterstitialAdReady = false;
 
-  /// DB設定
-  late DataAllDao allDb;
+  /// DB設定（可空：首次查詢前尚未初始化）
+  DataAllDao? allDb;
 
   /// 儲存資料
   late List<String> historyAllList;
@@ -31,11 +31,18 @@ class HistoryController extends GetxController {
   /// 前端顯示資料
   var dataAllList = <DataAll>[].obs;
 
+  /// initData 防重入鎖
+  bool _isLoadingData = false;
+
+  /// 載入世代計數：只接受最新一次請求的結果，避免舊結果蓋掉新請求
+  int _loadGeneration = 0;
+
   @override
   void onInit() async {
     super.onInit();
     adMobBanner();
     loadInterstitialAd();
+    initData(); // 首次載入；之後由切換 tab 時 reload
 
     isLoading(false);
   }
@@ -52,21 +59,30 @@ class HistoryController extends GetxController {
 
   /// 初始化資料
   Future<void> initData() async {
-    // 抓取景點歷史資料
-    final historyList =
-        sharedPreferences.getStringList(AppConstants.homeHistory);
-    if (historyList == null) return;
+    if (_isLoadingData) return; // 防重入：上一次查詢還在跑時不要重疊
+    _isLoadingData = true;
+    final generation = ++_loadGeneration;
+    try {
+      // 抓取景點歷史資料
+      final historyList =
+          sharedPreferences.getStringList(AppConstants.homeHistory);
+      if (historyList == null) return;
 
-    final result = <DataAll>[];
-    // 依序查詢，避免 forEach + async 的 fire-and-forget 競爭條件
-    for (final item in historyList.reversed) {
-      final searchDataAllResult = await searchDataAll(item);
-      if (searchDataAllResult != null) {
-        result.add(searchDataAllResult);
+      final result = <DataAll>[];
+      // 依序查詢，避免 forEach + async 的 fire-and-forget 競爭條件
+      for (final item in historyList.reversed) {
+        final searchDataAllResult = await searchDataAll(item);
+        if (searchDataAllResult != null) {
+          result.add(searchDataAllResult);
+        }
       }
+      // 只有最新一次的請求才能更新 UI（防舊結果回來蓋掉新資料）
+      if (generation != _loadGeneration || isClosed) return;
+      // 一次換上新資料，避免 UI 看到清空後尚未補回的中間狀態
+      dataAllList.assignAll(result);
+    } finally {
+      _isLoadingData = false;
     }
-    // 一次換上新資料，避免 UI 看到清空後尚未補回的中間狀態
-    dataAllList.assignAll(result);
   }
 
   /// 設定廣告
@@ -124,8 +140,13 @@ class HistoryController extends GetxController {
 
   /// 抓取資料庫判斷
   Future<DataAll?> searchDataAll(String whereArgs) async {
-    allDb = await FxDataBaseManager.dataAllDao();
-    return await allDb.findDataAllByName(whereArgs);
+    // dao 快取：還沒取過才去拿（initData 迴圈內會多次呼叫）
+    var db = allDb;
+    if (db == null) {
+      db = await FxDataBaseManager.dataAllDao();
+      allDb = db;
+    }
+    return await db.findDataAllByName(whereArgs);
   }
 
   /// 刪除資料
@@ -136,15 +157,17 @@ class HistoryController extends GetxController {
     isLoading(false);
   }
 
-  void onTapDataAll(DataAll item) {
+  Future<void> onTapDataAll(DataAll item) async {
     if (kDebugMode) {
       print(item.name);
     }
     // showInterstitialAd(); 關閉全屏廣告
-    Get.toNamed(AppRoutes.travelDetails, arguments: {
+    await Get.toNamed(AppRoutes.travelDetails, arguments: {
       'item': item,
       'page': 'history',
     });
+    // 從詳情頁返回：無論是否有刪除，都重新讀一次保持清單同步
+    if (!isClosed) reload();
   }
 
   /// 重新載入

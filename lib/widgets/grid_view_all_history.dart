@@ -14,6 +14,11 @@ class GridViewAllHistory extends StatelessWidget {
 
   GridViewAllHistory({super.key});
 
+  /// 名稱欄半透明背景（重用同一個實例，避免每個 item 重建）
+  static const BoxDecoration _nameBackdrop = BoxDecoration(
+    color: Color(0x809E9E9E), // grey 500 @ 50%
+  );
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -28,6 +33,8 @@ class GridViewAllHistory extends StatelessWidget {
                       controller.reload();
                     },
                     child: GridView.builder(
+                      // 資料不足一屏時仍可下拉刷新
+                      physics: const AlwaysScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3, // 3 列
@@ -64,7 +71,7 @@ class GridViewAllHistory extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 4.0, vertical: 2.0),
                                     child: Container(
-                                      color: Colors.grey.withOpacity(0.5),
+                                      decoration: _nameBackdrop,
                                       child: Text(
                                         item.name!,
                                         style: TextStyle(
