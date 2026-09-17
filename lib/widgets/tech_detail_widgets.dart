@@ -227,27 +227,33 @@ class CommentEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.chat_bubble_outline_rounded,
-              size: 48,
-              color: const Color(0xFF49368C).withOpacity(0.35),
+    // 可用高度不足時（小螢幕、鍵盤開啟、大標題展開等）改為可捲動，避免 RenderFlex overflow
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.chat_bubble_outline_rounded,
+                  size: 48,
+                  color: const Color(0xFF49368C).withOpacity(0.35),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  '暫無評論，快來搶沙發！',
+                  style: TextStyle(
+                    color: Color(0xFFB0B0B0),
+                    fontSize: 14,
+                    fontFamily: "PingFangSC",
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            const Text(
-              '暫無評論，快來搶沙發！',
-              style: TextStyle(
-                color: Color(0xFFB0B0B0),
-                fontSize: 14,
-                fontFamily: "PingFangSC",
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
