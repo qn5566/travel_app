@@ -16,7 +16,15 @@ class GridViewAllHistory extends StatelessWidget {
 
   /// 名稱欄半透明背景（重用同一個實例，避免每個 item 重建）
   static const BoxDecoration _nameBackdrop = BoxDecoration(
-    color: Color(0x809E9E9E), // grey 500 @ 50%
+    gradient: LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xD9162940), Color(0xD90C1327)],
+    ),
+    borderRadius: BorderRadius.only(
+      bottomLeft: Radius.circular(10),
+      bottomRight: Radius.circular(10),
+    ),
   );
 
   @override
@@ -29,6 +37,8 @@ class GridViewAllHistory extends StatelessWidget {
                   removeTop: true,
                   context: context,
                   child: RefreshIndicator(
+                    color: const Color(0xFF55E6FF),
+                    backgroundColor: const Color(0xFF0C1327),
                     onRefresh: () async {
                       controller.reload();
                     },
@@ -48,7 +58,28 @@ class GridViewAllHistory extends StatelessWidget {
                             controller.onTapDataAll(item);
                           },
                           child: Container(
-                            color: Colors.transparent,
+                            margin: const EdgeInsets.all(3),
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color(0xD9162940),
+                                  Color(0xD90C1327),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: const Color(0x6655E6FF)),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0x44000000),
+                                  blurRadius: 8,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
                             child: Stack(
                               children: [
                                 Align(
@@ -100,7 +131,7 @@ class GridViewAllHistory extends StatelessWidget {
                     Positioned.fill(
                       child: Padding(
                         padding: EdgeInsets.all(50.0),
-                        child: CommentError(),
+                        child: CommentError(textColor: Colors.white),
                       ),
                     ),
                   ],
