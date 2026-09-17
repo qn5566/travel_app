@@ -186,6 +186,7 @@ class DetailController extends GetxController
       // 確定沒有儲存
       wantGoList.add(item!.name!);
       sharedPreferences.setStringList(AppConstants.wantGo, wantGoList);
+      ToastUtil.info(context, "加入成功！");
     } else {
       ToastUtil.info(context, "已經加入過了");
     }
