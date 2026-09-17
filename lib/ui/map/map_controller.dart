@@ -168,16 +168,9 @@ class MapController extends GetxController {
     String updateTime =
         sharedPreferences.getString(AppConstants.homeUpdateShareKey) ?? '';
     if (updateTime != '') {
-      final dateTime = DateTime.tryParse(updateTime);
-      DateTime now = DateTime.now();
-      // 不需要太常更新1個禮拜一次即可
-      DateTime lastWeek = now.subtract(const Duration(days: 7));
-
-      if (dateTime != null && dateTime.isAfter(lastWeek)) {
-        fetchDB();
-      } else {
-        fetchApi();
-      }
+      // 資料新舊改由 DashboardController 的「兩週更新提醒」彈窗負責，
+      // 地圖頁一律讀本地；版本落後 / DB 空的重抓已在前段處理。
+      fetchDB();
     } else {
       /// DB相關
       DataAllDao dataData = await FxDataBaseManager.dataAllDao();
