@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 /// 錯誤顯示的View
 class CommentError extends StatelessWidget {
-  const CommentError({super.key});
+  const CommentError({super.key, this.textColor = Colors.black});
+
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +17,10 @@ class CommentError extends StatelessWidget {
           width: 64,
           height: 64,
         ),
-        const Text('無資料',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        Text(
+          '無資料',
+          style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+        ),
       ],
     );
   }

@@ -25,6 +25,8 @@ class ListViewAllHistory extends StatelessWidget {
                   removeTop: true,
                   context: context,
                   child: RefreshIndicator(
+                    color: const Color(0xFF55E6FF),
+                    backgroundColor: const Color(0xFF0C1327),
                     onRefresh: () async {
                       controller.reload();
                     },
@@ -37,7 +39,31 @@ class ListViewAllHistory extends StatelessWidget {
                             controller.onTapDataAll(item);
                           },
                           child: Container(
-                            color: Colors.white,
+                            margin: EdgeInsets.only(
+                                left: ASize.w(4),
+                                right: ASize.w(4),
+                                bottom: ASize.h(4)),
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color(0xD9162940),
+                                  Color(0xD90C1327),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                  color: const Color(0x6655E6FF)),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0x44000000),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                ),
+                              ],
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -60,7 +86,7 @@ class ListViewAllHistory extends StatelessWidget {
                                   child: Text(
                                     item.name!,
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontFamily: "PingFangSC",
                                       fontStyle: FontStyle.normal,
@@ -79,13 +105,14 @@ class ListViewAllHistory extends StatelessWidget {
                                     children: [
                                       const Icon(
                                         Icons.place_outlined,
-                                        color: Colors.grey,
+                                        color: Color(0xFF8CF3FF),
+                                        size: 14,
                                       ),
                                       Expanded(
                                         child: Text(
                                           item.address ?? emptyData,
                                           style: TextStyle(
-                                            color: Colors.grey,
+                                            color: Colors.white70,
                                             fontWeight: FontWeight.w500,
                                             fontFamily: "PingFangSC",
                                             fontStyle: FontStyle.normal,
@@ -112,7 +139,7 @@ class ListViewAllHistory extends StatelessWidget {
                     Positioned.fill(
                       child: Padding(
                         padding: EdgeInsets.all(50.0),
-                        child: CommentError(),
+                        child: CommentError(textColor: Colors.white),
                       ),
                     ),
                   ],

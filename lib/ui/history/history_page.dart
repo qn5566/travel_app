@@ -6,6 +6,7 @@ import 'package:travel/ui/history/history_controller.dart';
 import '../../util/ad_manager_util.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/list_view_history_all.dart';
+import '../../widgets/tech_travel_background.dart';
 
 /*
 設定頁面
@@ -24,13 +25,20 @@ class HistoryPage extends GetView<HistoryController> {
             resizeToAvoidBottomInset: false,
             body: Stack(
               children: [
-                Positioned.fill(
-                  child: Image.asset(
-                    'images/setting/background_setting_2.webp',
-                    fit: BoxFit.fitHeight,
-                    height: double.infinity,
-                    width: double.infinity,
-                    alignment: Alignment.center,
+                const Positioned.fill(child: TechTravelBackground()),
+                const Positioned.fill(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0x66040D1D),
+                          Color(0xAA101342),
+                          Color(0xCC050B1A),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 Column(
@@ -63,18 +71,50 @@ class HistoryPage extends GetView<HistoryController> {
               ],
             ),
             floatingActionButton: Obx(() => (controller.dataAllList.isNotEmpty)
-                ? FloatingActionButton.extended(
-                    heroTag: null, // IndexedStack 內多頁共存，關閉預設 Hero tag 避免重複
-                    onPressed: () {
-                      controller.deleteData();
-                    },
-                    backgroundColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0), // 設置圓角弧度
-                    ),
-                    label: const Text(
-                      '刪除全部資料',
-                      style: TextStyle(color: Colors.white),
+                ? GestureDetector(
+                    onTap: () => controller.deleteData(),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color(0xFF8B1A3B),
+                            Color(0xFF4A0E2A),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: const Color(0xFFFF5C8A).withOpacity(0.55)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFFF5C8A).withOpacity(0.18),
+                            blurRadius: 10,
+                            spreadRadius: 1,
+                          ),
+                        ],
+                      ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.delete_outline_rounded,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            '刪除全部資料',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: "PingFangSC",
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 : SizedBox(
