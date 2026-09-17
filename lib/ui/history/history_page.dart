@@ -64,6 +64,7 @@ class HistoryPage extends GetView<HistoryController> {
             ),
             floatingActionButton: Obx(() => (controller.dataAllList.isNotEmpty)
                 ? FloatingActionButton.extended(
+                    heroTag: null, // IndexedStack 內多頁共存，關閉預設 Hero tag 避免重複
                     onPressed: () {
                       controller.deleteData();
                     },

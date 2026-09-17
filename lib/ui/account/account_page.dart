@@ -288,6 +288,7 @@ class AccountPage extends GetView<AccountController> {
                       ),
                     ),
                     FloatingActionButton.small(
+                      heroTag: null, // IndexedStack 內多頁共存，關閉預設 Hero tag 避免重複
                       onPressed: () {
                         FocusScope.of(context).unfocus();
                         controller.checkSendData(

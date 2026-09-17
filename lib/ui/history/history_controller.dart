@@ -51,22 +51,22 @@ class HistoryController extends GetxController {
   }
 
   /// 初始化資料
-  void initData() {
+  Future<void> initData() async {
     // 抓取景點歷史資料
-    if (sharedPreferences.getStringList(AppConstants.homeHistory) != null) {
-      dataAllList.clear();
+    final historyList =
+        sharedPreferences.getStringList(AppConstants.homeHistory);
+    if (historyList == null) return;
 
-      // 儲存資料
-      sharedPreferences
-          .getStringList(AppConstants.homeHistory)
-          ?.reversed
-          .forEach((item) async {
-        var searchDataAllResult = await searchDataAll(item);
-        if (searchDataAllResult != null) {
-          dataAllList.add(searchDataAllResult);
-        }
-      });
+    final result = <DataAll>[];
+    // 依序查詢，避免 forEach + async 的 fire-and-forget 競爭條件
+    for (final item in historyList.reversed) {
+      final searchDataAllResult = await searchDataAll(item);
+      if (searchDataAllResult != null) {
+        result.add(searchDataAllResult);
+      }
     }
+    // 一次換上新資料，避免 UI 看到清空後尚未補回的中間狀態
+    dataAllList.assignAll(result);
   }
 
   /// 設定廣告
