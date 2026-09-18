@@ -168,8 +168,6 @@ class DetailController extends GetxController
 
   /// 儲存想去名單
   void saveWantGo(BuildContext context) async {
-    isLoading(true);
-
     if (sharedPreferences.getString(AppConstants.userName) == null ||
         sharedPreferences.getString(AppConstants.userName) == '') {
       ToastUtil.info(context, "請先設定暱稱");
@@ -192,13 +190,10 @@ class DetailController extends GetxController
     }
 
     sharedPreferences.setStringList(AppConstants.wantGo, wantGoList);
-    isLoading(false);
   }
 
   /// 刪除想去名單
   void deleteWantGo(BuildContext context) async {
-    isLoading(true);
-
     // 儲存資料 - 判斷這個item title有沒有資料
     List<String> wantGoList =
         (sharedPreferences.getStringList(AppConstants.wantGo) ?? <String>[]);
@@ -214,7 +209,6 @@ class DetailController extends GetxController
     }
 
     sharedPreferences.setStringList(AppConstants.wantGo, wantGoList);
-    isLoading(false);
 
     /// 退出
     Get.back();

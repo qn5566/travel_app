@@ -31,6 +31,7 @@ class ListViewAllHistory extends StatelessWidget {
                       controller.reload();
                     },
                     child: ListView.builder(
+                      padding: const EdgeInsets.only(bottom: 120),
                       itemCount: controller.dataAllList.length,
                       itemBuilder: (context, index) {
                         DataAll item = controller.dataAllList[index];

@@ -43,6 +43,7 @@ class GridViewAllHistory extends StatelessWidget {
                       controller.reload();
                     },
                     child: GridView.builder(
+                      padding: const EdgeInsets.only(bottom: 120),
                       // 資料不足一屏時仍可下拉刷新
                       physics: const AlwaysScrollableScrollPhysics(),
                       gridDelegate:
