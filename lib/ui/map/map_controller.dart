@@ -7,7 +7,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:location/location.dart';
 import 'package:travel/config/AdHelper.dart';
 import 'package:travel/util/ad_manager_util.dart';
 
@@ -40,11 +39,8 @@ class MapController extends GetxController {
       ),
       zoom: 15);
 
-  /// 先宣告 LocationData
-  LocationData locationData = LocationData.fromMap({
-    "latitude": 25.03,
-    "longitude": 121.56,
-  });
+  /// 先宣告目前位置（台北預設）
+  LatLng locationData = const LatLng(25.03, 121.56);
 
   RxSet<CustomMarker> markers = <CustomMarker>{}.obs;
   var isLoading = true.obs;
@@ -190,8 +186,8 @@ class MapController extends GetxController {
   Future<void> fetchDB() async {
     try {
       dataList.assignAll(await dataController.fetchData());
-      py0 = locationData.longitude ?? 121.56;
-      px0 = locationData.latitude ?? 25.03;
+      py0 = locationData.longitude;
+      px0 = locationData.latitude;
       updateNearbyMarkers();
       firstLoading(false);
       isLoading(false);
@@ -237,35 +233,36 @@ class MapController extends GetxController {
   }
 
   Future<void> getMyLocation() async {
-    // Get current location
-    Location location = Location();
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         return;
       }
-    }
 
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
         return;
       }
+
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      locationData = LatLng(position.latitude, position.longitude);
+
+      cameraInitPosition = CameraPosition(
+        target: LatLng(position.latitude, position.longitude),
+        zoom: 15,
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        print('getMyLocation error: $e');
+      }
     }
-
-    locationData = await location.getLocation();
-
-    cameraInitPosition = CameraPosition(
-        target: LatLng(
-          locationData.latitude ?? 25.03,
-          locationData.longitude ?? 121.56,
-        ),
-        zoom: 15);
   }
 
   /// 設定廣告

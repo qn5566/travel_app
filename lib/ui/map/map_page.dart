@@ -71,8 +71,8 @@ class MapPage extends GetView<MapController> {
                         CameraUpdate.newCameraPosition(
                           CameraPosition(
                             target: LatLng(
-                              controller.locationData.latitude ?? 25.03,
-                              controller.locationData.longitude ?? 121.56,
+                              controller.locationData.latitude,
+                              controller.locationData.longitude,
                             ),
                             zoom: 15,
                           ),
