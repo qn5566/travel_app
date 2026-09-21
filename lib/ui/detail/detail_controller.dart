@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:travel/data/mode/data_all.dart';
-import 'package:travel/ui/history/history_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/global_config.dart';
@@ -40,7 +39,6 @@ class DetailController extends GetxController
     fetchApi();
     tabInfoController = TabController(length: subTitle.length, vsync: this);
     messageController = TextEditingController();
-    Get.delete<HistoryController>();
   }
 
   /// 獲取Comment data
@@ -129,7 +127,6 @@ class DetailController extends GetxController
   @override
   void onClose() {
     tabInfoController.dispose();
-    Get.lazyPut<HistoryController>(() => HistoryController());
     super.onClose();
   }
 

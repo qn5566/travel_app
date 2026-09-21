@@ -17,6 +17,8 @@ APP TableView Page router
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
+  static bool _isExitDialogShowing = false;
+
   /// 頁面設定
   static List<Widget> pages = [
     const MapPage(),
@@ -31,9 +33,11 @@ class DashboardPage extends StatelessWidget {
     ScreenUtil.init(context);
     return GetBuilder<DashboardController>(
       builder: (controller) {
-        return WillPopScope(
-          onWillPop: () async {
-            return await _showExitConfirmationDialog(context) ?? false;
+        return PopScope<void>(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop || _isExitDialogShowing) return;
+            _showExitConfirmationDialog(context);
           },
           child: Scaffold(
             body: Stack(
@@ -59,28 +63,37 @@ class DashboardPage extends StatelessWidget {
   }
 
   /// 確認關閉的彈窗
-  Future<bool?> _showExitConfirmationDialog(BuildContext context) async {
-    return await showDialog<bool>(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: const Text('確定要離開嗎？'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('取消'),
-              onPressed: () {
-                Navigator.of(dialogContext).pop(false); // 关闭对话框，并返回false
-              },
-            ),
-            TextButton(
-              child: const Text('確定'),
-              onPressed: () {
-                SystemNavigator.pop(); // 关闭应用程序
-              },
-            ),
-          ],
-        );
-      },
-    );
+  Future<void> _showExitConfirmationDialog(BuildContext context) async {
+    if (_isExitDialogShowing || !context.mounted) return;
+    _isExitDialogShowing = true;
+    try {
+      final shouldExit = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext dialogContext) {
+          return AlertDialog(
+            title: const Text('確定要離開嗎？'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('取消'),
+                onPressed: () {
+                  Navigator.of(dialogContext).pop(false);
+                },
+              ),
+              TextButton(
+                child: const Text('確定'),
+                onPressed: () {
+                  Navigator.of(dialogContext).pop(true);
+                },
+              ),
+            ],
+          );
+        },
+      );
+      if (shouldExit == true) {
+        await SystemNavigator.pop();
+      }
+    } finally {
+      _isExitDialogShowing = false;
+    }
   }
 }

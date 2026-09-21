@@ -61,12 +61,20 @@ class HistoryController extends GetxController {
   Future<void> initData() async {
     if (_isLoadingData) return; // 防重入：上一次查詢還在跑時不要重疊
     _isLoadingData = true;
+    isLoading(true);
     final generation = ++_loadGeneration;
     try {
       // 抓取景點歷史資料
       final historyList =
-          sharedPreferences.getStringList(AppConstants.homeHistory);
-      if (historyList == null) return;
+          sharedPreferences.getStringList(AppConstants.homeHistory) ??
+              <String>[];
+      if (historyList.isEmpty) {
+        if (generation == _loadGeneration && !isClosed) {
+          dataAllList.clear();
+          isLoading(false);
+        }
+        return;
+      }
 
       final result = <DataAll>[];
       // 依序查詢，避免 forEach + async 的 fire-and-forget 競爭條件
@@ -82,6 +90,7 @@ class HistoryController extends GetxController {
       dataAllList.assignAll(result);
     } finally {
       _isLoadingData = false;
+      if (!isClosed) isLoading(false);
     }
   }
 
