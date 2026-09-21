@@ -23,25 +23,30 @@ class SplashController extends GetxController
     if (_started) return;
     _started = true;
     userData.initializeDefaults();
-    _navigateToDashboard();
-    _loadRemoteConfig();
+    _prepareApp();
+  }
+
+  Future<void> _prepareApp() async {
+    await _loadRemoteConfig();
+    await _navigateToDashboard();
   }
 
   Future<void> _loadRemoteConfig() async {
     try {
       final value =
           await ApiHelper().getInfoData().timeout(const Duration(seconds: 5));
-      // 資料串接API
-      final dataApi = (value['data_api'] as List?)?.cast<String>() ?? [];
-      final normalizedDataApi = dataApi
-          .map((url) => url.contains('/scenic_spot_C_f.json')
-              ? RxConfig.defaultDataApi.first
-              : url)
-          .toSet()
-          .toList();
-      if (normalizedDataApi.isNotEmpty) {
-        userData.dataAPI.assignAll(normalizedDataApi);
-      }
+      // 先嘗試內建 Taiwan 來源，失敗後再嘗試 info.json 的遠端備援來源。
+      // Set 會保留插入順序並自動去重。
+      final remoteDataApi = (value['data_api'] as List?)
+              ?.map((url) => url.toString().trim())
+              .where((url) => url.isNotEmpty) ??
+          const Iterable<String>.empty();
+      final dataApiCandidates = <String>{
+        ...RxConfig.defaultDataApi,
+        ...remoteDataApi,
+        ...RxConfig.fallbackDataApi,
+      }.toList();
+      userData.dataAPI.assignAll(dataApiCandidates);
 
       // The data source can require a different SQL refresh version per
       // platform. Keep the server value locally so controllers can compare it
@@ -96,6 +101,12 @@ class SplashController extends GetxController
         return;
       }
     } catch (e) {
+      // info.json 失敗時也要保留固定 GitHub 鏡像，確保 default 失敗後
+      // 仍然有第二個來源可嘗試。
+      userData.dataAPI.assignAll(<String>{
+        ...RxConfig.defaultDataApi,
+        ...RxConfig.fallbackDataApi,
+      }.toList());
       if (kDebugMode) {
         print('Error getting version information: $e');
       }

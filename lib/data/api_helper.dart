@@ -18,12 +18,19 @@ class ApiHelper extends GetConnect {
   Future<DataHome> fetchAllData({
     void Function(double progress)? onProgress,
   }) async {
-    if (userData.dataAPI.isEmpty) {
+    if (userData.dataAPI.isEmpty &&
+        RxConfig.defaultDataApi.isEmpty &&
+        RxConfig.fallbackDataApi.isEmpty) {
       throw StateError('沒有設定景點資料 API');
     }
 
-    Object? lastError;
-    for (final url in userData.dataAPI) {
+    final errors = <String>[];
+    final dataApiCandidates = <String>{
+      ...userData.dataAPI,
+      ...RxConfig.defaultDataApi,
+      ...RxConfig.fallbackDataApi,
+    }.toList();
+    for (final url in dataApiCandidates) {
       try {
         final isZip = Uri.tryParse(url)?.path.toLowerCase().endsWith('.zip') ??
             url.toLowerCase().endsWith('.zip');
@@ -46,12 +53,12 @@ class ApiHelper extends GetConnect {
           onProgress?.call(0.75);
           return body;
         }
-        lastError = StateError('景點資料 API 回應為空（HTTP ${response.statusCode}）');
+        errors.add('$url：回應為空（HTTP ${response.statusCode}）');
       } catch (error) {
-        lastError = error;
+        errors.add('$url：$error');
       }
     }
-    throw StateError('景點資料下載失敗：$lastError');
+    throw StateError('景點資料下載失敗：${errors.join('；')}');
   }
 
   Future<DataHome> _fetchAttractionZip(
@@ -165,13 +172,24 @@ class ApiHelper extends GetConnect {
 
   /// 版本控管API
   Future<Map<String, dynamic>> getInfoData() async {
-    return await get(
+    return await get<Map<String, dynamic>>(
       'https://raw.githubusercontent.com/qn5566/travel/main/info.json',
       contentType: 'application/json; charset=utf-8',
       decoder: (data) {
-        return json.decode(data);
+        if (data is Map<String, dynamic>) return data;
+        if (data is Map) return Map<String, dynamic>.from(data);
+        final decoded = json.decode(data.toString());
+        if (decoded is Map<String, dynamic>) return decoded;
+        if (decoded is Map) return Map<String, dynamic>.from(decoded);
+        throw const FormatException('info.json 格式錯誤');
       },
-    ).then((value) => value.body!).catchError((e) => throw e);
+    ).then((value) {
+      final body = value.body;
+      if (body == null) {
+        throw StateError('info.json 回應為空（HTTP ${value.statusCode}）');
+      }
+      return body;
+    });
   }
 
   /// 傳送點擊紀錄

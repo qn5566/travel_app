@@ -46,6 +46,11 @@ class RxConfig extends GetxController {
   static const defaultDataApi = <String>[
     'https://media.taiwan.net.tw/XMLReleaseALL_public/v2.0/Zh_tw/Attraction-json.zip',
   ];
+
+  /// info.json 無法取得時仍可使用的景點資料鏡像。
+  static const fallbackDataApi = <String>[
+    'https://raw.githubusercontent.com/qn5566/travel/main/data/Attraction-json.zip',
+  ];
   // tab Title
   RxList<String> travelTitle = <String>[].obs;
 

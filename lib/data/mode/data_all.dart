@@ -273,6 +273,15 @@ class DataAll {
     String? stringValue(Object? value) =>
         value == null ? null : value.toString().trim();
     final address = mapValue(json['PostalAddress']);
+    final city = stringValue(address['City']);
+    final town = stringValue(address['Town']);
+    final streetAddress = stringValue(address['StreetAddress']);
+    final fullAddress = streetAddress?.isNotEmpty == true
+        ? streetAddress
+        : <String>[
+            if (city?.isNotEmpty == true) city!,
+            if (town?.isNotEmpty == true && town != city) town!,
+          ].join();
     final phones = mapList(json['Telephones']);
     final images = mapList(json['Images']);
     final classes = json['AttractionClasses'] is List
@@ -322,10 +331,10 @@ class DataAll {
       // Existing map code uses px as longitude and py as latitude.
       px: (json['PositionLon'] as num?)?.toDouble(),
       py: (json['PositionLat'] as num?)?.toDouble(),
-      region: stringValue(address['City']),
-      town: stringValue(address['Town']),
+      region: city,
+      town: town,
       zipcode: stringValue(address['ZipCode']),
-      address: stringValue(address['StreetAddress']),
+      address: fullAddress,
       tel: phones.isNotEmpty ? stringValue(phones.first['Tel']) : null,
       picture1: imageUrl(0),
       picdescribe1: imageDescription(0),
