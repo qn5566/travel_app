@@ -31,7 +31,7 @@ class AccountPage extends GetView<AccountController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xFF070A10),
       body: SizedBox.expand(
         child: Stack(children: [
@@ -248,14 +248,14 @@ class AccountPage extends GetView<AccountController> {
                           )),
                   ),
                 ),
-                CommentViewMessageBoard(),
+                const CommentViewMessageBoard(),
               ],
             ),
           ),
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 100, right: 16, top: 16),
+              padding: const EdgeInsets.only(bottom: 150, right: 16, top: 16),
               child: GradientPillButton(
                 text: '更多資訊',
                 icon: Icons.info_outline_rounded,
@@ -278,7 +278,7 @@ class AccountPage extends GetView<AccountController> {
           Align(
             alignment: Alignment.bottomLeft,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 100, left: 16, top: 16),
+              padding: const EdgeInsets.only(bottom: 150, left: 16, top: 16),
               child: InkWell(
                 onTap: () async {
                   controller.startAnimation();
@@ -316,7 +316,7 @@ class AccountPage extends GetView<AccountController> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 90),
               child: Container(
                 height: 50,
                 decoration: _glassDecoration(),
@@ -355,6 +355,7 @@ class AccountPage extends GetView<AccountController> {
                     Padding(
                       padding: const EdgeInsets.all(6),
                       child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () {
                           FocusScope.of(context).unfocus();
                           controller.checkSendData(

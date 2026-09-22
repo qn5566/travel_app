@@ -51,7 +51,7 @@ class _CommentViewMessageBoardState extends State<CommentViewMessageBoard> {
       children: [
         SingleChildScrollView(
           child: SizedBox(
-            height: ASize.h(220),
+            height: ASize.h(195),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -115,7 +115,7 @@ class _CommentViewMessageBoardState extends State<CommentViewMessageBoard> {
                                       padding:
                                           EdgeInsets.symmetric(vertical: 1),
                                       child: DashedDivider(
-                                        color: const Color(0x4455E6FF),
+                                        color: Color(0x4455E6FF),
                                         height: 1,
                                       ),
                                     ),
