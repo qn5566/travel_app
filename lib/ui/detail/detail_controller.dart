@@ -42,77 +42,77 @@ class DetailController extends GetxController
   }
 
   /// 獲取Comment data
-  void fetchApi() async {
+  Future<void> fetchApi() async {
     isLoading(true);
     // 來去儲存點擊紀錄
     sendHistory(item?.name ?? '');
-    await ApiHelper().fetchCommentData(item!.id!).then((value) {
+    try {
+      final value = await ApiHelper().fetchCommentData(item!.id!);
       dataList.assignAll(value);
-      isLoading(false);
       update();
-    }).catchError((e) {
+    } catch (e) {
       if (kDebugMode) {
         print('Error:$e');
       }
+    } finally {
       isLoading(false);
-    });
+    }
   }
 
-  void checkSendData(BuildContext context, String data,
-      {required ValueChanged<dynamic> callback}) {
+  Future<bool> checkSendData(BuildContext context, String data) async {
     String username = '';
     if (sharedPreferences.getString(AppConstants.userName) != null &&
         sharedPreferences.getString(AppConstants.userName) != '') {
       username = sharedPreferences.getString(AppConstants.userName) ?? '未命名';
     } else {
       ToastUtil.info(context, "請先設定暱稱");
-      return;
+      return false;
     }
 
     if (data.isEmpty) {
       ToastUtil.info(context, "請填入資訊");
-    } else {
-      int timestamp = DateTime.now().millisecondsSinceEpoch;
-      DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(timestamp);
-      String datetime =
-          "${tsdate.year}/${tsdate.month.toString().padLeft(2, '0')}/"
-          "${tsdate.day.toString().padLeft(2, '0')} "
-          "${tsdate.hour.toString().padLeft(2, '0')}:"
-          "${tsdate.minute.toString().padLeft(2, '0')}";
-      if (kDebugMode) {
-        print(datetime);
-      }
-
-      Map<String, dynamic> body = {
-        'fun': 'updateComment',
-        'TitleId': item?.id,
-        'TitleName': item?.name,
-        'Username': username,
-        'Comment': data,
-        'Like': 5,
-        'Device': Platform.isAndroid ? 'Android' : 'iOS',
-        'TimeStamp': datetime
-      };
-
-      sendCommentApi(body, callback: (value) {
-        callback(value);
-      });
+      return false;
     }
+
+    int timestamp = DateTime.now().millisecondsSinceEpoch;
+    DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(timestamp);
+    String datetime =
+        "${tsdate.year}/${tsdate.month.toString().padLeft(2, '0')}/"
+        "${tsdate.day.toString().padLeft(2, '0')} "
+        "${tsdate.hour.toString().padLeft(2, '0')}:"
+        "${tsdate.minute.toString().padLeft(2, '0')}";
+    if (kDebugMode) {
+      print(datetime);
+    }
+
+    final Map<String, dynamic> body = {
+      'fun': 'updateComment',
+      'TitleId': item?.id,
+      'TitleName': item?.name,
+      'Username': username,
+      'Comment': data,
+      'Like': 5,
+      'Device': Platform.isAndroid ? 'Android' : 'iOS',
+      'TimeStamp': datetime
+    };
+
+    return sendCommentApi(body);
   }
 
   /// 傳送Comment data
-  void sendCommentApi(Map<String, dynamic> body,
-      {required ValueChanged<dynamic> callback}) async {
+  Future<bool> sendCommentApi(Map<String, dynamic> body) async {
     isLoading(true);
-    await ApiHelper().sendCommentData(body).then((value) {
-      isLoading(false);
-      callback('ok');
-    }).catchError((e) {
+    try {
+      await ApiHelper().sendCommentData(body);
+      return true;
+    } catch (e) {
       if (kDebugMode) {
         print('Error:$e');
       }
-      callback('error');
-    });
+      return false;
+    } finally {
+      isLoading(false);
+    }
   }
 
   //拨打电话

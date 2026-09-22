@@ -167,7 +167,7 @@ class ApiHelper extends GetConnect {
       decoder: (data) {
         return json.decode(data);
       },
-    ).then((value) => value.body!).catchError((e) => throw e);
+    ).then((value) => value.statusCode.toString()).catchError((e) => throw e);
   }
 
   /// 版本控管API

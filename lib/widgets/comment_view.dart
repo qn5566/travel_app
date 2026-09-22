@@ -33,6 +33,12 @@ class CommentView extends StatelessWidget {
       color: const Color(0xFFAAAAAA),
       fontFamily: "PingFangSC");
 
+  static final TextStyle _textHint = TextStyle(
+      fontSize: ASize.ft(4.5),
+      fontWeight: FontWeight.w200,
+      color: const Color(0xFFAAAAAA),
+      fontFamily: "PingFangSC");
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -202,32 +208,45 @@ class CommentView extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 4),
-                    child: GestureDetector(
-                      onTap: () {
-                        FocusScope.of(context).unfocus();
-                        controller.messageController.text = '';
-                        controller.checkSendData(context, sendData,
-                            callback: (value) {
-                          if (value == 'ok') {
-                            controller.fetchApi();
-                          }
-                        });
-                      },
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [Color(0xFF19687B), Color(0xFF49368C)],
+                    child: Obx(
+                      () => GestureDetector(
+                        onTap: controller.isLoading.value
+                            ? null
+                            : () {
+                                FocusScope.of(context).unfocus();
+                                final text = controller.messageController.text;
+                                controller
+                                    .checkSendData(context, text)
+                                    .then((success) {
+                                  if (!success) return;
+                                  controller.messageController.clear();
+                                  controller.fetchApi();
+                                });
+                              },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: controller.isLoading.value
+                                  ? [
+                                      const Color(0xFF9E9E9E),
+                                      const Color(0xFF757575),
+                                    ]
+                                  : const [
+                                      Color(0xFF19687B),
+                                      Color(0xFF49368C),
+                                    ],
+                            ),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Icon(
-                          Icons.send,
-                          color: Colors.white,
-                          size: 18,
+                          child: const Icon(
+                            Icons.send,
+                            color: Colors.white,
+                            size: 18,
+                          ),
                         ),
                       ),
                     ),
@@ -235,7 +254,12 @@ class CommentView extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: ASize.h(10)),
+            SizedBox(height: ASize.h(1)),
+            Text(
+              "請友善留言，勿輸入個資或不當內容",
+              style: _textHint,
+            ),
+            SizedBox(height: ASize.h(2)),
           ],
         ),
       ),
