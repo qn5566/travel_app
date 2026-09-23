@@ -97,8 +97,8 @@ class AccountPage extends GetView<AccountController> {
                                         ),
                                         child: CupertinoTextField(
                                           textAlign: TextAlign.center,
-                                          controller: controller
-                                              .textEditingController,
+                                          controller:
+                                              controller.textEditingController,
                                           keyboardType: TextInputType.text,
                                           cursorColor: const Color(0xFF55E6FF),
                                           style: TextStyle(
@@ -134,8 +134,8 @@ class AccountPage extends GetView<AccountController> {
                               const SizedBox(width: 8),
                               GestureDetector(
                                 onTap: () {
-                                  if (controller.draftUsername.value
-                                      .isNotEmpty) {
+                                  if (controller
+                                      .draftUsername.value.isNotEmpty) {
                                     FocusScope.of(context)
                                         .requestFocus(FocusNode());
                                     controller.updateUsername(
@@ -328,6 +328,7 @@ class AccountPage extends GetView<AccountController> {
                         child: CupertinoTextField(
                           textAlign: TextAlign.start,
                           controller: controller.messageController,
+                          focusNode: controller.messageFocusNode,
                           keyboardType: TextInputType.text,
                           cursorColor: const Color(0xFF55E6FF),
                           style: const TextStyle(
@@ -357,10 +358,11 @@ class AccountPage extends GetView<AccountController> {
                       child: GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
-                          FocusScope.of(context).unfocus();
+                          controller.messageFocusNode.unfocus();
                           controller.checkSendData(
                               context, controller.messageController.text,
                               callback: (value) {
+                            controller.messageFocusNode.unfocus();
                             if (value == 'ok') {
                               controller.fetchApi();
                               controller.messageController.clear();
@@ -380,8 +382,7 @@ class AccountPage extends GetView<AccountController> {
                               ],
                             ),
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                color: const Color(0x8C55E6FF)),
+                            border: Border.all(color: const Color(0x8C55E6FF)),
                           ),
                           child: const Icon(
                             Icons.send,

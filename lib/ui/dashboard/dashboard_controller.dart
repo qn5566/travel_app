@@ -44,7 +44,8 @@ class DashboardController extends GetxController {
     if (isClosed) return;
 
     // 從未成功下載過 → 不提醒（地圖頁會引導首次下載）
-    final updateTime = sharedPreferences.getString(AppConstants.homeUpdateShareKey);
+    final updateTime =
+        sharedPreferences.getString(AppConstants.homeUpdateShareKey);
     if (updateTime == null || updateTime.isEmpty) return;
     final lastUpdate = DateTime.tryParse(updateTime);
     if (lastUpdate == null) return;
@@ -123,6 +124,9 @@ class DashboardController extends GetxController {
   }
 
   void changeTabIndex(int index) {
+    if (tabIndex == 3 && index != 3 && Get.isRegistered<AccountController>()) {
+      Get.find<AccountController>().messageFocusNode.unfocus();
+    }
     tabIndex = index;
     update();
     // IndexedStack 的分頁不會因切換而重建；這兩頁的資料可能在詳情頁

@@ -40,6 +40,7 @@ class AccountController extends GetxController
   bool isInterstitialAdReady = false;
 
   late TextEditingController messageController;
+  late FocusNode messageFocusNode;
   late AnimationController animationController;
 
   @override
@@ -54,6 +55,7 @@ class AccountController extends GetxController
     }
     textEditingController = TextEditingController();
     messageController = TextEditingController();
+    messageFocusNode = FocusNode();
 
     userData = Get.find();
 
@@ -70,8 +72,7 @@ class AccountController extends GetxController
     isLoading(true);
     await ApiHelper().fetchCommentDataMessageBoard().then((value) {
       final sorted = value
-        ..sort((a, b) =>
-            (b.timeStamp ?? '').compareTo(a.timeStamp ?? ''));
+        ..sort((a, b) => (b.timeStamp ?? '').compareTo(a.timeStamp ?? ''));
       dataListComment.assignAll(sorted);
       isLoading(false);
       update();
@@ -243,6 +244,7 @@ class AccountController extends GetxController
   void dispose() {
     textEditingController.dispose();
     messageController.dispose();
+    messageFocusNode.dispose();
     AdManagerUtil.releaseAd(
       AdHelper.accountAdUnitId,
       placementId: 'account-banner',
