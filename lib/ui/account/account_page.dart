@@ -255,7 +255,7 @@ class AccountPage extends GetView<AccountController> {
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 150, right: 16, top: 16),
+              padding: const EdgeInsets.only(bottom: 160, right: 16, top: 16),
               child: GradientPillButton(
                 text: '更多資訊',
                 icon: Icons.info_outline_rounded,
@@ -278,7 +278,7 @@ class AccountPage extends GetView<AccountController> {
           Align(
             alignment: Alignment.bottomLeft,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 150, left: 16, top: 16),
+              padding: const EdgeInsets.only(bottom: 160, left: 16, top: 16),
               child: InkWell(
                 onTap: () async {
                   controller.startAnimation();
@@ -316,7 +316,7 @@ class AccountPage extends GetView<AccountController> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 90),
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 100),
               child: Container(
                 height: 50,
                 decoration: _glassDecoration(),
