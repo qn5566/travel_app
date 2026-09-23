@@ -89,3 +89,6 @@ String getRandomErrorImagePath() {
   final random = Random();
   return paths[random.nextInt(paths.length)];
 }
+
+// 廣告的開關
+String adSwitch = '1'; // 廣告的開關 0 關閉 1 開啟

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:travel/ui/dashboard/dashboard_binding.dart';
 
+import 'app_binding.dart';
 import 'config/global_config.dart';
 import 'injection_container.dart';
 import 'routes/app_pages.dart';
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
     return GetMaterialApp(
-      initialBinding: DashboardBinding(),
+      initialBinding: AppBinding(),
       initialRoute: AppRoutes.splashPage,
       getPages: AppPages.list,
       debugShowCheckedModeBanner: false,

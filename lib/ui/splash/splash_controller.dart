@@ -32,9 +32,19 @@ class SplashController extends GetxController
   }
 
   Future<void> _loadRemoteConfig() async {
+    var adSwitchLoaded = false;
     try {
       final value =
           await ApiHelper().getInfoData().timeout(const Duration(seconds: 5));
+      final adSwitchValue = value['ad_switch']?.toString().trim();
+      adSwitch = (adSwitchValue == '1') as String;
+      adSwitchLoaded = true;
+      if (kDebugMode) {
+        debugPrint(
+          'Splash ad_switch=$adSwitch, nativeAdEnabled=$adSwitch',
+        );
+      }
+
       // 先嘗試內建 Taiwan 來源，失敗後再嘗試 info.json 的遠端備援來源。
       // Set 會保留插入順序並自動去重。
       final remoteDataApi = (value['data_api'] as List?)
@@ -80,8 +90,8 @@ class SplashController extends GetxController
       if (infoMenu.isNotEmpty) userData.infoMenu.assignAll(infoMenu);
 
       final flutterVersion = packageInfo.buildNumber; // 您的Flutter版本号
-      final iosVersion = value['ios_version'] as String;
-      final androidVersion = value['android_version'] as String;
+      final iosVersion = value['ios_version']?.toString() ?? '';
+      final androidVersion = value['android_version']?.toString() ?? '';
 
       if (Platform.isAndroid &&
           compareVersion(flutterVersion, androidVersion) < 0) {
@@ -100,7 +110,12 @@ class SplashController extends GetxController
         _showVersionDialog(Get.context, info);
         return;
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      // 只有 info.json 請求本身失敗時才關閉廣告；若是後續欄位解析
+      // 失敗，不應覆蓋已成功讀取的 ad_switch。
+      if (!adSwitchLoaded) {
+        adSwitch = '1';
+      }
       // info.json 失敗時也要保留固定 GitHub 鏡像，確保 default 失敗後
       // 仍然有第二個來源可嘗試。
       userData.dataAPI.assignAll(<String>{
@@ -108,7 +123,8 @@ class SplashController extends GetxController
         ...RxConfig.fallbackDataApi,
       }.toList());
       if (kDebugMode) {
-        print('Error getting version information: $e');
+        debugPrint('Error getting version information: $e');
+        debugPrintStack(stackTrace: stackTrace);
       }
     }
   }

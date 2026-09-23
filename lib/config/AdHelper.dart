@@ -112,13 +112,13 @@ class AdHelper {
   static String get nativeAdUnitId {
     if (Platform.isAndroid) {
       if (kDebugMode) {
-        return "ca-app-pub-3731028924883193/4877309858";
+        return 'ca-app-pub-3940256099942544/2247696110';
       } else {
         return "ca-app-pub-3731028924883193/9062059184";
       }
     } else if (Platform.isIOS) {
       if (kDebugMode) {
-        return "ca-app-pub-3731028924883193/2748143416";
+        return 'ca-app-pub-3940256099942544/3986624511';
       } else {
         return "ca-app-pub-3731028924883193/7884708887";
       }
