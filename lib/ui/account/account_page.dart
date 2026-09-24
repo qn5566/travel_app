@@ -252,150 +252,169 @@ class AccountPage extends GetView<AccountController> {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 160, right: 16, top: 16),
-              child: GradientPillButton(
-                text: '更多資訊',
-                icon: Icons.info_outline_rounded,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        contentPadding: EdgeInsets.zero,
-                        content: PopViewSettingPage(controller: controller),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 160, left: 16, top: 16),
-              child: InkWell(
-                onTap: () async {
-                  controller.startAnimation();
-                  await controller.fetchApi();
-                  controller.stopAnimation();
-                },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                    child: Container(
-                      width: ASize.w(16),
-                      height: ASize.h(16),
-                      decoration: _glassDecoration(),
-                      child: AnimatedBuilder(
-                        animation: controller.animationController,
-                        builder: (context, child) {
-                          return Transform.rotate(
-                            angle: controller.animationController.value *
-                                2.0 *
-                                3.1415927,
-                            child: const Icon(
-                              Icons.refresh,
-                              color: Color(0xFF8CF3FF),
+          Builder(
+            builder: (context) {
+              final mediaQuery = MediaQuery.of(context);
+              final keyboardIsOpen = mediaQuery.viewInsets.bottom > 0;
+              const tabBarHeight = 72.0;
+              const controlSpacing = 22.0;
+              final bottomOffset = tabBarHeight +
+                  controlSpacing +
+                  (keyboardIsOpen ? 0 : mediaQuery.padding.bottom);
+
+              return Positioned(
+                left: 0,
+                right: 0,
+                bottom: bottomOffset,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              controller.startAnimation();
+                              await controller.fetchApi();
+                              controller.stopAnimation();
+                            },
+                            borderRadius: BorderRadius.circular(10),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                                child: Container(
+                                  width: ASize.w(16),
+                                  height: ASize.h(16),
+                                  decoration: _glassDecoration(),
+                                  child: AnimatedBuilder(
+                                    animation: controller.animationController,
+                                    builder: (context, child) {
+                                      return Transform.rotate(
+                                        angle: controller
+                                                .animationController.value *
+                                            2.0 *
+                                            3.1415927,
+                                        child: const Icon(
+                                          Icons.refresh,
+                                          color: Color(0xFF8CF3FF),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
                             ),
-                          );
-                        },
+                          ),
+                          GradientPillButton(
+                            text: '更多資訊',
+                            icon: Icons.info_outline_rounded,
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0,
+                                    contentPadding: EdgeInsets.zero,
+                                    content: PopViewSettingPage(
+                                        controller: controller),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ),
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 50,
+                        decoration: _glassDecoration(),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 5, right: 5),
+                                child: CupertinoTextField(
+                                  textAlign: TextAlign.start,
+                                  controller: controller.messageController,
+                                  focusNode: controller.messageFocusNode,
+                                  keyboardType: TextInputType.text,
+                                  cursorColor: const Color(0xFF55E6FF),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "PingFangSC",
+                                  ),
+                                  maxLines: 1,
+                                  maxLength: 30,
+                                  placeholder: "留下你的心得吧!",
+                                  placeholderStyle: TextStyle(
+                                    color: Colors.white54,
+                                    fontFamily: "PingFangSC",
+                                    fontSize: ASize.ft(8),
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  onChanged: (value) {
+                                    // The controller owns the text field state.
+                                  },
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(6),
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.opaque,
+                                onTap: () {
+                                  controller.messageFocusNode.unfocus();
+                                  controller.checkSendData(context,
+                                      controller.messageController.text,
+                                      callback: (value) {
+                                    controller.messageFocusNode.unfocus();
+                                    if (value == 'ok') {
+                                      controller.fetchApi();
+                                      controller.messageController.clear();
+                                    }
+                                  });
+                                },
+                                child: Container(
+                                  width: 38,
+                                  height: 38,
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Color(0xFF19687B),
+                                        Color(0xFF49368C),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: const Color(0x8C55E6FF)),
+                                  ),
+                                  child: const Icon(
+                                    Icons.send,
+                                    color: Colors.white,
+                                    size: 18,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 100),
-              child: Container(
-                height: 50,
-                decoration: _glassDecoration(),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 5, right: 5),
-                        child: CupertinoTextField(
-                          textAlign: TextAlign.start,
-                          controller: controller.messageController,
-                          focusNode: controller.messageFocusNode,
-                          keyboardType: TextInputType.text,
-                          cursorColor: const Color(0xFF55E6FF),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontFamily: "PingFangSC",
-                          ),
-                          maxLines: 1,
-                          maxLength: 30,
-                          placeholder: "留下你的心得吧!",
-                          placeholderStyle: TextStyle(
-                            color: Colors.white54,
-                            fontFamily: "PingFangSC",
-                            fontSize: ASize.ft(8),
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          onChanged: (value) {
-                            // The controller owns the text field state.
-                          },
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          controller.messageFocusNode.unfocus();
-                          controller.checkSendData(
-                              context, controller.messageController.text,
-                              callback: (value) {
-                            controller.messageFocusNode.unfocus();
-                            if (value == 'ok') {
-                              controller.fetchApi();
-                              controller.messageController.clear();
-                            }
-                          });
-                        },
-                        child: Container(
-                          width: 38,
-                          height: 38,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [
-                                Color(0xFF19687B),
-                                Color(0xFF49368C),
-                              ],
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: const Color(0x8C55E6FF)),
-                          ),
-                          child: const Icon(
-                            Icons.send,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+              );
+            },
           ),
         ]),
       ),
