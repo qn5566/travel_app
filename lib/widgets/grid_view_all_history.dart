@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:travel/ui/want/want_controller.dart';
 import 'package:travel/widgets/money_text_widget_no_padding.dart';
 import 'package:travel/widgets/views/video_cover_view.dart';
@@ -8,6 +7,7 @@ import 'package:travel/widgets/views/video_cover_view.dart';
 import '../data/mode/data_all.dart';
 import '../util/ui_util.dart';
 import 'comment_error.dart';
+import 'tech_loading_view.dart';
 
 class GridViewAllHistory extends StatelessWidget {
   final WantController controller = Get.find<WantController>();
@@ -31,7 +31,7 @@ class GridViewAllHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => controller.isLoading.value
-          ? Lottie.asset('assets/loading.json')
+          ? const TechLoadingView()
           : (controller.dataAllList.isNotEmpty)
               ? MediaQuery.removePadding(
                   removeTop: true,
@@ -71,8 +71,8 @@ class GridViewAllHistory extends StatelessWidget {
                                 ],
                               ),
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                  color: const Color(0x6655E6FF)),
+                              border:
+                                  Border.all(color: const Color(0x6655E6FF)),
                               boxShadow: const [
                                 BoxShadow(
                                   color: Color(0x44000000),

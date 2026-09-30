@@ -9,6 +9,7 @@ import '../ui/home/home_controller.dart';
 import '../util/ui_util.dart';
 import 'comment_error.dart';
 import 'money_text_widget.dart';
+import 'tech_loading_view.dart';
 
 class ListViewHome extends StatelessWidget {
   ListViewHome({Key? key, required this.site}) : super(key: key);
@@ -31,7 +32,7 @@ class ListViewHome extends StatelessWidget {
               ],
             )
           : controller.isLoading.value
-              ? Lottie.asset('assets/loading.json')
+              ? const TechLoadingView()
               : (controller.dataList.isNotEmpty)
                   ? MediaQuery.removePadding(
                       removeTop: true,

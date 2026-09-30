@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:travel/widgets/views/video_cover_view.dart';
 
 import '../config/global_config.dart';
@@ -9,6 +8,7 @@ import '../ui/account/account_controller.dart';
 import '../util/ui_util.dart';
 import 'comment_error.dart';
 import 'money_text_widget.dart';
+import 'tech_loading_view.dart';
 
 class ListViewHistory extends StatelessWidget {
   final AccountController controller = Get.find<AccountController>();
@@ -19,7 +19,7 @@ class ListViewHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => controller.isLoading.value
-          ? Lottie.asset('assets/loading.json')
+          ? const TechLoadingView()
           // const Center(
           //         child: CircularProgressIndicator(
           //         strokeWidth: 10,

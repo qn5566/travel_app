@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../config/global_config.dart';
 import '../network_cache_image.dart';
+import '../tech_loading_view.dart';
 
 /// 「多圖滑動」封面：景點有多張圖片時可橫向滑動瀏覽，
 /// 右下角顯示圓點指示器；只有一張（或沒有）圖片時行為與
@@ -63,7 +63,7 @@ class _ImageSliderViewState extends State<ImageSliderView> {
       height: double.infinity,
       radius: widget.radius,
       fit: BoxFit.cover,
-      placeholderWidget: Lottie.asset('assets/cover.json'),
+      placeholderWidget: const TechCoverPlaceholder(),
       errorWidget: const Icon(Icons.error),
       placeholder: Image.asset(
         getRandomErrorImagePath(),
@@ -129,8 +129,8 @@ class _ImageSliderViewState extends State<ImageSliderView> {
             height: _currentIndex == index ? 7 : 5,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withValues(
-                  alpha: _currentIndex == index ? 1.0 : 0.5),
+              color: Colors.white
+                  .withValues(alpha: _currentIndex == index ? 1.0 : 0.5),
             ),
           ),
         ),

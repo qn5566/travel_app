@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:travel/ui/history/history_controller.dart';
 import 'package:travel/widgets/views/video_cover_view.dart';
 
@@ -34,7 +33,7 @@ class ListViewAllHistory extends StatelessWidget {
                 BoxShadow(color: Color(0x2255E6FF), blurRadius: 20),
               ],
             ),
-            child: Lottie.asset('assets/loading.json'),
+            child: const _HistoryLoadingGraphic(),
           ),
         );
       }
@@ -87,7 +86,8 @@ class _HistoryHudCard extends StatelessWidget {
       if (town.isNotEmpty && town != '0' && town != region) town,
       if (streetAddress.isNotEmpty && streetAddress != '0') streetAddress,
     ];
-    final locationText = locationParts.isEmpty ? '地址未提供' : locationParts.join('');
+    final locationText =
+        locationParts.isEmpty ? '地址未提供' : locationParts.join('');
     final sequence = (index + 1).toString().padLeft(3, '0');
 
     return Semantics(
@@ -249,8 +249,7 @@ class _HudChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent =
-        purple ? const Color(0xFFB8A4FF) : const Color(0xFF8CF3FF);
+    final accent = purple ? const Color(0xFFB8A4FF) : const Color(0xFF8CF3FF);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
       decoration: BoxDecoration(
@@ -342,6 +341,27 @@ class _HistoryEmptyState extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// 歷史頁載入時的靜態科技感圖示（取代 Lottie 動畫）。
+class _HistoryLoadingGraphic extends StatelessWidget {
+  const _HistoryLoadingGraphic();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0x2255E6FF),
+        border: Border.all(color: const Color(0x6655E6FF)),
+      ),
+      child: const Icon(
+        Icons.travel_explore_rounded,
+        color: Color(0xFF8CF3FF),
+        size: 44,
       ),
     );
   }

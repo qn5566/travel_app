@@ -11,6 +11,7 @@ import '../data/mode/data_all.dart';
 import '../ui/home/home_controller.dart';
 import '../util/ui_util.dart';
 import 'comment_error.dart';
+import 'tech_loading_view.dart';
 
 class GridViewHome extends StatefulWidget {
   const GridViewHome({Key? key, required this.site, this.callback})
@@ -63,7 +64,7 @@ class _GridViewHomeState extends State<GridViewHome> {
               ],
             )
           : controller.isLoading.value
-              ? Lottie.asset('assets/loading.json')
+              ? const TechLoadingView()
               : (controller.dataList.isNotEmpty)
                   ? MediaQuery.removePadding(
                       removeTop: true,
@@ -94,7 +95,7 @@ class _GridViewHomeState extends State<GridViewHome> {
                               }
                               return Container(
                                 alignment: Alignment.center,
-                                child: Lottie.asset('assets/loading.json'),
+                                child: const TechLoadingView(compact: true),
                               );
                             }
 

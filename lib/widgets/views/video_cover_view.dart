@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../config/global_config.dart';
 import '../network_cache_image.dart';
+import '../tech_loading_view.dart';
 
 /// 「封面圖」
 class VideoCoverView extends StatelessWidget {
@@ -30,7 +30,7 @@ class VideoCoverView extends StatelessWidget {
               height: double.infinity,
               radius: radius,
               fit: BoxFit.cover,
-              placeholderWidget: Lottie.asset('assets/cover.json'),
+              placeholderWidget: const TechCoverPlaceholder(),
               errorWidget: const Icon(Icons.error),
               placeholder: Image.asset(
                 getRandomErrorImagePath(),
