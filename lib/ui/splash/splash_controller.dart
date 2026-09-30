@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../config/global_config.dart';
 import '../../config/rx_config.dart';
 import '../../data/api_helper.dart';
+import '../../data/mode/recommend_app_model.dart';
 import '../../routes/app_routes.dart';
 
 class SplashController extends GetxController
@@ -88,6 +89,17 @@ class SplashController extends GetxController
       // 設定頁面的小訣竅
       final infoMenu = (value['info_menu'] as List?)?.cast<String>() ?? [];
       if (infoMenu.isNotEmpty) userData.infoMenu.assignAll(infoMenu);
+
+      // 相關 App 推薦
+      final recommendApp = (value['recommend_app'] as List?)
+              ?.whereType<Map>()
+              .map((item) =>
+                  RecommendAppModel.fromJson(Map<String, dynamic>.from(item)))
+              .toList() ??
+          const <RecommendAppModel>[];
+      if (recommendApp.isNotEmpty) {
+        userData.recommendApp.assignAll(recommendApp);
+      }
 
       final flutterVersion = packageInfo.buildNumber; // 您的Flutter版本号
       final iosVersion = value['ios_version']?.toString() ?? '';

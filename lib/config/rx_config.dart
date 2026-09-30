@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import 'global_config.dart';
+import '../data/mode/recommend_app_model.dart';
 
 class RxConfig extends GetxController {
   RxConfig() {
@@ -16,6 +17,7 @@ class RxConfig extends GetxController {
     if (travelTitle.isEmpty) travelTitle.assignAll(defaultTravelTitles);
     if (keyWordTravel.isEmpty) keyWordTravel.assignAll(defaultKeywords);
     if (dataAPI.isEmpty) dataAPI.assignAll(defaultDataApi);
+    if (recommendApp.isEmpty) recommendApp.assignAll(defaultRecommendApp);
   }
 
   static const defaultTravelTitles = <String>[
@@ -51,6 +53,55 @@ class RxConfig extends GetxController {
   static const fallbackDataApi = <String>[
     'https://raw.githubusercontent.com/qn5566/travel/main/data/Attraction-json.zip',
   ];
+
+  static final defaultRecommendApp = <RecommendAppModel>[
+    RecommendAppModel(
+      title: 'Baby Learn English｜遊戲學 ABC',
+      subtitle: '邊玩邊學，輕鬆認識英文字母',
+      image:
+          'https://raw.githubusercontent.com/qn5566/ActivityEvent/main/res/images/pics/ads_banner_4.webp',
+      imageHeight: 76,
+      url: 'https://qn5566.github.io/BabayLearnEnglish/',
+    ),
+    RecommendAppModel(
+      title: 'HiMyDream 親子台灣旅遊部落客',
+      subtitle: '親子共遊靈感與實用攻略',
+      image:
+          'https://raw.githubusercontent.com/qn5566/travel/main/res/images/pics/ads_banner_1.webp',
+      imageHeight: 76,
+      url: 'https://himydream.me/',
+    ),
+    RecommendAppModel(
+      title: '台灣吃喝玩樂地圖 APP',
+      subtitle: '景點、美食、路線一手掌握',
+      image:
+          'https://raw.githubusercontent.com/qn5566/travel/main/res/images/pics/ads_banner_2.webp',
+      imageHeight: 76,
+      androidUrl:
+          'https://play.google.com/store/apps/details?id=com.meetstudio.event',
+      iosUrl: 'https://apps.apple.com/us/app/id6446348643',
+    ),
+    RecommendAppModel(
+      title: '寵物領養紀錄 APP',
+      subtitle: '給毛小孩最完整的陪伴紀錄',
+      image:
+          'https://raw.githubusercontent.com/qn5566/travel/main/res/images/pics/ads_banner_3.webp',
+      imageHeight: 76,
+      androidUrl:
+          'https://play.google.com/store/apps/details?id=com.meetstudio.app.adoptpet',
+      iosUrl: 'https://apps.apple.com/us/app/id6737406473',
+    ),
+    RecommendAppModel(
+      title: '幫忙打分給予支持，大感謝',
+      subtitle: '你的肯定就是我們前進的動力',
+      image:
+          'https://raw.githubusercontent.com/qn5566/travel/main/res/images/icon/rate_us.webp',
+      imageHeight: 40,
+      androidUrl:
+          'https://play.google.com/store/apps/details?id=com.meetstudio.travel&reviewId=0',
+      iosUrl: 'https://apps.apple.com/us/app/id1671108420?action=write-review',
+    ),
+  ];
   // tab Title
   RxList<String> travelTitle = <String>[].obs;
 
@@ -69,4 +120,7 @@ class RxConfig extends GetxController {
 
   // 小訣竅
   RxList<String> infoMenu = <String>[].obs;
+
+  // 相關 App 推薦
+  RxList<RecommendAppModel> recommendApp = <RecommendAppModel>[].obs;
 }
