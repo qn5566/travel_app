@@ -38,7 +38,7 @@ class SplashController extends GetxController
       final value =
           await ApiHelper().getInfoData().timeout(const Duration(seconds: 5));
       final adSwitchValue = value['ad_switch']?.toString().trim();
-      adSwitch = (adSwitchValue == '1') as String;
+      adSwitch = adSwitchValue == '1' ? '1' : '0';
       adSwitchLoaded = true;
       if (kDebugMode) {
         debugPrint(
