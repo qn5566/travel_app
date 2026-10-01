@@ -317,8 +317,8 @@ class _PopViewSettingPageState extends State<PopViewSettingPage> {
                       ],
                     ),
                     child: const Icon(
-                      Icons.rocket_launch_rounded,
-                      color: Colors.white,
+                      Icons.terminal_rounded,
+                      color: Color(0xFF8CF3FF),
                       size: 20,
                     ),
                   ),
@@ -393,8 +393,8 @@ class _PopViewSettingPageState extends State<PopViewSettingPage> {
                       ],
                     ),
                     child: const Icon(
-                      Icons.account_balance_rounded,
-                      color: Colors.white,
+                      Icons.public_rounded,
+                      color: Color(0xFF8CF3FF),
                       size: 20,
                     ),
                   ),
@@ -470,8 +470,8 @@ class _PopViewSettingPageState extends State<PopViewSettingPage> {
                       ],
                     ),
                     child: const Icon(
-                      Icons.verified_rounded,
-                      color: Colors.white,
+                      Icons.new_releases_rounded,
+                      color: Color(0xFF8CF3FF),
                       size: 20,
                     ),
                   ),
