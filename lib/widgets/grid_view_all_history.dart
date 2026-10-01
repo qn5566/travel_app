@@ -5,27 +5,12 @@ import 'package:travel/widgets/money_text_widget_no_padding.dart';
 import 'package:travel/widgets/views/video_cover_view.dart';
 
 import '../data/mode/data_all.dart';
-import '../util/ui_util.dart';
-import 'comment_error.dart';
 import 'tech_loading_view.dart';
 
 class GridViewAllHistory extends StatelessWidget {
   final WantController controller = Get.find<WantController>();
 
   GridViewAllHistory({super.key});
-
-  /// 名稱欄半透明背景（重用同一個實例，避免每個 item 重建）
-  static const BoxDecoration _nameBackdrop = BoxDecoration(
-    gradient: LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [Color(0xD9162940), Color(0xD90C1327)],
-    ),
-    borderRadius: BorderRadius.only(
-      bottomLeft: Radius.circular(10),
-      bottomRight: Radius.circular(10),
-    ),
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -43,100 +28,141 @@ class GridViewAllHistory extends StatelessWidget {
                       controller.reload();
                     },
                     child: GridView.builder(
-                      padding: const EdgeInsets.only(bottom: 120),
-                      // 資料不足一屏時仍可下拉刷新
+                      padding: const EdgeInsets.fromLTRB(12, 8, 12, 120),
                       physics: const AlwaysScrollableScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3, // 3 列
-                        childAspectRatio: 0.75, // 調整子項目比例
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 14,
+                        childAspectRatio: 0.82,
                       ),
                       itemCount: controller.dataAllList.length,
                       itemBuilder: (context, index) {
                         DataAll item = controller.dataAllList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            controller.onTapDataAll(item);
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.all(3),
-                            clipBehavior: Clip.antiAlias,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Color(0xD9162940),
-                                  Color(0xD90C1327),
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                              border:
-                                  Border.all(color: const Color(0x6655E6FF)),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(0x44000000),
-                                  blurRadius: 8,
-                                  offset: Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Stack(
-                              children: [
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Stack(
-                                    children: [
-                                      VideoCoverView(
-                                        // radius: 10,
-                                        cover: item.picture1 ?? '',
-                                        money: item.region,
-                                      ),
-                                      MoneyTextWidgetNoPadding(
-                                          item.region ?? "尚未資料")
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 4.0, vertical: 2.0),
-                                    child: Container(
-                                      decoration: _nameBackdrop,
-                                      child: Text(
-                                        item.name!,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w300,
-                                          fontFamily: "PingFangSC",
-                                          fontStyle: FontStyle.normal,
-                                          fontSize: ASize.ft(6),
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                        return _buildCard(item);
                       },
                     ),
                   ),
                 )
-              : const Stack(
-                  children: [
-                    Positioned.fill(
-                      child: Padding(
-                        padding: EdgeInsets.all(50.0),
-                        child: CommentError(textColor: Colors.white),
-                      ),
-                    ),
-                  ],
+              : _buildEmptyState(),
+    );
+  }
+
+  Widget _buildCard(DataAll item) {
+    return GestureDetector(
+      onTap: () {
+        controller.onTapDataAll(item);
+      },
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xD9162940), Color(0xD90C1327)],
+          ),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: const Color(0x6655E6FF)),
+          boxShadow: [
+            const BoxShadow(
+              color: Color(0x44000000),
+              blurRadius: 10,
+              offset: Offset(0, 4),
+            ),
+            BoxShadow(
+              color: const Color(0xFF55E6FF).withValues(alpha: 0.10),
+              blurRadius: 14,
+            ),
+          ],
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(3),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(11),
+                child: VideoCoverView(
+                  cover: item.picture1 ?? '',
+                  money: item.region,
                 ),
+              ),
+            ),
+            MoneyTextWidgetNoPadding(item.region ?? '尚未資料'),
+            Positioned(
+              left: 8,
+              right: 8,
+              bottom: 8,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withValues(alpha: 0.72),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color(0x3355E6FF)),
+                ),
+                child: Text(
+                  item.name!,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'PingFangSC',
+                    fontSize: 11,
+                    shadows: [
+                      Shadow(color: Colors.black87, blurRadius: 2),
+                    ],
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.favorite_border_rounded,
+            size: 56,
+            color: const Color(0xFF55E6FF).withValues(alpha: 0.45),
+          ),
+          const SizedBox(height: 14),
+          const Text(
+            '還沒有想去的地方',
+            style: TextStyle(
+              color: Color(0xFFEAF3FF),
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'PingFangSC',
+            ),
+          ),
+          const SizedBox(height: 6),
+          const Text(
+            '去首頁收藏喜歡的景點吧',
+            style: TextStyle(
+              color: Color(0xFF8FA3B8),
+              fontSize: 13,
+              fontFamily: 'PingFangSC',
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

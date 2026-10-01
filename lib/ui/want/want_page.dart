@@ -57,20 +57,88 @@ class WantPage extends GetView<WantController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: ScreenUtil().statusBarHeight + 5.0),
-              Obx(() => (controller.isADShowing.value &&
-                      controller.bannerAd != null)
-                  ? Align(
-                      alignment: Alignment.topCenter,
-                      child: SizedBox(
-                        width: controller.bannerAd!.size.width.toDouble(),
-                        height: controller.bannerAd!.size.height.toDouble(),
-                        child: AdManagerUtil()
-                            .bannerAdWidget(controller.bannerAd!),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 5,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color(0xFF55E6FF),
+                                  Color(0xFF7C5CFF),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(3),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF55E6FF)
+                                      .withValues(alpha: 0.55),
+                                  blurRadius: 10,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                '想去名單',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'PingFangSC',
+                                  letterSpacing: 1,
+                                  shadows: [
+                                    Shadow(
+                                      color: Color(0x8855E6FF),
+                                      blurRadius: 12,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Obx(
+                                () => Text(
+                                  '已收藏 ${controller.dataAllList.length} 個景點',
+                                  style: const TextStyle(
+                                    color: Color(0xFF8FA3B8),
+                                    fontSize: 12,
+                                    fontFamily: 'PingFangSC',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    )
-                  : SizedBox(
-                      height: ASize.h(0),
-                    )),
+                    ),
+                  ],
+                ),
+              ),
+              Obx(() =>
+                  (controller.isADShowing.value && controller.bannerAd != null)
+                      ? Align(
+                          alignment: Alignment.topCenter,
+                          child: SizedBox(
+                            width: controller.bannerAd!.size.width.toDouble(),
+                            height: controller.bannerAd!.size.height.toDouble(),
+                            child: AdManagerUtil()
+                                .bannerAdWidget(controller.bannerAd!),
+                          ),
+                        )
+                      : SizedBox(
+                          height: ASize.h(0),
+                        )),
               SizedBox(
                 height: ASize.h(5),
               ),
@@ -85,8 +153,8 @@ class WantPage extends GetView<WantController> {
           ? GestureDetector(
               onTap: () => _confirmDeleteAll(context),
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
@@ -96,14 +164,19 @@ class WantPage extends GetView<WantController> {
                       Color(0xFF4A0E2A),
                     ],
                   ),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                      color: const Color(0xFFFF5C8A).withOpacity(0.55)),
+                      color: const Color(0xFFFF5C8A).withOpacity(0.62)),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFFF5C8A).withOpacity(0.18),
-                      blurRadius: 10,
+                      color: const Color(0xFFFF5C8A).withOpacity(0.35),
+                      blurRadius: 18,
                       spreadRadius: 1,
+                    ),
+                    const BoxShadow(
+                      color: Color(0x55000000),
+                      blurRadius: 14,
+                      offset: Offset(0, 6),
                     ),
                   ],
                 ),
