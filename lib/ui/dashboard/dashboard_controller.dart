@@ -43,6 +43,11 @@ class DashboardController extends GetxController {
     await Future.delayed(const Duration(seconds: 3));
     if (isClosed) return;
 
+    // 使用者在設定頁關閉自動更新時，不再跳出兩週未更新的提醒。
+    final autoUpdate =
+        sharedPreferences.getBool(AppConstants.homeAutoUpdateKey) ?? true;
+    if (!autoUpdate) return;
+
     // 從未成功下載過 → 不提醒（地圖頁會引導首次下載）
     final updateTime =
         sharedPreferences.getString(AppConstants.homeUpdateShareKey);

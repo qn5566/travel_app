@@ -55,6 +55,10 @@ class AppConstants {
   static const String userName = 'username';
 
   static const String homeUpdateShareKey = 'update';
+
+  /// 資料自動更新提醒開關（開啟時，資料超過兩週未更新會跳出更新提醒）
+  static const String homeAutoUpdateKey = 'home_auto_update';
+
   /// Version of the local attraction snapshot. Increment this whenever the
   /// remote schema/source changes and existing rows must be downloaded again.
   static const String homeDataVersionKey = 'home_data_version';
