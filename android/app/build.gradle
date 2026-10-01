@@ -74,7 +74,7 @@ android {
         applicationId "com.meetstudio.travel"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion flutterMinSdkVersion
+        minSdkVersion 24
         targetSdkVersion flutterTargetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
