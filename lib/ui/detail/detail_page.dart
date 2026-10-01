@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -23,13 +25,14 @@ class DetailPage extends GetView<DetailController> {
     final region = item.region ?? '';
 
     return Scaffold(
+      backgroundColor: const Color(0xFF060B18),
       body: SafeArea(
         top: false,
         child: CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
-              backgroundColor: Colors.transparent,
-              expandedHeight: ScreenUtil().setHeight(ASize.h(200)),
+              backgroundColor: const Color(0xFF060B18),
+              expandedHeight: ScreenUtil().setHeight(ASize.h(240)),
               floating: false,
               pinned: true,
               snap: false,
@@ -85,86 +88,131 @@ class DetailPage extends GetView<DetailController> {
                         money: region,
                       ),
                     ),
-                    // 漸層遮罩：有 gradient 的 Container 會吃掉觸控事件，
-                    // 必須用 IgnorePointer 讓滑動手勢穿透到下面的 PageView
-                    Positioned.fill(
-                      child: IgnorePointer(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.black.withValues(alpha: 0.25),
-                                Colors.transparent,
-                                Colors.black.withValues(alpha: 0.45),
-                                Colors.black.withValues(alpha: 0.85),
-                              ],
-                              stops: const [0, 0.35, 0.65, 1],
+                    if (region.isNotEmpty)
+                      Positioned(
+                        left: 14,
+                        bottom: 84,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 7),
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Color(0x66162940),
+                                    Color(0x660C1327),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                                border:
+                                    Border.all(color: const Color(0x6655E6FF)),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const Icon(
+                                    Icons.location_on_rounded,
+                                    color: Color(0xFF55E6FF),
+                                    size: 14,
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Text(
+                                    region,
+                                    style: const TextStyle(
+                                      color: Color(0xFFEAF3FF),
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: "PingFangSC",
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(48.0),
+                preferredSize: const Size.fromHeight(76),
                 child: Container(
+                  margin: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                  padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF0EFEE),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
+                    color: const Color(0xE60C1327),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(color: const Color(0x3355E6FF)),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.12),
-                        blurRadius: 8,
-                        offset: const Offset(0, -2),
+                        color: const Color(0xFF55E6FF).withValues(alpha: 0.12),
+                        blurRadius: 20,
+                        offset: const Offset(0, 6),
+                      ),
+                      const BoxShadow(
+                        color: Color(0x55000000),
+                        blurRadius: 18,
+                        offset: Offset(0, 8),
                       ),
                     ],
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
                         child: TabBar(
-                          isScrollable: true,
-                          indicatorColor: const Color(0xFF49368C),
-                          labelColor: const Color(0xFF49368C),
-                          unselectedLabelColor: const Color(0xFFB0B0B0),
-                          tabAlignment: TabAlignment.start,
-                          indicatorWeight: 2.5,
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: ASize.ft(8),
-                            fontFamily: "PingFangSC",
-                          ),
-                          unselectedLabelStyle: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: ASize.ft(8),
-                            fontFamily: "PingFangSC",
-                          ),
-                          tabs: controller.subTitle,
                           controller: controller.tabInfoController,
-                          padding: const EdgeInsets.only(left: 8),
+                          tabs: controller.subTitle,
+                          dividerColor: Colors.transparent,
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicator: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Color(0xFF19687B), Color(0xFF7C5CFF)],
+                            ),
+                            borderRadius: BorderRadius.circular(18),
+                            border: Border.all(
+                              color: const Color(0xFF55E6FF)
+                                  .withValues(alpha: 0.5),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF55E6FF)
+                                    .withValues(alpha: 0.28),
+                                blurRadius: 14,
+                              ),
+                            ],
+                          ),
+                          labelColor: Colors.white,
+                          unselectedLabelColor: const Color(0xFF8FA3B8),
+                          labelStyle: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                            fontFamily: "PingFangSC",
+                          ),
+                          unselectedLabelStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                            fontFamily: "PingFangSC",
+                          ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(right: ASize.w(4)),
-                        child: GradientPillButton(
-                          text: page == 'want' ? '刪除想去名單' : '加入想去名單',
-                          isDelete: page == 'want',
-                          onTap: () {
-                            if (page == 'want') {
-                              controller.deleteWantGo(context);
-                            } else {
-                              controller.saveWantGo(context);
-                            }
-                          },
-                        ),
+                      const SizedBox(width: 8),
+                      GradientPillButton(
+                        text: page == 'want' ? '刪除想去名單' : '加入想去名單',
+                        isDelete: page == 'want',
+                        onTap: () {
+                          if (page == 'want') {
+                            controller.deleteWantGo(context);
+                          } else {
+                            controller.saveWantGo(context);
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -173,7 +221,7 @@ class DetailPage extends GetView<DetailController> {
             ),
             SliverFillRemaining(
               child: Container(
-                color: const Color(0xFFF0EFEE),
+                color: Colors.transparent,
                 child: TabBarView(
                   controller: controller.tabInfoController,
                   children: [

@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../config/style_info.dart';
 import '../data/mode/comment_model.dart';
 import '../ui/detail/detail_controller.dart';
 import '../util/ui_util.dart';
@@ -17,32 +16,32 @@ class CommentView extends StatelessWidget {
   static final TextStyle _textName = TextStyle(
       fontSize: ASize.ft(8.0),
       fontWeight: FontWeight.bold,
-      color: StyleInfo.infoTextUserNameColor,
+      color: const Color(0xFFEAF3FF),
       fontFamily: "PingFangSC");
 
   static final TextStyle _textComment = TextStyle(
       fontSize: ASize.ft(6.0),
       fontWeight: FontWeight.normal,
-      color: const Color(0xFF3A3A3A),
+      color: const Color(0xFFC7D4E5),
       height: 1.4,
       fontFamily: "PingFangSC");
 
   static final TextStyle _textInfo = TextStyle(
       fontSize: ASize.ft(5.5),
       fontWeight: FontWeight.w200,
-      color: const Color(0xFFAAAAAA),
+      color: const Color(0xFF7A8BA3),
       fontFamily: "PingFangSC");
 
   static final TextStyle _textHint = TextStyle(
       fontSize: ASize.ft(4.5),
       fontWeight: FontWeight.w200,
-      color: const Color(0xFFAAAAAA),
+      color: const Color(0xFF64748B),
       fontFamily: "PingFangSC");
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: StyleInfo.infoBGColor,
+      color: Colors.transparent,
       child: Padding(
         padding: const EdgeInsets.only(
             left: 10.0, right: 10.0, top: 8.0, bottom: 5.0),
@@ -56,7 +55,7 @@ class CommentView extends StatelessWidget {
                       controller.dataList.isEmpty) {
                     return const Center(
                       child: CircularProgressIndicator(
-                        color: Color(0xFF49368C),
+                        color: Color(0xFF55E6FF),
                         strokeWidth: 2.5,
                       ),
                     );
@@ -78,19 +77,27 @@ class CommentView extends StatelessWidget {
                         return SizedBox(width: ASize.w(5));
                       }
                       return Container(
-                        margin: const EdgeInsets.only(bottom: 8),
+                        margin: const EdgeInsets.only(bottom: 10),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 10),
+                            horizontal: 14, vertical: 12),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Color(0xE61B2E52), Color(0xE60D1730)],
+                          ),
+                          borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                              color: const Color(0xFFE8E6E4), width: 0.5),
-                          boxShadow: const [
+                              color: const Color(0x3355E6FF), width: 0.8),
+                          boxShadow: [
                             BoxShadow(
-                              color: Color(0x0A000000),
-                              blurRadius: 4,
-                              offset: Offset(0, 1),
+                              color: Color(0x22000000),
+                              blurRadius: 10,
+                              offset: Offset(0, 3),
+                            ),
+                            const BoxShadow(
+                              color: Color(0x1455E6FF),
+                              blurRadius: 14,
                             ),
                           ],
                         ),
@@ -108,8 +115,8 @@ class CommentView extends StatelessWidget {
                                     decoration: BoxDecoration(
                                       gradient: const LinearGradient(
                                         colors: [
-                                          Color(0xFF49368C),
-                                          Color(0xFF19687B),
+                                          Color(0xFF7C5CFF),
+                                          Color(0xFF55E6FF),
                                         ],
                                       ),
                                       borderRadius: BorderRadius.circular(14),
@@ -163,16 +170,18 @@ class CommentView extends StatelessWidget {
             Container(
               height: 50,
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12.0),
-                border: Border.all(
-                    color: const Color(0xFF49368C).withValues(alpha: 0.3),
-                    width: 1.0),
-                boxShadow: const [
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xE61B2E52), Color(0xE60D1730)],
+                ),
+                borderRadius: BorderRadius.circular(14.0),
+                border: Border.all(color: const Color(0x3355E6FF), width: 1.0),
+                boxShadow: [
                   BoxShadow(
-                    color: Color(0x0D000000),
-                    blurRadius: 6,
-                    offset: Offset(0, 2),
+                    color: Color(0x22000000),
+                    blurRadius: 10,
+                    offset: Offset(0, 3),
                   ),
                 ],
               ),
@@ -189,10 +198,11 @@ class CommentView extends StatelessWidget {
                         maxLength: 30,
                         placeholder: "寫下你的感想",
                         placeholderStyle: TextStyle(
-                            color: const Color(0xFFB0B0B0),
+                            color: const Color(0xFF64748B),
                             fontSize: ASize.ft(6)),
                         style: TextStyle(
-                            color: Colors.black, fontSize: ASize.ft(6)),
+                            color: const Color(0xFFEAF3FF),
+                            fontSize: ASize.ft(6)),
                         decoration: BoxDecoration(
                           color: Colors.transparent,
                           borderRadius: BorderRadius.circular(10.0),
@@ -236,8 +246,8 @@ class CommentView extends StatelessWidget {
                                       const Color(0xFF757575),
                                     ]
                                   : const [
-                                      Color(0xFF19687B),
-                                      Color(0xFF49368C),
+                                      Color(0xFF55E6FF),
+                                      Color(0xFF7C5CFF),
                                     ],
                             ),
                             borderRadius: BorderRadius.circular(10),

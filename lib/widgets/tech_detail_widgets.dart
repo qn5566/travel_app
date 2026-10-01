@@ -2,6 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+const _techCyan = Color(0xFF55E6FF);
+const _techViolet = Color(0xFF7C5CFF);
+const _techTextPrimary = Color(0xFFEAF3FF);
+const _techTextSecondary = Color(0xFF8FA3B8);
+const _techTextMuted = Color(0xFF64748B);
+
 /// Glass-morphism circular icon button used in the detail page app bar.
 class GlassIconButton extends StatelessWidget {
   const GlassIconButton({
@@ -141,22 +147,32 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final accent = iconColor ?? _techCyan;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFFE8E6E4)),
-          boxShadow: const [
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xE61B2E52), Color(0xE60D1730)],
+          ),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: accent.withValues(alpha: 0.30)),
+          boxShadow: [
             BoxShadow(
-              color: Color(0x0F000000),
-              blurRadius: 6,
-              offset: Offset(0, 2),
+              color: accent.withValues(alpha: 0.16),
+              blurRadius: 16,
+              offset: const Offset(0, 5),
+            ),
+            const BoxShadow(
+              color: Color(0x33000000),
+              blurRadius: 12,
+              offset: Offset(0, 4),
             ),
           ],
         ),
@@ -164,16 +180,26 @@ class InfoCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: 32,
-              height: 32,
+              width: 40,
+              height: 40,
               decoration: BoxDecoration(
-                color: (iconColor ?? const Color(0xFF49368C)).withOpacity(0.10),
-                borderRadius: BorderRadius.circular(8),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [accent, _techViolet],
+                ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: accent.withValues(alpha: 0.32),
+                    blurRadius: 10,
+                  ),
+                ],
               ),
               child: Icon(
                 icon,
-                size: 17,
-                color: iconColor ?? const Color(0xFF49368C),
+                size: 20,
+                color: Colors.white,
               ),
             ),
             const SizedBox(width: 12),
@@ -184,13 +210,14 @@ class InfoCard extends StatelessWidget {
                   Text(
                     title,
                     style: const TextStyle(
-                      color: Color(0xFF7C7474),
+                      color: _techTextSecondary,
                       fontWeight: FontWeight.w600,
                       fontFamily: "PingFangSC",
                       fontSize: 12,
+                      letterSpacing: 0.4,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 5),
                   child,
                 ],
               ),
@@ -214,13 +241,13 @@ class InfoText extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        color: isLink ? Colors.blue : const Color(0xFF3A3A3A),
+        color: isLink ? _techCyan : _techTextPrimary,
         fontWeight: isLink ? FontWeight.w600 : FontWeight.normal,
         fontFamily: "PingFangSC",
-        fontSize: 13,
-        height: 1.5,
+        fontSize: 13.5,
+        height: 1.55,
         decoration: isLink ? TextDecoration.underline : TextDecoration.none,
-        decorationColor: Colors.blue,
+        decorationColor: _techCyan,
       ),
     );
   }
@@ -245,13 +272,13 @@ class CommentEmptyState extends StatelessWidget {
                 Icon(
                   Icons.chat_bubble_outline_rounded,
                   size: 48,
-                  color: const Color(0xFF49368C).withOpacity(0.35),
+                  color: _techCyan.withValues(alpha: 0.45),
                 ),
                 const SizedBox(height: 12),
                 const Text(
                   '暫無評論，快來搶沙發！',
                   style: TextStyle(
-                    color: Color(0xFFB0B0B0),
+                    color: _techTextMuted,
                     fontSize: 14,
                     fontFamily: "PingFangSC",
                   ),

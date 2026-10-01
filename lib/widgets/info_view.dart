@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../config/style_info.dart';
 import '../ui/detail/detail_controller.dart';
 import '../util/ToastUtil.dart';
 import '../util/ui_util.dart';
@@ -18,10 +17,13 @@ class InfoView extends StatelessWidget {
     if (item == null) return const SizedBox.shrink();
 
     return Container(
-      color: StyleInfo.infoBGColor,
+      color: Colors.transparent,
       child: SingleChildScrollView(
         padding: EdgeInsets.only(
-            top: ASize.w(5), left: ASize.w(5), right: ASize.w(5), bottom: ASize.h(15)),
+            top: ASize.w(5),
+            left: ASize.w(5),
+            right: ASize.w(5),
+            bottom: ASize.h(15)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -38,12 +40,11 @@ class InfoView extends StatelessWidget {
             InfoCard(
               icon: Icons.phone_rounded,
               title: '聯絡電話',
-              iconColor: const Color(0xFF19687B),
-              onTap: () => controller.call(
-                  Uri(scheme: 'tel', path: "+${item.tel}")),
-              child: InfoText(item.tel?.isNotEmpty == true
-                  ? item.tel!
-                  : '暫時無資料'),
+              iconColor: const Color(0xFF4FD1C5),
+              onTap: () =>
+                  controller.call(Uri(scheme: 'tel', path: "+${item.tel}")),
+              child:
+                  InfoText(item.tel?.isNotEmpty == true ? item.tel! : '暫時無資料'),
             ),
 
             // 地址資訊
@@ -51,7 +52,7 @@ class InfoView extends StatelessWidget {
               InfoCard(
                 icon: Icons.location_on_rounded,
                 title: '地址資訊',
-                iconColor: const Color(0xFFE07B1A),
+                iconColor: const Color(0xFFFFB020),
                 onTap: () {
                   Clipboard.setData(
                       ClipboardData(text: item.address ?? '暫時無資料'));
@@ -64,7 +65,7 @@ class InfoView extends StatelessWidget {
             InfoCard(
               icon: Icons.assistant_navigation,
               title: '開啟導航',
-              iconColor: const Color(0xFF19687B),
+              iconColor: const Color(0xFF55E6FF),
               onTap: () {
                 controller.call(Uri(
                     scheme: 'https',
@@ -75,7 +76,7 @@ class InfoView extends StatelessWidget {
               child: const Row(
                 children: [
                   Icon(Icons.directions_rounded,
-                      color: Color(0xFF19687B), size: 16),
+                      color: Color(0xFF55E6FF), size: 16),
                   SizedBox(width: 4),
                   InfoText('點此開啟 Google Maps 導航', isLink: true),
                 ],
@@ -87,7 +88,7 @@ class InfoView extends StatelessWidget {
               InfoCard(
                 icon: Icons.access_time_rounded,
                 title: '營業時間',
-                iconColor: const Color(0xFF49368C),
+                iconColor: const Color(0xFF7C5CFF),
                 child: InfoText(item.opentime ?? ''),
               ),
 
@@ -96,7 +97,7 @@ class InfoView extends StatelessWidget {
               InfoCard(
                 icon: Icons.confirmation_number_rounded,
                 title: '門票',
-                iconColor: const Color(0xFFE07B1A),
+                iconColor: const Color(0xFFFFB020),
                 child: InfoText(item.ticketinfo!),
               ),
 
@@ -105,7 +106,7 @@ class InfoView extends StatelessWidget {
               InfoCard(
                 icon: Icons.directions_bus_rounded,
                 title: '旅遊資訊',
-                iconColor: const Color(0xFF19687B),
+                iconColor: const Color(0xFF4FD1C5),
                 child: InfoText(item.travellinginfo!),
               ),
 
@@ -120,7 +121,7 @@ class InfoView extends StatelessWidget {
               return InfoCard(
                 icon: Icons.info_outline_rounded,
                 title: '詳細資訊',
-                iconColor: const Color(0xFF49368C),
+                iconColor: const Color(0xFF7C5CFF),
                 child: InfoText(detail),
               );
             }),
@@ -130,7 +131,7 @@ class InfoView extends StatelessWidget {
               InfoCard(
                 icon: Icons.warning_amber_rounded,
                 title: '注意事項',
-                iconColor: const Color(0xFFD97706),
+                iconColor: const Color(0xFFFF5C8A),
                 child: InfoText(item.remarks!),
               ),
 
@@ -139,7 +140,7 @@ class InfoView extends StatelessWidget {
               InfoCard(
                 icon: Icons.update_rounded,
                 title: '更新時間',
-                iconColor: const Color(0xFF7C7C8D),
+                iconColor: const Color(0xFF64748B),
                 child: InfoText(item.changetime ?? ''),
               ),
           ],
