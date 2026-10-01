@@ -16,33 +16,49 @@ class VideoCoverView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: NetworkCacheImage(
-              url: cover ?? '',
-              width: double.infinity,
-              height: double.infinity,
-              radius: radius,
-              fit: BoxFit.cover,
-              placeholderWidget: const TechCoverPlaceholder(),
-              errorWidget: const Icon(Icons.error),
-              placeholder: Image.asset(
-                getRandomErrorImagePath(),
-                fit: BoxFit.cover,
-                height: double.infinity,
-                width: double.infinity,
-                alignment: Alignment.center,
-              ),
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final devicePixelRatio = MediaQuery.of(context).devicePixelRatio;
+        final cacheWidth = _cacheSize(constraints.maxWidth, devicePixelRatio);
+        final cacheHeight = _cacheSize(constraints.maxHeight, devicePixelRatio);
+
+        return Container(
+          decoration: const BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-        ],
-      ),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: NetworkCacheImage(
+                  url: cover ?? '',
+                  width: double.infinity,
+                  height: double.infinity,
+                  radius: radius,
+                  fit: BoxFit.cover,
+                  memCacheWidth: cacheWidth,
+                  memCacheHeight: cacheHeight,
+                  placeholderWidget: const TechCoverPlaceholder(),
+                  errorWidget: const Icon(Icons.error),
+                  placeholder: Image.asset(
+                    getRandomErrorImagePath(),
+                    fit: BoxFit.cover,
+                    height: double.infinity,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
+  }
+
+  int? _cacheSize(double value, double devicePixelRatio) {
+    if (!value.isFinite || value <= 0) return null;
+    final size = (value * devicePixelRatio).round();
+    return size > 0 ? size : null;
   }
 }

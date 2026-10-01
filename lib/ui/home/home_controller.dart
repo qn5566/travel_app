@@ -15,6 +15,7 @@ import '../../data/repo/data_repo.dart';
 import '../../data/repo/fxDataBaseManager.dart';
 import '../../routes/app_routes.dart';
 import '../../util/ad_manager_util.dart';
+import '../../util/native_ad_pool.dart';
 
 class HomeController extends GetxController with GetTickerProviderStateMixin {
   // var scaffoldKey = GlobalKey<ScaffoldState>();
@@ -22,7 +23,6 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
 
   var firstLoading = false.obs;
   var isLoading = true.obs;
-  var dataList = <DataAll>[].obs;
   var dataListCommentModel = <CommentModel>[].obs;
   var dataListHistory = <HistoryModel>[].obs;
   var username = "".obs;
@@ -39,12 +39,28 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   // 備份原始資料
   List<DataAll> backupDataList = [];
 
+  /// 每個地區的資料與載入狀態（分頁各自快取，避免共用 dataList 造成滑動閃爍）
+  final Map<String, RxList<DataAll>> regionDataMap = {};
+  final Map<String, RxBool> regionLoadingMap = {};
+
+  String get _activeRegion => userData.travelTitle[tabTitleController.index];
+
+  RxList<DataAll> regionData(String region) =>
+      regionDataMap.putIfAbsent(region, () => <DataAll>[].obs);
+
+  RxBool regionLoading(String region) =>
+      regionLoadingMap.putIfAbsent(region, () => false.obs);
+
+  RxList<DataAll> get dataList => regionData(_activeRegion);
+
   late RxConfig userData;
   Worker? _dataVersionWorker;
 
   // 廣告宣告
   BannerAd? bannerAd;
   var isADShowing = false.obs;
+
+  int _lastLoadedTabIndex = -1;
 
   /// 轉圈動畫
   AnimationController? animationController;
@@ -62,8 +78,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     _dataVersionWorker = ever<int>(userData.dataVersion, (_) {
       final storedVersion =
           sharedPreferences.getInt(AppConstants.homeDataVersionKey) ?? 0;
-      if (userData.dataVersion.value > storedVersion &&
-          !firstLoading.value) {
+      if (userData.dataVersion.value > storedVersion && !firstLoading.value) {
         firstLoading(true);
         fetchApi();
       }
@@ -71,15 +86,14 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     tabTitleController =
         TabController(length: userData.travelTitle.length, vsync: this);
     tabTitleController.addListener(() {
-      // 監聽滑動
-      if (kDebugMode) {
-        print(tabTitleController.index);
+      final currentIndex = tabTitleController.index;
+      if (currentIndex == _lastLoadedTabIndex) {
+        return;
       }
+      _lastLoadedTabIndex = currentIndex;
 
       backupDataList.clear();
-      if (!tabTitleController.indexIsChanging) {
-        searchData(userData.travelTitle[tabTitleController.index]);
-      }
+      loadRegion(userData.travelTitle[currentIndex]);
     });
     textEditingController = TextEditingController();
     // 輸入匡宣告
@@ -117,6 +131,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
     tabTitleController.dispose();
     textEditingController.dispose();
     messageController.dispose();
+    NativeAdPool.instance.disposeAll();
     super.onClose();
   }
 
@@ -126,24 +141,45 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   /// 抓取資料判斷
-  void fetchDB() async {
-    isLoading(true);
-    searchData(userData.travelTitle[tabTitleController.index]);
+  Future<void> fetchDB() async {
+    _clearRegionCache();
     firstLoading(false);
-    isLoading(false);
+    await loadRegion(_activeRegion, force: true);
   }
 
   /// 抓取遠端資料
   Future<void> fetchApi() async {
-    isLoading(true);
     try {
-      final data = await dataController.fetchRemoteData();
-      dataList.assignAll(data);
-      fetchDB();
+      await dataController.fetchRemoteData();
     } catch (e) {
       firstLoading(false);
-      isLoading(false);
       if (kDebugMode) print('Error fetching remote data: $e');
+      return;
+    }
+    await fetchDB();
+  }
+
+  /// 載入指定地區的景點資料（有快取時直接使用）
+  Future<void> loadRegion(String region, {bool force = false}) async {
+    final list = regionData(region);
+    final loading = regionLoading(region);
+    if (!force && (loading.value || list.isNotEmpty)) {
+      return;
+    }
+    loading.value = true;
+    try {
+      final result = await dataController.searchData(region);
+      list.assignAll(result);
+    } catch (e) {
+      if (kDebugMode) print('loadRegion($region) error: $e');
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  void _clearRegionCache() {
+    for (final list in regionDataMap.values) {
+      list.clear();
     }
   }
 
@@ -180,9 +216,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   /// 下拉刷新
-  void updateData() {
-    fetchApi();
-  }
+  Future<void> updateData() => fetchApi();
 
   /// 抓取資料判斷 - 同地區
   void searchDataRegion(String keyword) async {
@@ -204,12 +238,7 @@ class HomeController extends GetxController with GetTickerProviderStateMixin {
   }
 
   /// 抓取資料判斷
-  void searchData(String whereArgs) async {
-    dataList.assignAll(await dataController.searchData(whereArgs));
-
-    /// 亂數一下
-    randomData();
-  }
+  Future<void> searchData(String whereArgs) => loadRegion(whereArgs);
 
   /// 取得版本
   String getAppVersion() {

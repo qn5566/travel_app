@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 
 import '../../config/global_config.dart';
-import '../../config/style_info.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/gird_view_home.dart';
 import '../../widgets/tech_detail_widgets.dart';
@@ -176,13 +175,13 @@ class HomePage extends GetView<HomeController> {
                             if (controller.animationInit.value) {
                               return RotationTransition(
                                 turns: controller.animation!,
-                                child: Icon(
+                                child: const Icon(
                                   Icons.refresh,
                                   color: iconColor,
                                 ),
                               );
                             } else {
-                              return Icon(
+                              return const Icon(
                                 Icons.refresh,
                                 color: iconColor,
                               );
@@ -218,8 +217,16 @@ class HomePage extends GetView<HomeController> {
             controller: controller.tabTitleController,
             tabAlignment: TabAlignment.start,
             isScrollable: true,
-            indicatorColor: const Color(0xFF55E6FF),
-            indicatorWeight: 2.5,
+            indicator: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF19687B), Color(0xFF49368C)],
+              ),
+              borderRadius: BorderRadius.circular(ASize.w(8)),
+              border: Border.all(color: const Color(0x6655E6FF)),
+            ),
+            indicatorSize: TabBarIndicatorSize.tab,
             labelColor: Colors.white,
             unselectedLabelColor: Colors.white54,
             unselectedLabelStyle: TextStyle(
@@ -235,10 +242,13 @@ class HomePage extends GetView<HomeController> {
             ),
           ),
         ),
+        const SizedBox(
+          height: 8,
+        ),
         Expanded(
           child: TabBarView(
             controller: controller.tabTitleController,
-            physics: const NeverScrollableScrollPhysics(),
+            physics: const PageScrollPhysics(),
             children: controller.userData.travelTitle.map((e) {
               return GridViewHome(site: e);
             }).toList(),
@@ -308,114 +318,77 @@ class HomePage extends GetView<HomeController> {
                 },
               )),
           Expanded(
-            child: Container(
-              height: ASize.w(16),
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                color: Colors.white,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(
-                      left: 5,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  height: ASize.w(16),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [Color(0xD9162940), Color(0xD90C1327)],
                     ),
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Expanded(
-                    child: CupertinoTextField(
-                      controller: controller.messageController,
-                      keyboardType: TextInputType.text,
-                      maxLines: 1,
-                      maxLength: 10,
-                      placeholder: placeholderText,
-                      placeholderStyle: TextStyle(
-                          fontSize: ASize.ft(6),
-                          fontWeight: FontWeight.normal,
-                          color: Colors.black54),
-                      decoration:
-                          const BoxDecoration(color: Colors.transparent),
-                      onChanged: (value) {
-                        controller.keywords.value = value;
-                        if (kDebugMode) {
-                          print('keywords:${controller.keywords.value}');
-                        }
-                      },
-                      onSubmitted: (value) {
-                        if (controller.keywords.value.isNotEmpty) {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          controller
-                              .searchDataRegion(controller.keywords.value);
-                        }
-                      },
-                    ),
-                  ),
-                  GestureDetector(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        right: ASize.w(2),
+                    border: Border.all(color: const Color(0x6655E6FF)),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x2255E6FF),
+                        blurRadius: 12,
+                        spreadRadius: 1,
                       ),
-                      child: Container(
-                        height: ASize.h(12),
-                        padding: EdgeInsets.symmetric(horizontal: ASize.w(5)),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(ASize.w(5)),
-                          color: StyleInfo.searchTextHomeHitOne,
-                        ),
-                        child: Center(
-                          child: Text(controller.userData.keyWordTravel[0],
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: "PingFang-SC",
-                                  fontStyle: FontStyle.normal,
-                                  fontSize: ASize.ft(7))),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(left: 8),
+                        child: Icon(
+                          Icons.search_rounded,
+                          color: Color(0xFF8CF3FF),
+                          size: 18,
                         ),
                       ),
-                    ),
-                    onTap: () {
-                      String text = controller.userData.keyWordTravel[0];
-                      controller.messageController.text = text;
-                      controller.keywords.value = text;
-                      controller.searchDataRegion(text);
-                    },
-                  ),
-                  GestureDetector(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        right: ASize.w(2),
-                      ),
-                      child: Container(
-                        height: ASize.h(12),
-                        padding: EdgeInsets.symmetric(horizontal: ASize.w(5)),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(ASize.w(5)),
-                          color: StyleInfo.searchTextHomeHitTwo,
+                      Expanded(
+                        child: CupertinoTextField(
+                          controller: controller.messageController,
+                          keyboardType: TextInputType.text,
+                          maxLines: 1,
+                          maxLength: 10,
+                          placeholder: placeholderText,
+                          placeholderStyle: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.white54),
+                          style: const TextStyle(color: Colors.white),
+                          cursorColor: const Color(0xFF8CF3FF),
+                          decoration:
+                              const BoxDecoration(color: Colors.transparent),
+                          onChanged: (value) {
+                            controller.keywords.value = value;
+                            if (kDebugMode) {
+                              print('keywords:${controller.keywords.value}');
+                            }
+                          },
+                          onSubmitted: (value) {
+                            if (controller.keywords.value.isNotEmpty) {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              controller
+                                  .searchDataRegion(controller.keywords.value);
+                            }
+                          },
                         ),
-                        child: Center(
-                          child: Text(controller.userData.keyWordTravel[1],
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: "PingFang-SC",
-                                  fontStyle: FontStyle.normal,
-                                  fontSize: ASize.ft(7))),
-                        ),
                       ),
-                    ),
-                    onTap: () {
-                      String text = controller.userData.keyWordTravel[1];
-                      controller.messageController.text = text;
-                      controller.keywords.value = text;
-                      controller.searchDataRegion(text);
-                    },
+                      _keywordChip(
+                          context, controller.userData.keyWordTravel[0]),
+                      _keywordChip(
+                          context, controller.userData.keyWordTravel[1]),
+                      const SizedBox(width: 4),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -470,7 +443,8 @@ class HomePage extends GetView<HomeController> {
           title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.emoji_events_rounded, color: Color(0xFFFFD700), size: 24),
+              Icon(Icons.emoji_events_rounded,
+                  color: Color(0xFFFFD700), size: 24),
               SizedBox(width: 8),
               Text(
                 '熱門景點排行',
@@ -529,6 +503,49 @@ class HomePage extends GetView<HomeController> {
           ],
         );
       },
+    );
+  }
+
+  /// 搜尋列內的關鍵字快速標籤
+  Widget _keywordChip(BuildContext context, String text) {
+    return GestureDetector(
+      onTap: () {
+        controller.messageController.text = text;
+        controller.keywords.value = text;
+        controller.searchDataRegion(text);
+      },
+      child: Container(
+        height: ASize.h(12),
+        margin: const EdgeInsets.only(right: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF19687B), Color(0xFF49368C)],
+          ),
+          borderRadius: BorderRadius.circular(ASize.w(5)),
+          border: Border.all(color: const Color(0x6655E6FF)),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x3355E6FF),
+              blurRadius: 6,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontFamily: "PingFangSC",
+              fontSize: 11,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

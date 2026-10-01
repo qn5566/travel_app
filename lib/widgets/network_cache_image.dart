@@ -17,6 +17,8 @@ class NetworkCacheImage extends StatelessWidget {
   final double radiusBottomRight;
   final double? width;
   final double? height;
+  final int? memCacheWidth;
+  final int? memCacheHeight;
   final BoxFit? fit;
   final Widget placeholderWidget;
   final Color? placeholderColor;
@@ -27,7 +29,8 @@ class NetworkCacheImage extends StatelessWidget {
     super.key,
     this.url,
     this.placeholder,
-    @Deprecated('this field is useless,Used to be too lazy to change the code that calls the method.')
+    @Deprecated(
+        'this field is useless,Used to be too lazy to change the code that calls the method.')
     this.type,
     this.radius = 0.0,
     this.radiusTopLeft = 0.0,
@@ -36,6 +39,8 @@ class NetworkCacheImage extends StatelessWidget {
     this.radiusBottomRight = 0.0,
     this.width,
     this.height,
+    this.memCacheWidth,
+    this.memCacheHeight,
     this.fit,
     required this.placeholderWidget,
     required this.errorWidget,
@@ -47,15 +52,15 @@ class NetworkCacheImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return hasRadius()
         ? ClipRRect(
-        borderRadius: hasAllRadius()
-            ? BorderRadius.all(Radius.circular(radius))
-            : BorderRadius.only(
-          topLeft: Radius.circular(radiusTopLeft),
-          topRight: Radius.circular(radiusTopRight),
-          bottomLeft: Radius.circular(radiusBottomLeft),
-          bottomRight: Radius.circular(radiusBottomRight),
-        ),
-        child: _buildImage())
+            borderRadius: hasAllRadius()
+                ? BorderRadius.all(Radius.circular(radius))
+                : BorderRadius.only(
+                    topLeft: Radius.circular(radiusTopLeft),
+                    topRight: Radius.circular(radiusTopRight),
+                    bottomLeft: Radius.circular(radiusBottomLeft),
+                    bottomRight: Radius.circular(radiusBottomRight),
+                  ),
+            child: _buildImage())
         : _buildImage();
   }
 
@@ -83,11 +88,13 @@ class NetworkCacheImage extends StatelessWidget {
         imageUrl: url!,
         width: width,
         height: height,
+        memCacheWidth: memCacheWidth,
+        memCacheHeight: memCacheHeight,
         fit: fit,
         fadeInDuration: const Duration(milliseconds: 200),
         fadeOutDuration: const Duration(milliseconds: 500),
         placeholder: (context, s) =>
-        placeholderWidget ?? _buildPlaceholderWidget(),
+            placeholderWidget ?? _buildPlaceholderWidget(),
         errorWidget: (context, s, e) {
           return errorWidget ?? _buildErrorWidget();
         });
@@ -103,15 +110,15 @@ class NetworkCacheImage extends StatelessWidget {
       height: height,
       child: showLoading
           ? Center(
-        child: SizedBox(
-          width: ASize.w(50),
-          height: ASize.w(50),
-          child: const LoadingIndicator(
-            indicatorType: Indicator.circleStrokeSpin,
-            // color: Colors.deepPurpleAccent,
-          ),
-        ),
-      )
+              child: SizedBox(
+                width: ASize.w(50),
+                height: ASize.w(50),
+                child: const LoadingIndicator(
+                  indicatorType: Indicator.circleStrokeSpin,
+                  // color: Colors.deepPurpleAccent,
+                ),
+              ),
+            )
           : const SizedBox.shrink(),
     );
   }
