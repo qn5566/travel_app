@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,8 +8,11 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../config/global_config.dart';
 import '../../config/rx_config.dart';
 import '../../data/mode/recommend_app_model.dart';
+import '../../data/repo/data_repo.dart';
 import '../../util/ui_util.dart';
 import '../../widgets/network_cache_image.dart';
+import '../home/home_controller.dart';
+import '../map/map_controller.dart';
 import 'account_controller.dart';
 
 class PopViewSettingPage extends StatefulWidget {
@@ -21,6 +26,11 @@ class PopViewSettingPage extends StatefulWidget {
 
 class _PopViewSettingPageState extends State<PopViewSettingPage> {
   bool _autoUpdate = true;
+  bool _manualUpdating = false;
+  bool _manualFailed = false;
+  double _manualProgress = 0;
+  String _manualStatus = '';
+  Timer? _manualTicker;
 
   @override
   void initState() {
@@ -32,6 +42,80 @@ class _PopViewSettingPageState extends State<PopViewSettingPage> {
   void _setAutoUpdate(bool value) {
     setState(() => _autoUpdate = value);
     sharedPreferences.setBool(AppConstants.homeAutoUpdateKey, value);
+  }
+
+  @override
+  void dispose() {
+    _manualTicker?.cancel();
+    super.dispose();
+  }
+
+  /// 手動下載最新景點資料，並在原地顯示進度。
+  Future<void> _startManualUpdate() async {
+    if (_manualUpdating) return;
+
+    setState(() {
+      _manualUpdating = true;
+      _manualFailed = false;
+      _manualStatus = '正在下載景點資料…';
+      _manualProgress = 0.1;
+    });
+
+    // onProgress 只會回報給第一個發起下載的呼叫端；若與其他頁面共用
+    // 下載 future，則用保底 ticker 讓進度條持續前進。
+    _manualTicker?.cancel();
+    _manualTicker = Timer.periodic(const Duration(milliseconds: 250), (_) {
+      if (!mounted) return;
+      if (_manualProgress < 0.8) {
+        setState(() {
+          _manualProgress = (_manualProgress + 0.01).clamp(0.1, 0.8).toDouble();
+        });
+      }
+    });
+
+    try {
+      await Get.find<DataController>().fetchRemoteData(
+        onProgress: (value) {
+          if (!mounted) return;
+          setState(() {
+            _manualProgress = value.clamp(0.1, 0.9).toDouble();
+          });
+        },
+      );
+
+      // 即使彈窗已關閉，仍要完成地圖與首頁的記憶體資料刷新。
+      if (mounted) {
+        setState(() {
+          _manualStatus = '正在建立離線資料…';
+          _manualProgress = 0.92;
+        });
+      }
+      if (Get.isRegistered<MapController>()) {
+        await Get.find<MapController>().fetchDB();
+      }
+      if (Get.isRegistered<HomeController>()) {
+        await Get.find<HomeController>().fetchDB();
+      }
+      if (mounted) {
+        setState(() {
+          _manualProgress = 1;
+          _manualStatus = '更新完成';
+          _manualFailed = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _manualFailed = true;
+          _manualStatus = '下載失敗，請檢查網路後重試';
+        });
+      }
+    } finally {
+      _manualTicker?.cancel();
+      if (mounted) {
+        setState(() => _manualUpdating = false);
+      }
+    }
   }
 
   String get _updateDateLabel {
@@ -283,6 +367,104 @@ class _PopViewSettingPageState extends State<PopViewSettingPage> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 12),
+                  GestureDetector(
+                    onTap: _startManualUpdate,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 11),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: _manualUpdating
+                              ? const [Color(0xFF2A3550), Color(0xFF232A44)]
+                              : const [Color(0xFF19687B), Color(0xFF49368C)],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0x8C55E6FF)),
+                        boxShadow: [
+                          BoxShadow(
+                            color:
+                                const Color(0xFF55E6FF).withValues(alpha: 0.22),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (_manualUpdating)
+                            const SizedBox(
+                              width: 15,
+                              height: 15,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation(Colors.white),
+                              ),
+                            )
+                          else
+                            const Icon(
+                              Icons.download_rounded,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          const SizedBox(width: 8),
+                          Text(
+                            _manualUpdating ? '更新中…' : '手動更新',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: "PingFangSC",
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  if (_manualStatus.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: LinearProgressIndicator(
+                        value: _manualProgress.clamp(0.0, 1.0),
+                        minHeight: 6,
+                        backgroundColor: const Color(0x2255E6FF),
+                        color: _manualFailed
+                            ? const Color(0xFFFF5C8A)
+                            : const Color(0xFF55E6FF),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            _manualStatus,
+                            style: TextStyle(
+                              color: _manualFailed
+                                  ? const Color(0xFFFF9AB8)
+                                  : Colors.white70,
+                              fontFamily: "PingFangSC",
+                              fontSize: 11,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '${(_manualProgress * 100).clamp(0, 100).round()}%',
+                          style: const TextStyle(
+                            color: Color(0xFF8CF3FF),
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "PingFangSC",
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
