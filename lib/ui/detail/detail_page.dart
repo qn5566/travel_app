@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -88,54 +86,6 @@ class DetailPage extends GetView<DetailController> {
                         money: region,
                       ),
                     ),
-                    if (region.isNotEmpty)
-                      Positioned(
-                        left: 14,
-                        bottom: 84,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12, vertical: 7),
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    Color(0x66162940),
-                                    Color(0x660C1327),
-                                  ],
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                                border:
-                                    Border.all(color: const Color(0x6655E6FF)),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.location_on_rounded,
-                                    color: Color(0xFF55E6FF),
-                                    size: 14,
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Text(
-                                    region,
-                                    style: const TextStyle(
-                                      color: Color(0xFFEAF3FF),
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: "PingFangSC",
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
                   ],
                 ),
               ),
@@ -162,7 +112,18 @@ class DetailPage extends GetView<DetailController> {
                     ],
                   ),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      if (region.isNotEmpty) ...[
+                        _RegionChip(region: region),
+                        const SizedBox(width: 12),
+                        Container(
+                          width: 1,
+                          height: 20,
+                          color: const Color(0x3355E6FF),
+                        ),
+                        const SizedBox(width: 12),
+                      ],
                       Expanded(
                         child: TabBar(
                           controller: controller.tabInfoController,
@@ -206,6 +167,7 @@ class DetailPage extends GetView<DetailController> {
                       GradientPillButton(
                         text: page == 'want' ? '刪除想去名單' : '加入想去名單',
                         isDelete: page == 'want',
+                        showText: false,
                         onTap: () {
                           if (page == 'want') {
                             controller.deleteWantGo(context);
@@ -234,6 +196,37 @@ class DetailPage extends GetView<DetailController> {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// 顯示地區名稱的小標籤，會與下方資訊 bar 一起 pinned 滑動。
+class _RegionChip extends StatelessWidget {
+  const _RegionChip({required this.region});
+
+  final String region;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Icon(
+          Icons.location_on_rounded,
+          color: Color(0xFF55E6FF),
+          size: 16,
+        ),
+        const SizedBox(width: 4),
+        Text(
+          region,
+          style: const TextStyle(
+            color: Color(0xFFEAF3FF),
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            fontFamily: "PingFangSC",
+          ),
+        ),
+      ],
     );
   }
 }

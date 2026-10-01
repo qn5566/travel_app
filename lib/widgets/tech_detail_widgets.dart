@@ -66,22 +66,33 @@ class GradientPillButton extends StatelessWidget {
     required this.text,
     this.isDelete = false,
     this.icon,
+    this.showText = true,
     required this.onTap,
   });
 
   final String text;
   final bool isDelete;
   final IconData? icon;
+  final bool showText;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final accent = isDelete ? const Color(0xFFFF5C8A) : const Color(0xFF55E6FF);
+    final iconWidget = Icon(
+      icon ??
+          (isDelete ? Icons.delete_outline_rounded : Icons.favorite_rounded),
+      color: Colors.white,
+      size: showText ? 15 : 18,
+    );
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: showText
+            ? const EdgeInsets.symmetric(horizontal: 16, vertical: 8)
+            : const EdgeInsets.all(9),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -90,7 +101,7 @@ class GradientPillButton extends StatelessWidget {
                 ? [const Color(0xFF8B1A3B), const Color(0xFF4A0E2A)]
                 : [const Color(0xFF19687B), const Color(0xFF49368C)],
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(showText ? 12 : 14),
           border: Border.all(color: accent.withOpacity(0.55)),
           boxShadow: [
             BoxShadow(
@@ -100,29 +111,24 @@ class GradientPillButton extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon ??
-                  (isDelete
-                      ? Icons.delete_outline_rounded
-                      : Icons.favorite_rounded),
-              color: Colors.white,
-              size: 15,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              text,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                fontFamily: "PingFangSC",
-              ),
-            ),
-          ],
-        ),
+        child: showText
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  iconWidget,
+                  const SizedBox(width: 5),
+                  Text(
+                    text,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: "PingFangSC",
+                    ),
+                  ),
+                ],
+              )
+            : Center(child: iconWidget),
       ),
     );
   }
