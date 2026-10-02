@@ -521,7 +521,7 @@ class _PopViewSettingPageState extends State<PopViewSettingPage> {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          'MeetStudio 工作社',
+                          'MeetStudio 工作室',
                           style: TextStyle(
                             color: Color(0xFF8CF3FF),
                             fontWeight: FontWeight.w800,
